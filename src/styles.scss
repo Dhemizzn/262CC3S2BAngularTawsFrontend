@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+
+$color-primary: #FF3B30;
+$color-secondary: #0F172A;
+$bg-light: #EFEFEF;
+$text-dark: #2C3E50;
+$border-color:#D1D5DB;
+$white: #ffffff;
+
+body{
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", sans-serif;
+    margin: 0px;
+    display:flex;
+    flex-direction: column;
+    background-color: var(--bg-light);
+    min-height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('https://images.pexels.com/photos/37885473/pexels-photo-37885473.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}

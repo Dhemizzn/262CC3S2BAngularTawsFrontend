@@ -1,0 +1,5 @@
+@use '../../variables' as *;
+.bg-f{
+    background: $bg-light;
+    color: $text-dark;
+}
