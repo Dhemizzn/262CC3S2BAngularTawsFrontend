@@ -1,0 +1,36 @@
+@use "../../variables" as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.hero {
+  flex-grow: 1;
+  min-height: 60vh;
+  color: $white;
+}
+
+.hero-kicker {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.hero-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  max-width: 720px;
+}
+
+.hero-subtitle {
+  max-width: 520px;
+  font-size: 1.1rem;
+}
+
+.btn-hero-outline {
+  background: transparent;
+  color: $white;
+  border: 2px solid $white;
+}
