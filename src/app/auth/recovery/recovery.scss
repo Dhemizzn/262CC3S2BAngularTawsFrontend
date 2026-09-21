@@ -1,0 +1,12 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.auth-card{
+    max-width: 35%;
+}
