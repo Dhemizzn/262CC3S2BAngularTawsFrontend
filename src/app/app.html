@@ -1,3 +1,9 @@
-<app-header />
-<router-outlet />
-<app-footer />
+<div class="d-flex flex-column min-vh-100">
+    <app-header />
+    
+    <main class="d-flex flex-column flex-grow-1">
+        <router-outlet />
+    </main>
+    
+    <app-footer />
+</div>
