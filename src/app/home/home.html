@@ -9,3 +9,116 @@
     <a routerLink="/login" class="bttn btn-hero-outline text-decoration-none">Iniciar sesión</a>
   </div>
 </section>
+
+<!-- Destinos -->
+<section id="destinos" class="home-section">
+  <div class="container">
+    <h2 class="home-section-title text-center mb-2">Lugares que puedes visitar</h2>
+    <p class="home-section-lead text-center mb-4">
+      Rutas clásicas del Perú para armar tu próximo viaje.
+    </p>
+
+    <div class="row g-4">
+      @for (destino of destinos; track destino.nombre) {
+        <div class="col-12 col-md-6 col-lg-3">
+          <article class="destino-card">
+            <img [src]="destino.imagen" [alt]="destino.nombre" class="destino-card-img" />
+            <div class="destino-card-overlay">
+              <p class="destino-region mb-1">{{ destino.region }}</p>
+              <h3 class="destino-nombre mb-0">{{ destino.nombre }}</h3>
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Planes -->
+<section id="planes" class="home-section home-section-alt">
+  <div class="container">
+    <h2 class="home-section-title text-center mb-2">
+      Planes de <span class="title-accent">viaje</span>
+    </h2>
+    <p class="home-section-lead text-center mb-4">
+      Paquetes listos para reservar, con duración y precio por persona.
+    </p>
+
+    <div class="row g-4 justify-content-center">
+      @for (plan of planes; track plan.nombre) {
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="plan-card">
+            <img [src]="plan.imagen" [alt]="plan.nombre" class="plan-card-img" />
+            <div class="plan-card-overlay">
+              <p class="plan-duracion mb-1">{{ plan.duracion }}</p>
+              <h3 class="plan-nombre">{{ plan.nombre }}</h3>
+              <p class="plan-incluye mb-3">{{ plan.incluye }}</p>
+              <span class="plan-precio">{{ plan.precio }}</span>
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Tarifas -->
+<section id="tarifas" class="home-section">
+  <div class="container">
+    <h2 class="home-section-title text-center mb-2">Tarifas</h2>
+    <p class="home-section-lead text-center mb-4">
+      Precios referenciales por persona. El total depende del plan que elijas.
+    </p>
+
+    <div class="row g-4 justify-content-center">
+      @for (tarifa of tarifas; track tarifa.nombre) {
+        <div class="col-12 col-md-4">
+          <article
+            class="tarifa-card h-100 text-center"
+            [class.tarifa-card-destacada]="tarifa.destacada"
+          >
+            @if (tarifa.destacada) {
+              <p class="tarifa-badge mb-2">Más elegido</p>
+            }
+            <h3 class="tarifa-nombre">{{ tarifa.nombre }}</h3>
+            <p class="tarifa-precio">{{ tarifa.precio }}</p>
+            <p class="tarifa-detalle mb-0">{{ tarifa.detalle }}</p>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Motivos -->
+<section id="nosotros" class="home-section home-section-alt">
+  <div class="container">
+    <h2 class="home-section-title text-center mb-2">Por qué elegirnos</h2>
+    <p class="home-section-lead text-center mb-4">
+      Peru TOURS arma el viaje para que tú solo te preocupes por llegar.
+    </p>
+
+    <div class="row g-4">
+      @for (motivo of motivos; track motivo.titulo) {
+        <div class="col-12 col-md-6 col-lg-3">
+          <article class="motivo-card h-100 text-center">
+            <i class="bi {{ motivo.icono }} motivo-icon"></i>
+            <h3 class="motivo-titulo">{{ motivo.titulo }}</h3>
+            <p class="motivo-texto mb-0">{{ motivo.texto }}</p>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Reserva -->
+<section id="reserva" class="home-section home-cta">
+  <div class="container text-center">
+    <h2 class="home-section-title mb-2">¿Listo para armar tu viaje?</h2>
+    <p class="home-section-lead">
+      Inicia sesión para ver disponibilidad y continuar con tu reserva.
+    </p>
+    <a routerLink="/login" class="bttn bttn-primary text-decoration-none">Iniciar sesión</a>
+  </div>
+</section>
