@@ -34,3 +34,58 @@
   color: $white;
   border: 2px solid $white;
 }
+
+.home-section {
+  background: $bg-light;
+  color: $text-dark;
+}
+
+.home-section-title {
+  color: $color-secondary;
+  font-weight: 700;
+}
+
+.home-section-lead {
+  color: $text-dark;
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+.destino-card {
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.destino-card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+.destino-card-body {
+  padding: 16px;
+}
+
+.destino-region {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $color-primary;
+  font-weight: 600;
+}
+
+.destino-nombre {
+  font-size: 1.15rem;
+  color: $color-secondary;
+  margin-bottom: 8px;
+}
+
+.destino-desc {
+  font-size: 0.95rem;
+}

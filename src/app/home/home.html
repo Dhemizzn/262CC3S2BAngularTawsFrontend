@@ -9,3 +9,28 @@
     <a routerLink="/login" class="bttn btn-hero-outline text-decoration-none">Iniciar sesión</a>
   </div>
 </section>
+
+<!-- Destinos -->
+<section id="destinos" class="home-section">
+  <div class="container py-5">
+    <h2 class="home-section-title text-center mb-2">Lugares que puedes visitar</h2>
+    <p class="home-section-lead text-center mb-4">
+      Rutas clásicas del Perú para armar tu próximo viaje.
+    </p>
+
+    <div class="row g-4">
+      @for (destino of destinos; track destino.nombre) {
+        <div class="col-12 col-md-6 col-lg-3">
+          <article class="destino-card h-100">
+            <img [src]="destino.imagen" [alt]="destino.nombre" class="destino-card-img" />
+            <div class="destino-card-body">
+              <p class="destino-region mb-1">{{ destino.region }}</p>
+              <h3 class="destino-nombre">{{ destino.nombre }}</h3>
+              <p class="destino-desc mb-0">{{ destino.descripcion }}</p>
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
