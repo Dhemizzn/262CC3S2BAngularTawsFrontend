@@ -74,4 +74,23 @@ export class Home {
       detalle: 'Hotel 4 estrellas, guía privado y experiencias extra.',
     },
   ];
+
+  readonly motivos = [
+    {
+      titulo: 'Guías locales',
+      texto: 'Quiénes conocen la ruta, la historia y el ritmo de cada destino.',
+    },
+    {
+      titulo: 'Grupos pequeños',
+      texto: 'Salidas reducidas para que el viaje se sienta cercano, no masivo.',
+    },
+    {
+      titulo: 'Precios claros',
+      texto: 'Ves qué incluye cada plan antes de decidir. Sin letras chicas.',
+    },
+    {
+      titulo: 'Acompañamiento',
+      texto: 'Soporte antes y durante el viaje para imprevistos en ruta.',
+    },
+  ];
 }

@@ -79,3 +79,24 @@
     </div>
   </div>
 </section>
+
+<!-- Motivos -->
+<section id="nosotros" class="home-section home-section-alt">
+  <div class="container py-5">
+    <h2 class="home-section-title text-center mb-2">Por qué elegirnos</h2>
+    <p class="home-section-lead text-center mb-4">
+      Peru TOURS arma el viaje para que tú solo te preocupes por llegar.
+    </p>
+
+    <div class="row g-4">
+      @for (motivo of motivos; track motivo.titulo) {
+        <div class="col-12 col-md-6 col-lg-3">
+          <article class="motivo-card h-100">
+            <h3 class="motivo-titulo">{{ motivo.titulo }}</h3>
+            <p class="motivo-texto mb-0">{{ motivo.texto }}</p>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
