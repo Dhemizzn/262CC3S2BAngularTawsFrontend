@@ -38,17 +38,24 @@
 .home-section {
   background: $bg-light;
   color: $text-dark;
+  padding-block: 4rem;
 }
 
 .home-section-title {
   color: $color-secondary;
   font-weight: 700;
+  font-size: 2rem;
 }
 
 .home-section-lead {
   color: $text-dark;
   max-width: 560px;
   margin-inline: auto;
+  margin-bottom: 2.5rem;
+}
+
+.title-accent {
+  color: $color-primary;
 }
 
 .destino-card {
