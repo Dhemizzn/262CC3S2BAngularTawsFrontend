@@ -8,7 +8,7 @@
 
 .hero {
   flex-grow: 1;
-  min-height: 60vh;
+  min-height: 100vh;
   color: $white;
 }
 
@@ -65,13 +65,13 @@
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  min-height: 280px;
+  min-height: 500px;
   border: none;
 }
 
 .destino-card-img {
   width: 100%;
-  height: 280px;
+  height: 500px;
   object-fit: cover;
   display: block;
 }
@@ -107,7 +107,7 @@
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  min-height: 320px;
+  min-height: 500px;
   border: none;
   padding: 0;
   background: transparent;
@@ -115,7 +115,7 @@
 
 .plan-card-img {
   width: 100%;
-  height: 320px;
+  height: 500px;
   object-fit: cover;
   display: block;
 }

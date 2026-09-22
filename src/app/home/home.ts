@@ -20,7 +20,7 @@ export class Home {
       nombre: 'Valle del Colca',
       region: 'Arequipa',
       descripcion: 'Cañones, pueblos andinos y el vuelo del cóndor.',
-      imagen: 'https://images.pexels.com/photos/2356045/pexels-photo-2356045.jpeg',
+      imagen: 'https://images.pexels.com/photos/35697077/pexels-photo-35697077.jpeg?_gl=1*8g3dc4*_ga*MTAwODAxNDc4Mi4xNzkwMDQ0NzA1*_ga_8JE65Q40S6*czE3OTAwNDk1MjkkbzIkZzEkdDE3OTAwNDk1NDUkajQ0JGwwJGgw',
     },
     {
       nombre: 'Lago Titicaca',
