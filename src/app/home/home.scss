@@ -198,14 +198,20 @@
   font-size: 0.95rem;
 }
 
+
+/* Motivos */
 .motivo-card {
-  padding: 8px 4px;
+  background: $white;
+  border-radius: 12px;
+  padding: 28px 16px;
+  height: 100%;
 }
 
-.motivo-titulo {
-  color: $color-secondary;
-  font-size: 1.15rem;
-  margin-bottom: 8px;
+.motivo-icon {
+  font-size: 2rem;
+  color: $color-primary;
+  display: block;
+  margin-bottom: 12px;
 }
 
 

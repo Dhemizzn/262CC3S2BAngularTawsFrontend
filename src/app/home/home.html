@@ -101,7 +101,8 @@
     <div class="row g-4">
       @for (motivo of motivos; track motivo.titulo) {
         <div class="col-12 col-md-6 col-lg-3">
-          <article class="motivo-card h-100">
+          <article class="motivo-card h-100 text-center">
+            <i class="bi {{ motivo.icono }} motivo-icon"></i>
             <h3 class="motivo-titulo">{{ motivo.titulo }}</h3>
             <p class="motivo-texto mb-0">{{ motivo.texto }}</p>
           </article>
