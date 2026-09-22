@@ -101,31 +101,55 @@
   background: $white;
 }
 
+
+/* Planes */
 .plan-card {
-  background: $bg-light;
-  border: 1px solid $border-color;
-  border-radius: 10px;
-  padding: 24px;
-  height: 100%;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 320px;
+  border: none;
+  padding: 0;
+  background: transparent;
 }
 
-.plan-nombre {
-  color: $color-secondary;
-  font-size: 1.25rem;
+.plan-card-img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+.plan-card-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  background: linear-gradient(transparent 30%, rgba(15, 23, 42, 0.8));
+  color: $white;
 }
 
 .plan-duracion {
-  color: $color-primary;
-  font-weight: 600;
-  text-transform: uppercase;
+  color: $white;
   font-size: 0.8rem;
-  letter-spacing: 0.06em;
+}
+
+.plan-nombre,
+.plan-incluye {
+  color: $white;
 }
 
 .plan-precio {
-  color: $color-secondary;
-  font-size: 1.4rem;
+  display: inline-block;
+  background: $color-primary;
+  color: $white;
+  font-size: 1.35rem;
   font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 6px;
 }
 
 

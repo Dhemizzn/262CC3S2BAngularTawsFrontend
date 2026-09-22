@@ -42,18 +42,22 @@ export class Home {
       duracion: '3 días',
       incluye: 'City tour, Valle Sagrado y traslados.',
       precio: 'S/ 890',
+      imagen: 'https://images.unsplash.com/photo-1593494441374-bad54249d0e8?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+
     },
     {
       nombre: 'Machu Picchu clásico',
       duracion: '5 días',
       incluye: 'Cusco, tren y entrada a Machu Picchu.',
       precio: 'S/ 1 590',
+      imagen: 'https://images.pexels.com/photos/5176713/pexels-photo-5176713.jpeg?_gl=1*158s5u3*_ga*MTAwODAxNDc4Mi4xNzkwMDQ0NzA1*_ga_8JE65Q40S6*czE3OTAwNDQ3MDQkbzEkZzEkdDE3OTAwNDUwOTkkajU5JGwwJGgw',
     },
     {
       nombre: 'Sur andino',
       duracion: '7 días',
       incluye: 'Arequipa, Colca, Puno y Titicaca.',
       precio: 'S/ 2 190',
+      imagen: 'https://images.unsplash.com/photo-1620417396507-9a57523d16a6?q=80&w=2831&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
   ];
 

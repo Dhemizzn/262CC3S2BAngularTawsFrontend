@@ -47,11 +47,14 @@
     <div class="row g-4 justify-content-center">
       @for (plan of planes; track plan.nombre) {
         <div class="col-12 col-md-6 col-lg-4">
-          <article class="plan-card h-100">
-            <h3 class="plan-nombre">{{ plan.nombre }}</h3>
-            <p class="plan-duracion mb-2">{{ plan.duracion }}</p>
-            <p class="plan-incluye">{{ plan.incluye }}</p>
-            <p class="plan-precio mb-0">{{ plan.precio }}</p>
+          <article class="plan-card">
+            <img [src]="plan.imagen" [alt]="plan.nombre" class="plan-card-img" />
+            <div class="plan-card-overlay">
+              <p class="plan-duracion mb-1">{{ plan.duracion }}</p>
+              <h3 class="plan-nombre">{{ plan.nombre }}</h3>
+              <p class="plan-incluye mb-3">{{ plan.incluye }}</p>
+              <span class="plan-precio">{{ plan.precio }}</span>
+            </div>
           </article>
         </div>
       }
