@@ -56,4 +56,22 @@ export class Home {
       precio: 'S/ 2 190',
     },
   ];
+
+  readonly tarifas = [
+    {
+      nombre: 'Básico',
+      precio: 'S/ 890',
+      detalle: 'Hospedaje turístico, desayunos y un tour diario.',
+    },
+    {
+      nombre: 'Recomendado',
+      precio: 'S/ 1 590',
+      detalle: 'Hotel 3 estrellas, tren y entradas principales.',
+    },
+    {
+      nombre: 'Premium',
+      precio: 'S/ 2 490',
+      detalle: 'Hotel 4 estrellas, guía privado y experiencias extra.',
+    },
+  ];
 }

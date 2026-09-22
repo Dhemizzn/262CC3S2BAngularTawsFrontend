@@ -120,3 +120,22 @@
   font-size: 1.4rem;
   font-weight: 700;
 }
+
+
+.tarifa-card {
+  background: $white;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 28px 20px;
+}
+
+.tarifa-nombre {
+  color: $color-secondary;
+  font-size: 1.1rem;
+}
+
+.tarifa-precio {
+  color: $color-primary;
+  font-size: 2rem;
+  font-weight: 700;
+}
