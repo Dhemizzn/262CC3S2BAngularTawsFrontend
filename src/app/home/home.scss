@@ -89,3 +89,34 @@
 .destino-desc {
   font-size: 0.95rem;
 }
+
+.home-section-alt {
+  background: $white;
+}
+
+.plan-card {
+  background: $bg-light;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 24px;
+  height: 100%;
+}
+
+.plan-nombre {
+  color: $color-secondary;
+  font-size: 1.25rem;
+}
+
+.plan-duracion {
+  color: $color-primary;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+}
+
+.plan-precio {
+  color: $color-secondary;
+  font-size: 1.4rem;
+  font-weight: 700;
+}

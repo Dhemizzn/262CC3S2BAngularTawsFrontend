@@ -35,4 +35,25 @@ export class Home {
       imagen: 'https://images.pexels.com/photos/2739664/pexels-photo-2739664.jpeg',
     },
   ];
+
+  readonly planes = [
+    {
+      nombre: 'Cusco esencial',
+      duracion: '3 días',
+      incluye: 'City tour, Valle Sagrado y traslados.',
+      precio: 'S/ 890',
+    },
+    {
+      nombre: 'Machu Picchu clásico',
+      duracion: '5 días',
+      incluye: 'Cusco, tren y entrada a Machu Picchu.',
+      precio: 'S/ 1 590',
+    },
+    {
+      nombre: 'Sur andino',
+      duracion: '7 días',
+      incluye: 'Arequipa, Colca, Puno y Titicaca.',
+      precio: 'S/ 2 190',
+    },
+  ];
 }

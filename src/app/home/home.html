@@ -34,3 +34,26 @@
     </div>
   </div>
 </section>
+
+<!-- Planes -->
+<section id="planes" class="home-section home-section-alt">
+  <div class="container py-5">
+    <h2 class="home-section-title text-center mb-2">Planes de viaje</h2>
+    <p class="home-section-lead text-center mb-4">
+      Paquetes listos para reservar, con duración y precio por persona.
+    </p>
+
+    <div class="row g-4 justify-content-center">
+      @for (plan of planes; track plan.nombre) {
+        <div class="col-12 col-md-6 col-lg-4">
+          <article class="plan-card h-100">
+            <h3 class="plan-nombre">{{ plan.nombre }}</h3>
+            <p class="plan-duracion mb-2">{{ plan.duracion }}</p>
+            <p class="plan-incluye">{{ plan.incluye }}</p>
+            <p class="plan-precio mb-0">{{ plan.precio }}</p>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
