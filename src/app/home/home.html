@@ -62,36 +62,8 @@
   </div>
 </section>
 
-<!-- Tarifas -->
-<section id="tarifas" class="home-section">
-  <div class="container">
-    <h2 class="home-section-title text-center mb-2">Tarifas</h2>
-    <p class="home-section-lead text-center mb-4">
-      Precios referenciales por persona. El total depende del plan que elijas.
-    </p>
-
-    <div class="row g-4 justify-content-center">
-      @for (tarifa of tarifas; track tarifa.nombre) {
-        <div class="col-12 col-md-4">
-          <article
-            class="tarifa-card h-100 text-center"
-            [class.tarifa-card-destacada]="tarifa.destacada"
-          >
-            @if (tarifa.destacada) {
-              <p class="tarifa-badge mb-2">Más elegido</p>
-            }
-            <h3 class="tarifa-nombre">{{ tarifa.nombre }}</h3>
-            <p class="tarifa-precio">{{ tarifa.precio }}</p>
-            <p class="tarifa-detalle mb-0">{{ tarifa.detalle }}</p>
-          </article>
-        </div>
-      }
-    </div>
-  </div>
-</section>
-
 <!-- Motivos -->
-<section id="nosotros" class="home-section home-section-alt">
+<section id="nosotros" class="home-section">
   <div class="container">
     <h2 class="home-section-title text-center mb-2">Por qué elegirnos</h2>
     <p class="home-section-lead text-center mb-4">
@@ -113,7 +85,7 @@
 </section>
 
 <!-- Reserva -->
-<section id="reserva" class="home-section home-cta">
+<section id="reserva" class="home-section home-section-alt">
   <div class="container text-center">
     <h2 class="home-section-title mb-2">¿Listo para armar tu viaje?</h2>
     <p class="home-section-lead">
