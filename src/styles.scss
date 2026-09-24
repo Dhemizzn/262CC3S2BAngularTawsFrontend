@@ -14,10 +14,6 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-                url('https://images.pexels.com/photos/37885473/pexels-photo-37885473.jpeg');
-    background-size: cover;
-    background-position: center;
 }
 
 app-root {
@@ -31,22 +27,6 @@ app-root {
     padding: rem(35) rem(30);
     width: 90%;
     border-radius: rem(10);
-    border: 1px solid $color-primary;
-}
-
-input[type="text"], input[type="date"], select, input[type="email"], input[type="number"] {
-    width: 99%;
-    padding: rem(10);
-    border: 0.5px solid $border-color; 
-    border-radius: rem(4);
-    font-size: 1rem;
-}
-
-label {
-    display: block;
-    margin-bottom: rem(2);
-    font-weight: 600;
-    color: $color-secondary;
 }
 
 .bttn {

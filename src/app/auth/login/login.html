@@ -1,20 +1,20 @@
-<form class="auth-card card border-0 shadow p-4 p-md-5 w-100">
+<form class="auth-card p-4 p-md-5">
     <h2 class="text-center mt-0 mb-4 fw-bold">Inicio de sesión</h2>
     
     <div class="mb-3">   
-        <label for="user" class="form-label">Usuario</label>
+        <label for="user" class="form-label fw-medium">Usuario</label>
         <input type="text" id="user" class="form-control" placeholder="Ingrese su usuario"> 
     </div>
 
     <div class="mb-4">   
-        <label for="password" class="form-label">Contraseña</label>
+        <label for="password" class="form-label fw-medium">Contraseña</label>
         <input type="password" id="password" class="form-control" placeholder="Ingrese su contraseña"> 
         <div class="text-end mt-2">
             <a routerLink="/recovery" class="text-decoration-none small">¿Olvidaste tu contraseña?</a>            
         </div>
     </div>
 
-    <div class="d-flex flex-column gap-3 align-items-center mt-2">
+    <div class="d-flex flex-column gap-2 align-items-center mt-2">
         <button type="submit" class="bttn bttn-primary w-100" id="login">Iniciar sesión</button>
         
         <p class="mb-0 mt-3 text-muted">

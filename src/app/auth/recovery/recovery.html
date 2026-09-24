@@ -1,17 +1,17 @@
-<section class="auth-card">
-    <h2 class="text-center">Olvidaste tu contraseña</h2>
+<form class="auth-card ">
+    <h2 class="text-center fw-bold">Olvidaste tu contraseña</h2>
     <p>Ingresa la direccion de correo eletronico a la que
                 desea que se envie la informacion para restablecer tu contraseña
     </p>
 
     <div class="mb-3">
-        <label for="email" >Ingrese su direccion de correo electronico</label>
-        <input type="email" id="email">
+        <label class="form-label" for="email" >Ingrese su direccion de correo electronico</label>
+        <input class="form-control" type="email" id="email">
     </div>
 
     <div class="d-flex justify-content-between">
-        <button class="bttn bttn-primary" id="recovery">Recuperar</button>
+        <button type="submit" class="bttn bttn-primary" id="recovery">Recuperar</button>
         <button routerLink="/login" class="bttn bttn-secondary">Regresar</button>               
     </div>
 
-</section>
+</form>
