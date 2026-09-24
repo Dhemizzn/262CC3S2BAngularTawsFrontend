@@ -3,18 +3,12 @@
 .bg-h{
     background: $color-secondary;
     color: $white;
+    border-bottom: rem(3) solid $color-primary; 
 };
 
-.l-p{
-    font-size: 1.5em;
-};
 
-.l-s{
-    font-size: 0.8rem;
-};
-
-.border-c-p{
-    border-bottom: 3px solid $color-primary; 
+.border-h{
+    border-bottom: rem(3) solid $color-primary; 
 }
 
 .header-link {
@@ -22,19 +16,13 @@
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
-  }
+}
   
 .header-link:hover {
     color: $color-primary;
 }
 
-.home-cta {
-    background: $color-secondary;
-    color: $white;
-}
-
-.home-cta .home-section-title,
-.home-cta .home-section-lead {
-color: $white;
+.flex-1{
+    flex: 1 1 0%;
 }
 

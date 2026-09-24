@@ -1,85 +1,90 @@
 @use "./variables" as *;
 
-body{
+$primary: $color-primary;
+$secondary: $color-secondary;
+$light: $bg-light;
+$dark: $text-dark;
+$white: $white; 
+
+@import "bootstrap/scss/bootstrap";
+
+body {
     font-family: -apple-system, "Segoe UI", "Helvetica Neue", sans-serif;
-    margin: 0px;
-    display:flex;
+    margin: 0;
+    display: flex;
     flex-direction: column;
     min-height: 100vh;
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
                 url('https://images.pexels.com/photos/37885473/pexels-photo-37885473.jpeg');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
 }
 
-app-root{
-    display:flex;
-    flex-direction:column;
+app-root {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
 }
 
-.auth-card{
+.auth-card {
     background-color: $white;
-    padding: 35px 30px;
-    width:90%;
-    border-radius: 10px;
+    padding: rem(35) rem(30);
+    width: 90%;
+    border-radius: rem(10);
     border: 1px solid $color-primary;
 }
 
-input[type="text"],input[type="date"], select, input[type="email"],input[type="number"]{
+input[type="text"], input[type="date"], select, input[type="email"], input[type="number"] {
     width: 99%;
-    padding: 10px;
-    border: 0.5px solid $border-color;
-    border-radius: 4px;
+    padding: rem(10);
+    border: 0.5px solid $border-color; 
+    border-radius: rem(4);
     font-size: 1rem;
 }
 
-label{
-    display:block;
-    margin-bottom:2px;
-    font-weight:600;
-    color:$color-secondary;
+label {
+    display: block;
+    margin-bottom: rem(2);
+    font-weight: 600;
+    color: $color-secondary;
 }
 
-.bttn{
-    padding:12px 35px;
+.bttn {
+    padding: rem(12) rem(35);
     font-size: 1rem;
     font-weight: bold;
     border: none;
-    border-radius: 4px;
+    border-radius: rem(4);
     cursor: pointer;
     text-align: center;
-
 }
 
-.bttn-primary{
+.bttn-primary {
     background-color: $color-primary;
-    color:white;
+    color:$white;
 }
 
-.bttn-primary:hover{
-    background-color:$color-secondary;
+.bttn-primary:hover {
+    background-color: $color-secondary;
     color: $white;
 }
 
-.bttn-secondary{
-    background-color: $color-secondary ;
+.bttn-secondary {
+    background-color: $color-secondary;
     color: $white;
 }
 
-.bttn-secondary:hover{
+.bttn-secondary:hover {
     background-color: $color-primary;
-    color:white;
+    color:$white;
 }
 
-
-a{
-    color:$color-primary;
+a {
+    color: $color-primary;
     text-decoration: none;
     font-weight: 600;
 }
 
-a:hover{
-    color:$color-secondary;
+a:hover {
+    color: $color-secondary;
 }

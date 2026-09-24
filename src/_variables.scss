@@ -1,3 +1,9 @@
+@use "sass:math";
+
+@function rem($px){
+    @return math.div($px,16)*1rem;
+}
+
 $color-primary: #FF3B30;
 $color-secondary: #0F172A;
 $bg-light: #EFEFEF;

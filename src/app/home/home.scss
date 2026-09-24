@@ -6,168 +6,29 @@
   flex-grow: 1;
 }
 
-.hero {
-  flex-grow: 1;
-  min-height: 100vh;
-  color: $white;
-}
-
-.hero-kicker {
+.kicker-spacing {
   letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
 }
 
-.hero-title {
-  font-size: 2.4rem;
-  font-weight: 700;
-  max-width: 720px;
+.max-w-720 { max-width: rem(720); }
+.max-w-560 { max-width: rem(560); }
+
+.tarjeta-viaje {
+  height: 500px;
+  
+  img {
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
-.hero-subtitle {
-  max-width: 520px;
-  font-size: 1.1rem;
+.overlay-oscuro {
+  background: linear-gradient(transparent, rgba(15, 23, 42, 0.85));
 }
 
+// Mantén esta clase para el botón transparente con borde blanco
 .btn-hero-outline {
   background: transparent;
   color: $white;
-  border: 2px solid $white;
-}
-
-.home-section {
-  background: $bg-light;
-  color: $text-dark;
-  padding-block: 4rem;
-}
-
-.home-section-title {
-  color: $color-secondary;
-  font-weight: 700;
-  font-size: 2rem;
-}
-
-.home-section-lead {
-  color: $text-dark;
-  max-width: 560px;
-  margin-inline: auto;
-  margin-bottom: 2.5rem;
-}
-
-.title-accent {
-  color: $color-primary;
-}
-
-
-/* Destinos */
-
-.destino-card {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  min-height: 500px;
-  border: none;
-}
-
-.destino-card-img {
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-  display: block;
-}
-
-.destino-card-overlay {
-  position: absolute;
-  inset: 0;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  background: linear-gradient(transparent, rgba(15, 23, 42, 0.75));
-  color: $white;
-}
-
-.destino-region {
-  color: $white;
-  opacity: 0.9;
-}
-
-.destino-nombre {
-  color: $white;
-  font-size: 1.2rem;
-}
-
-.home-section-alt {
-  background: $white;
-}
-
-
-/* Planes */
-.plan-card {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  min-height: 500px;
-  border: none;
-  padding: 0;
-  background: transparent;
-}
-
-.plan-card-img {
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-  display: block;
-}
-
-.plan-card-overlay {
-  position: absolute;
-  inset: 0;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  background: linear-gradient(transparent 30%, rgba(15, 23, 42, 0.8));
-  color: $white;
-}
-
-.plan-duracion {
-  color: $white;
-  font-size: 0.8rem;
-}
-
-.plan-nombre,
-.plan-incluye {
-  color: $white;
-}
-
-.plan-precio {
-  display: inline-block;
-  background: $color-primary;
-  color: $white;
-  font-size: 1.35rem;
-  font-weight: 700;
-  padding: 8px 14px;
-  border-radius: 6px;
-}
-
-/* Motivos */
-.motivo-card {
-  background: $bg-light;
-  border-radius: 12px;
-  padding: 28px 16px;
-  height: 100%;
-}
-
-.motivo-icon {
-  font-size: 2rem;
-  color: $color-primary;
-  display: block;
-  margin-bottom: 12px;
-}
-
-
-.home-cta {
-  background: $bg-light;
+  border: rem(2) solid $white;
 }

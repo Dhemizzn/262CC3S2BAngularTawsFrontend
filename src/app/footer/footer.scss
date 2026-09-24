@@ -2,5 +2,5 @@
 .bg-f{
     background: $bg-light;
     color: $text-dark;
-    border-top: 3px solid $color-secondary;
+    border-top: rem(3) solid $color-secondary;
 }
