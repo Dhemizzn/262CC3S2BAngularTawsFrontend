@@ -83,4 +83,15 @@ export class Home {
       icono: 'bi-headset',
     },
   ];
+
+  destinoExpandido: string | null = null;
+  planExpandido: string | null = null;
+
+  alternarDestino(nombre: string) {
+    this.destinoExpandido = this.destinoExpandido === nombre ? null : nombre;
+  }
+
+  alternarPlan(nombre: string) {
+    this.planExpandido = this.planExpandido === nombre ? null : nombre;
+  }
 }
