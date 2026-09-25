@@ -20,11 +20,20 @@
     <div class="row g-4">
       @for (destino of destinos; track destino.nombre) {
         <div class="col-12 col-md-6 col-lg-3">
-          <article class="card border-0 rounded-4 overflow-hidden tarjeta-viaje text-white">
+          <article 
+            class="card border-0 rounded-4 overflow-hidden tarjeta-viaje text-white shadow-sm"
+            (click)="alternarDestino(destino.nombre)">
             <img [src]="destino.imagen" [alt]="destino.nombre" class="card-img rounded-0 w-100" />
+            
             <div class="card-img-overlay overlay-oscuro d-flex flex-column justify-content-end p-3">
               <p class="opacity-75 mb-1 small">{{ destino.region }}</p>
               <h3 class="fs-5 mb-0 fw-semibold">{{ destino.nombre }}</h3>
+              
+              @if (destinoExpandido === destino.nombre) {
+                <div class="descripcion-revelada">
+                  <p class="mb-0 mt-2 small text-light">{{ destino.descripcion }}</p>
+                </div>
+              }
             </div>
           </article>
         </div>
@@ -45,14 +54,22 @@
     <div class="row g-4 justify-content-center">
       @for (plan of planes; track plan.nombre) {
         <div class="col-12 col-md-6 col-lg-4">
-          <article class="card border-0 rounded-4 overflow-hidden tarjeta-viaje text-white">
+          <article 
+            class="card border-0 rounded-4 overflow-hidden tarjeta-viaje text-white shadow-sm"
+            (click)="alternarPlan(plan.nombre)">
             <img [src]="plan.imagen" [alt]="plan.nombre" class="card-img rounded-0 w-100" />
+            
             <div class="card-img-overlay overlay-oscuro d-flex flex-column justify-content-end align-items-start p-4">
               <p class="small opacity-75 mb-1">{{ plan.duracion }}</p>
               <h3 class="fs-4 fw-semibold">{{ plan.nombre }}</h3>
-              <p class="mb-3">{{ plan.incluye }}</p>
-              <!-- Aquí también usamos bg-primary que ya enlazaste a tus variables -->
-              <span class="bg-primary text-white fs-5 fw-bold px-3 py-2 rounded-2">{{ plan.precio }}</span>
+              
+              @if (planExpandido === plan.nombre) {
+                <div class="descripcion-revelada w-100">
+                  <p class="mb-3 text-light">{{ plan.incluye }}</p>
+                </div>
+              }
+              
+              <span class="bg-primary text-white fs-5 fw-bold px-3 py-2 rounded-2 mt-3">{{ plan.precio }}</span>
             </div>
           </article>
         </div>

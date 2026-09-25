@@ -39,3 +39,44 @@
     background-position: center;
 
 }
+
+
+.tarjeta-viaje {
+  height: 500px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  img {
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important; 
+    
+    img {
+      transform: scale(1.05); 
+    }
+  }
+}
+
+.descripcion-revelada {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 12px;
+  padding-top: 12px;
+  
+  animation: deslizarAparecer 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes deslizarAparecer {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
