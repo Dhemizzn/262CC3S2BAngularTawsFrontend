@@ -1,12 +1,22 @@
-<section class="min-vh-100 d-flex flex-column justify-content-center align-items-center text-center px-3 text-white flex-grow-1 img-1">
-  <p class="text-uppercase kicker-spacing mb-2 small">Agencia de viajes</p>
-  <h1 class="fw-bold display-5 max-w-720">Descubre el Perú con Peru TOURS</h1>
-  <p class="fs-5 max-w-560">
-    Planes, destinos y tarifas pensados para que viajes sin complicaciones.
-  </p>
-  <div class="d-flex flex-wrap gap-3 justify-content-center mt-4">
-    <a href="#planes" class="bttn bttn-primary text-decoration-none">Ver planes</a>
-    <a routerLink="/login" class="bttn btn-hero-outline text-decoration-none">Iniciar sesión</a>
+<section class="min-vh-100 position-relative d-flex flex-column justify-content-center align-items-center text-center flex-grow-1 overflow-hidden">
+  
+  @for (slide of slidesHero; track slide.id; let i = $index) {
+    <div class="slide position-absolute top-0 start-0 w-100 h-100" [class.active]="i === currentIndex">
+      <img [src]="slide.url" alt="Fondo Peru Tours" class="w-100 h-100 object-fit-cover" />
+      <div class="position-absolute top-0 start-0 w-100 h-100 hero-overlay"></div>
+    </div>
+  }
+  
+  <div class="position-relative z-3 text-white px-3">
+    <p class="text-uppercase kicker-spacing mb-2 small">Agencia de viajes</p>
+    <h1 class="fw-bold display-5 max-w-720 mx-auto">Descubre el Perú con Peru TOURS</h1>
+    <p class="fs-5 max-w-560 mx-auto">
+      Planes, destinos y tarifas pensados para que viajes sin complicaciones.
+    </p>
+    <div class="d-flex flex-wrap gap-3 justify-content-center mt-4">
+      <a href="#planes" class="bttn bttn-primary text-decoration-none">Ver planes</a>
+      <a routerLink="/login" class="bttn btn-hero-outline text-decoration-none">Iniciar sesión</a>
+    </div>
   </div>
 </section>
 

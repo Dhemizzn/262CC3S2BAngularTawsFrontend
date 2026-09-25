@@ -6,6 +6,21 @@
   flex-grow: 1;
 }
 
+.slide {
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 1.2s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+  z-index: 2;
+}
+
+.hero-overlay {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+}
+
 .kicker-spacing {
   letter-spacing: 0.08em;
 }
@@ -13,14 +28,6 @@
 .max-w-720 { max-width: rem(720); }
 .max-w-560 { max-width: rem(560); }
 
-.tarjeta-viaje {
-  height: 500px;
-  
-  img {
-    height: 100%;
-    object-fit: cover;
-  }
-}
 
 .overlay-oscuro {
   background: linear-gradient(transparent, rgba(15, 23, 42, 0.85));
@@ -32,17 +39,9 @@
   border: rem(2) solid $white;
 }
 
-.img-1{
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-          url('https://images.pexels.com/photos/37885473/pexels-photo-37885473.jpeg');
-    background-size: cover;
-    background-position: center;
-
-}
-
 
 .tarjeta-viaje {
-  height: 500px;
+  height: rem(500);
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   
@@ -68,15 +67,4 @@
   padding-top: 12px;
   
   animation: deslizarAparecer 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-}
-
-@keyframes deslizarAparecer {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

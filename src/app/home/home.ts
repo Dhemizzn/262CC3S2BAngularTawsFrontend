@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 
@@ -8,7 +8,18 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.scss',
   templateUrl: './home.html',
 })
-export class Home {
+export class Home implements OnInit, OnDestroy {
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  readonly slidesHero = [
+      { id: 1,
+        url: 'https://images.pexels.com/photos/37885473/pexels-photo-37885473.jpeg' },
+      { id: 2,
+        url: 'https://images.pexels.com/photos/14631645/pexels-photo-14631645.jpeg' },
+      { id: 3,
+        url: 'https://images.pexels.com/photos/7435365/pexels-photo-7435365.jpeg' }
+    ];
+
   readonly destinos = [
     {
       nombre: 'Machu Picchu',
@@ -86,6 +97,8 @@ export class Home {
 
   destinoExpandido: string | null = null;
   planExpandido: string | null = null;
+  currentIndex= 0;
+  intervalId: any;
 
   alternarDestino(nombre: string) {
     this.destinoExpandido = this.destinoExpandido === nombre ? null : nombre;
@@ -93,5 +106,29 @@ export class Home {
 
   alternarPlan(nombre: string) {
     this.planExpandido = this.planExpandido === nombre ? null : nombre;
+  }
+
+  ngOnInit(){
+    this.iniciarSlider();
+  }
+
+  ngOnDestroy() {
+      if (this.intervalId) {
+        clearInterval(this.intervalId);
+      }
+    }
+
+  iniciarSlider() {
+    console.log('iniciarSlider ejecutado');
+
+    this.intervalId = setInterval(() => {
+      console.log('cambiando:', this.currentIndex);
+
+      this.currentIndex =
+        (this.currentIndex === this.slidesHero.length - 1)
+          ? 0
+          : this.currentIndex + 1;
+      this.cdr.detectChanges();
+    }, 5000);
   }
 }
