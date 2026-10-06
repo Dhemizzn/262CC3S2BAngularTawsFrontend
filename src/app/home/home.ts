@@ -123,11 +123,7 @@ export class Home implements OnInit, OnDestroy {
 
     this.intervalId = setInterval(() => {
       console.log('cambiando:', this.currentIndex);
-
-      this.currentIndex =
-        (this.currentIndex === this.slidesHero.length - 1)
-          ? 0
-          : this.currentIndex + 1;
+      this.currentIndex = (this.currentIndex === this.slidesHero.length - 1) ? 0 : this.currentIndex + 1;
       this.cdr.detectChanges();
     }, 5000);
   }
