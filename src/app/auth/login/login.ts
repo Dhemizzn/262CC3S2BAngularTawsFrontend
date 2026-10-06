@@ -23,4 +23,11 @@ export class Login {
     this.location.back();
   }
 
+  Login() {
+    if(this.form.invalid){return;}
+    const { email, password } = this.form.value;
+    if (!email || !password) return;
+    alert('Login successful');
+    this.router.navigate(['/client-dashboard']);
+  }
 }
