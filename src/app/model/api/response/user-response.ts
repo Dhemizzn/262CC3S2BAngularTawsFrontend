@@ -1,1 +1,3 @@
-export interface UserResponse {}
+export interface UserResponse {
+    token: string;
+}
