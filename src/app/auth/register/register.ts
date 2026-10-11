@@ -49,8 +49,8 @@ export class Register {
 
     this.authService.register(registerRequest).subscribe({
       next: (response) => {
-        this.form.markAllAsTouched();
-        alert('Verifique los campos del formulario');
+        alert('Registro exitoso');
+        this.router.navigate(['/login']);
         return;
       },
       error: (error: HttpErrorResponse) => {
