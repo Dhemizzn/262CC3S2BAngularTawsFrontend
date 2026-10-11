@@ -1,0 +1,9 @@
+ng generate component components\acceso\inicio-sesion
+ng generate component components\principal
+ng generate interface model\api\request\user-request
+ng generate interface model\api\response\user-response
+ng generate interface model\rol
+ng generate interface model\modulo
+ng generate interface model\user-sesion
+ng generate service services\auth.service --skip-tests
+ng generate service services\session.service --skip-tests

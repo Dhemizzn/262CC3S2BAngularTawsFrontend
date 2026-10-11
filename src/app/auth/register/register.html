@@ -1,40 +1,69 @@
-<form [formGroup]="form" class="auth-card p-4 p-md-5 ">
+```html
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-card p-4 p-md-5">
     <h2 class="text-center mt-0 mb-4 fw-bold">Registro</h2>
-    
+
     <div class="row">
         <div class="col-md-4 mb-3">
             <label for="name" class="form-label fw-medium">Nombre</label>
-            <input class="form-control" type="text" id="name" placeholder="Ingrese su nombre">    
-        </div>        
-
-        <div class="col-md-4 mb-3">
-            <label for="lastn" class="form-label fw-medium">Apellidos</label>
-            <input class="form-control" type="text" id="lastn" placeholder="Ingrese sus Apellidos">
+            <input class="form-control" type="text" id="name"
+                   formControlName="firstName"
+                   placeholder="Ingrese su nombre">
         </div>
 
         <div class="col-md-4 mb-3">
+            <label for="lastnP" class="form-label fw-medium">Apellido Paterno</label>
+            <input class="form-control" type="text" id="lastnP"
+                   formControlName="lastNameP"
+                   placeholder="Ingrese su apellido paterno">
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label for="lastnM" class="form-label fw-medium">Apellido Materno</label>
+            <input class="form-control" type="text" id="lastM"
+                   formControlName="lastNameM"
+                   placeholder="Ingrese su apellido materno">
+        </div>        
+
+        <div class="col-md-4 mb-3">
             <label for="dni" class="form-label fw-medium">DNI</label>
-            <input class="form-control" type="text" id="dni" inputmode="numeric" placeholder="Ingrese su DNI">
+            <input class="form-control" type="text" id="dni"
+                   formControlName="dni"
+                   inputmode="numeric"
+                   placeholder="Ingrese su DNI">
         </div>
 
         <div class="col-md-4 mb-3">
             <label for="email" class="form-label fw-medium">Correo Electrónico</label>
-            <input class="form-control" type="email" id="email" placeholder="Ingrese su correo">
+            <input class="form-control" type="email" id="email"
+                   formControlName="email"
+                   placeholder="Ingrese su correo">
         </div>
 
         <div class="col-md-4 mb-3">
             <label for="telefono" class="form-label fw-medium">Teléfono</label>
-            <input class="form-control" type="text" id="telefono" inputmode="numeric" placeholder="Ingrese su teléfono">
+            <input class="form-control" type="text" id="telefono"
+                   formControlName="phone"
+                   inputmode="numeric"
+                   placeholder="Ingrese su teléfono">
         </div>
 
         <div class="col-md-4 mb-3">
             <label for="direction" class="form-label fw-medium">Dirección</label>
-            <input class="form-control" type="text" id="direction" placeholder="Ingrese su dirección">
-        </div>            
+            <input class="form-control" type="text" id="direction"
+                   formControlName="direction"
+                   placeholder="Ingrese su dirección">
+        </div>
     </div>
 
     <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mt-4">
-        <button type="submit" class="bttn bttn-primary" id="register">Registrarse</button>
-        <a routerLink="/login" class="bttn bttn-secondary text-decoration-none">Regresar</a>
+        <button type="submit" class="bttn bttn-primary" id="register">
+            Registrarse
+        </button>
+
+        <a routerLink="/login"
+           class="bttn bttn-secondary text-decoration-none">
+            Regresar
+        </a>
     </div>
 </form>
+```

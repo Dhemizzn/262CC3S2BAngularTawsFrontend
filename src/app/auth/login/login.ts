@@ -2,6 +2,8 @@ import { Component,inject } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Auth } from '../../services/auth';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   imports: [RouterLink, RouterModule, ReactiveFormsModule],
@@ -13,21 +15,36 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class Login {
   location  = inject(Location);
   router = inject(Router);
+  authService = inject(Auth);
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
   });
 
-  onBack() {
-    this.location.back();
-  }
+  onSubmit() {
+    if(this.form.invalid){
+      return;
+    }
 
-  Login() {
-    if(this.form.invalid){return;}
     const { email, password } = this.form.value;
     if (!email || !password) return;
-    alert('Login successful');
-    this.router.navigate(['/client-dashboard']);
+
+    const loginRequest = {
+      username: email,
+      password: password
+    };
+    
+    this.authService.login(loginRequest).subscribe({
+      next: (response) => { //next es un callback que se ejecuta cuando la solicitud es exitosa
+        this.authService.setToken(response.token);
+        alert('Login successful');
+        this.router.navigate(['/client-dashboard']);
+      },
+      error: (error: HttpErrorResponse) => {
+        const mensaje = error.error?.message || 'Error al iniciar sesion';
+        alert(mensaje);
+      }
+    });
   }
 }

@@ -1,35 +1,40 @@
 import { Service, signal } from '@angular/core';
 import { authResponse } from '../model/response/authResponse';
-import { user } from '../model/user';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-
+import { loginRequest } from '../model/request/loginRequest';
+import { registerRequest } from '../model/request/registerRequest';
+import { StorageService } from './storage';
+import { environment } from '../environments/environment';
 @Service()
 export class Auth {
-    private  isAuthenticated = signal<boolean>(this.hasToken());
+    private apiUrl = `${environment.url}/auth`
+    private storageService = inject(StorageService);
+
+    private isAuthenticated = signal<boolean>(this.hasToken());
     isAuthenticated$ = this.isAuthenticated.asReadonly();
 
     http = inject(HttpClient);
-    login(authRequest: user) : Observable<authResponse> {
-        return this.http.post<authResponse>('/api/login', authRequest);
+    login(user: loginRequest) : Observable<authResponse> {
+            return this.http.post<authResponse>(`${this.apiUrl}/login`,user);
     }
 
-    register(registerRequest: user) : Observable<authResponse> {
-        return this.http.post<authResponse>('/api/register', registerRequest);
+    register(user: registerRequest) : Observable<authResponse> {
+        return this.http.post<authResponse>(`${this.apiUrl}/register`,user);
     }
 
     private hasToken(): boolean {
-        return !!localStorage.getItem('userToken');
+        return !!this.storageService.getItem('userToken');
     }
 
-    setToken(token: string): void {
-        localStorage.setItem('userToken', token);
+    public setToken(token: string): void {
+        this.storageService.setItem('userToken', token);
         this.isAuthenticated.set(true);
     }
 
     logout(): void {
-        localStorage.removeItem('userToken');
+        this.storageService.removeItem('userToken');
         this.isAuthenticated.set(false);
     }
 }
