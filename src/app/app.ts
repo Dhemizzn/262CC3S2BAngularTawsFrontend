@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Header } from './header/header';
-import { Footer } from './footer/footer';
+import { Header } from './components/header/header';
+import { Footer } from './components/footer/footer';
+import { Loading } from './services/loading';
 @Component({
   imports: [RouterOutlet, Header, Footer],
   selector: 'app-root',
@@ -10,4 +11,5 @@ import { Footer } from './footer/footer';
 })
 export class App {
   protected readonly title = signal('262CC3S2BAngularTawsFrontend');
+  readonly loading = inject(Loading);
 }

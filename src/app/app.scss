@@ -1,5 +1,97 @@
-.main-content{
-    flex: 1;
-    display:flex;
-    flex-direction: column;
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+// Fondo del loading
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  background: rgba(0, 0, 0, 0.75);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Oculta el SVG utilizado como plantilla
+.svg-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+// Contenedor de las huellitas y el texto
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+// Animación de las huellitas
+.ajax-loader {
+  position: relative;
+  font-size: 45px;
+  width: 2em;
+  height: 3em;
+  color: #d31145;
+
+  transform: rotate(90deg);
+
+  .paw {
+    width: 1em;
+    height: 1em;
+    opacity: 0;
+
+    animation: pawAnimation 2050ms ease-in-out infinite;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .icon {
+      fill: currentColor;
+    }
+
+    &:nth-child(odd) {
+      transform: rotate(-10deg);
+    }
+
+    &:nth-child(even) {
+      transform: rotate(10deg) translate(125%, 0);
+    }
+
+    @for $i from 1 through 6 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{(6 - $i) * 0.25}s;
+      }
+    }
+  }
+}
+
+// Texto del loading
+.loading-text {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+}
+
+// Animación
+@keyframes pawAnimation {
+  0% {
+    opacity: 1;
+  }
+
+  50%, 100% {
+    opacity: 0;
+  }
 }

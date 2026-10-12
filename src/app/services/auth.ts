@@ -6,7 +6,7 @@ import { inject } from '@angular/core';
 import { loginRequest } from '../model/request/loginRequest';
 import { registerRequest } from '../model/request/registerRequest';
 import { StorageService } from './storage';
-import { environment } from '../environments/environment';
+import { environment } from '../components/environments/environment';
 @Service()
 export class Auth {
     private apiUrl = `${environment.url}/auth`

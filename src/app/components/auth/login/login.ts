@@ -2,8 +2,8 @@ import { Component,inject } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Auth } from '../../services/auth';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Auth } from '../../../services/auth';
 
 @Component({
   imports: [RouterLink, RouterModule, ReactiveFormsModule],
