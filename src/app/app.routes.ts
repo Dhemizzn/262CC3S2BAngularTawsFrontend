@@ -5,6 +5,7 @@ import { Login } from './components/auth/login/login';
 import { Recovery } from './components/auth/recovery/recovery';
 import { Register } from './components/auth/register/register';
 import { NewQuote } from './components/home/client-dashboard/new-quote/new-quote';
+import { MyQuotes } from './components/home/client-dashboard/my-quotes/my-quotes';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -16,6 +17,7 @@ export const routes: Routes = [
     component: ClientDashboard, 
     children: [
       { path: 'nueva-cotizacion', component: NewQuote },
+      { path: 'mis-cotizaciones', component: MyQuotes },
       { path: '', redirectTo: 'nueva-cotizacion', pathMatch: 'full' }
     ]
   },
