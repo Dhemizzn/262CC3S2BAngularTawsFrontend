@@ -1,8 +1,8 @@
 <div class="container-fluid">
   <div class="row">
     
-    <nav class="col-md-3 col-lg-2 d-md-block bg-white sidebar shadow-sm min-vh-100 d-flex flex-column">
-      <div class="position-sticky pt-5 mt-3 px-2 w-100 d-flex flex-column h-100">
+    <nav class="col-md-3 col-lg-2 d-none d-md-flex bg-white sidebar shadow-sm flex-column">
+      <div class="position-sticky pt-5 mt-3 px-2 w-100 d-flex flex-column flex-grow-1">
         <div class="px-3 py-2 mb-3 border-bottom">
           <div class="d-flex align-items-center gap-2">
             <i class="bi bi-person-circle fs-3 text-secondary"></i>
@@ -33,7 +33,7 @@
 
         <hr class="my-4 mt-auto">
         
-        <div class="px-2 pb-5">
+        <div class="px-2 pb-3">
           <button type="button" class="btn btn-outline-danger w-100" (click)="logout()">
             <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
           </button>
@@ -41,7 +41,7 @@
       </div>
     </nav>
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 bg-light main-content min-vh-100 d-flex flex-column justify-content-center">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5 mt-4 pb-4 bg-light main-content d-flex flex-column">
         <router-outlet></router-outlet> 
     </main>
 
