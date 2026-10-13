@@ -1,3 +1,4 @@
+@use '../../../../variables' as *; 
 .sidebar, .main-content {
   min-height: calc(100vh - 60px); 
 }
@@ -12,7 +13,7 @@
 
     &:hover {
       background-color: #f8f9fa;
-      color: #0d6efd !important; 
+      color: $color-primary !important; 
       transform: translateX(3px); 
     }
 
@@ -21,7 +22,7 @@
       background-color: #e9ecef;
       color: #000;
       font-weight: 600;
-      border-left: 4px solid #0d6efd;
+      border-left: 4px solid $color-secondary;
     }
   }
 }
