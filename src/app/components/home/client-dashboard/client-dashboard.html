@@ -1,23 +1,23 @@
 <div class="container-fluid">
   <div class="row">
     
-    <nav class="col-md-3 col-lg-2 d-md-block bg-white sidebar shadow-sm">
+    <nav class="col-md-3 col-lg-2 d-md-block bg-white sidebar shadow-sm min-vh-100">
       <div class="position-sticky pt-4 px-2">
         <h5 class="text-muted px-3 mb-4 fw-bold fs-6">PORTAL DEL SOCIO</h5>
         
         <ul class="nav flex-column gap-2">
           <li class="nav-item">
-            <a class="nav-link active rounded d-flex align-items-center" href="#">
+            <a class="nav-link active rounded d-flex align-items-center" routerLink="nueva-cotizacion">
               <i class="bi bi-file-earmark-plus fs-5 me-2"></i> Nueva Cotización
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark rounded d-flex align-items-center" href="#">
+            <a class="nav-link text-dark rounded d-flex align-items-center" routerLink="mis-cotizaciones">
               <i class="bi bi-card-list fs-5 me-2"></i> Mis Cotizaciones
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark rounded d-flex align-items-center" href="#">
+            <a class="nav-link text-dark rounded d-flex align-items-center" routerLink="mis-pagos">
               <i class="bi bi-credit-card fs-5 me-2"></i> Mis Pagos
             </a>
           </li>
@@ -33,82 +33,8 @@
       </div>
     </nav>
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5 bg-light main-content">
-      <div class="row justify-content-center mt-3">
-        <div class="col-12 col-xxl-10">
-          
-          <div class="card shadow border-0">
-            <div class="card-header bg-dark text-white p-4">
-              <h3 class="mb-0 fs-5">Solicitud de Paquete Turístico</h3>
-              <p class="mb-0 text-light small mt-1">El agente receptivo evaluará estos datos para enviarle una cotización.</p>
-            </div>
-            
-            <div class="card-body p-4 p-md-5">
-              
-              <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-4" role="alert">
-                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
-                <div>{{ successMessage }}</div>
-              </div>
-
-              <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()">
-                
-                <h5 class="text-secondary mb-3 border-bottom pb-2 fs-6">Información de la Ruta</h5>
-                
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="ciudadPartida" class="form-label fw-semibold">Ciudad de Partida</label>
-                    <input type="text" id="ciudadPartida" class="form-control" formControlName="ciudadPartida" 
-                           [ngClass]="{'is-invalid': quoteForm.get('ciudadPartida')?.invalid && quoteForm.get('ciudadPartida')?.touched}" 
-                           placeholder="Ej. Lima, Arequipa">
-                  </div>
-
-                  <div class="col-md-6 mb-3">
-                    <label for="destino" class="form-label fw-semibold">Destino</label>
-                    <input type="text" id="destino" class="form-control" formControlName="destino" 
-                           [ngClass]="{'is-invalid': quoteForm.get('destino')?.invalid && quoteForm.get('destino')?.touched}" 
-                           placeholder="Ej. Cusco, Puno, Arequipa">
-                  </div>
-                </div>
-
-                <div class="row mt-2">
-                  <div class="col-md-6 mb-3">
-                    <label for="pasajeros" class="form-label fw-semibold">Cantidad de Pasajeros</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-people"></i></span>
-                      <input type="number" id="pasajeros" class="form-control" formControlName="pasajeros" min="1"
-                             [ngClass]="{'is-invalid': quoteForm.get('pasajeros')?.invalid && quoteForm.get('pasajeros')?.touched}">
-                    </div>
-                  </div>
-                </div>
-
-                <h5 class="text-secondary mb-3 mt-4 border-bottom pb-2 fs-6">Cronograma de Viaje</h5>
-
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="fechaPartida" class="form-label fw-semibold">Fecha y Hora de Partida</label>
-                    <input type="datetime-local" id="fechaPartida" class="form-control" formControlName="fechaPartida"
-                           [ngClass]="{'is-invalid': quoteForm.get('fechaPartida')?.invalid && quoteForm.get('fechaPartida')?.touched}">
-                  </div>
-
-                  <div class="col-md-6 mb-4">
-                    <label for="fechaRetorno" class="form-label fw-semibold">Fecha y Hora de Retorno</label>
-                    <input type="datetime-local" id="fechaRetorno" class="form-control" formControlName="fechaRetorno"
-                           [ngClass]="{'is-invalid': quoteForm.get('fechaRetorno')?.invalid && quoteForm.get('fechaRetorno')?.touched}">
-                  </div>
-                </div>
-
-                <div class="d-flex justify-content-end mt-2">
-                  <button type="submit" class="btn btn-primary px-5 py-2 shadow-sm" [disabled]="quoteForm.invalid">
-                    <i class="bi bi-send me-1"></i> Enviar Solicitud
-                  </button>
-                </div>
-
-              </form>
-            </div>
-          </div>
-
-        </div>
-      </div>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5 bg-light main-content min-vh-100">
+      <router-outlet></router-outlet> 
     </main>
 
   </div>
