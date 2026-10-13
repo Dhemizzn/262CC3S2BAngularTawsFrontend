@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-12 col-xxl-11">
+    
+    <div class="card shadow border-0">
+      <div class="card-header bg-secondary text-white p-4">
+        <h3 class="mb-0 fs-5">Solicitud de Paquete Turístico</h3>
+        <p class="mb-0 text-light small mt-1">El agente receptivo evaluará estos datos para enviarle una cotización.</p>
+      </div>
+      
+      <div class="card-body p-4 p-md-4">
+        
+        <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-4">
+          <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+          <div>{{ successMessage }}</div>
+        </div>
+
+        <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()">
+          
+          <h5 class="text-secondary mb-3 border-bottom pb-2 fs-6">Información de la Ruta</h5>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold">Ciudad de Partida</label>
+              <input type="text" class="form-control" formControlName="ciudadPartida" 
+                     [ngClass]="{'is-invalid': quoteForm.get('ciudadPartida')?.invalid && quoteForm.get('ciudadPartida')?.touched}" 
+                     placeholder="Ej. Lima, Arequipa">
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold">Destino</label>
+              <input type="text" class="form-control" formControlName="destino" 
+                     [ngClass]="{'is-invalid': quoteForm.get('destino')?.invalid && quoteForm.get('destino')?.touched}" 
+                     placeholder="Ej. Cusco, Arequipa">
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold">Cantidad de Pasajeros</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-people"></i></span>
+                <input type="number" class="form-control" formControlName="pasajeros" min="1"
+                       [ngClass]="{'is-invalid': quoteForm.get('pasajeros')?.invalid && quoteForm.get('pasajeros')?.touched}">
+              </div>
+            </div>
+          </div>
+
+          <h5 class="text-secondary mb-3 mt-3 border-bottom pb-2 fs-6">Cronograma de Viaje</h5>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-semibold">Fecha y Hora de Partida</label>
+              <input type="datetime-local" class="form-control" formControlName="fechaPartida"
+                     [ngClass]="{'is-invalid': quoteForm.get('fechaPartida')?.invalid && quoteForm.get('fechaPartida')?.touched}">
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-semibold">Fecha y Hora de Retorno</label>
+              <input type="datetime-local" class="form-control" formControlName="fechaRetorno"
+                     [ngClass]="{'is-invalid': quoteForm.get('fechaRetorno')?.invalid && quoteForm.get('fechaRetorno')?.touched}">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-2">
+            <button type="submit" class="btn btn-primary px-5 py-2 shadow-sm" [disabled]="quoteForm.invalid">
+              <i class="bi bi-send me-1"></i> Enviar Solicitud
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
