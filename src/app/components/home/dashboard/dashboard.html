@@ -3,32 +3,31 @@
     
     <nav class="col-md-3 col-lg-2 d-none d-md-flex bg-white sidebar shadow-sm flex-column">
       <div class="position-sticky pt-5 mt-3 px-2 w-100 d-flex flex-column flex-grow-1">
+        
         <div class="px-3 py-2 mb-3 border-bottom">
           <div class="d-flex align-items-center gap-2">
             <i class="bi bi-person-circle fs-3 text-secondary"></i>
             <div class="text-truncate">
-              <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">Portal del Socio</small>
+              <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">
+                {{ roleLabel }}
+              </small>
               <span class="fw-bold text-dark fs-6">¡Hola, {{ firstName }}!</span>
             </div>
           </div>
         </div>
         
         <ul class="nav flex-column gap-2">
-          <li class="nav-item">
-            <a class="nav-link active rounded d-flex align-items-center" routerLink="nueva-cotizacion">
-              <i class="bi bi-file-earmark-plus fs-5 me-2"></i> Nueva Cotización
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark rounded d-flex align-items-center" routerLink="mis-cotizaciones">
-              <i class="bi bi-card-list fs-5 me-2"></i> Mis Cotizaciones
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark rounded d-flex align-items-center" routerLink="mis-pagos">
-              <i class="bi bi-credit-card fs-5 me-2"></i> Mis Pagos
-            </a>
-          </li>
+          @for (item of menuItems; track item.urlPath) {
+            <li class="nav-item">
+              <a class="nav-link text-dark rounded d-flex align-items-center"
+                 [routerLink]="item.urlPath"
+                 routerLinkActive="active bg-light fw-bold text-primary"
+                 [routerLinkActiveOptions]="{ exact: false }">
+                <i class="bi {{ item.icon || 'bi-folder' }} fs-5 me-2"></i>
+                {{ item.moduleName }}
+              </a>
+            </li>
+          }
         </ul>
 
         <hr class="my-4 mt-auto">
@@ -42,7 +41,7 @@
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5 mt-4 pb-4 bg-light main-content d-flex flex-column">
-        <router-outlet></router-outlet> 
+      <router-outlet></router-outlet> 
     </main>
 
   </div>

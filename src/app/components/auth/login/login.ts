@@ -5,6 +5,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../../../services/auth';
 import { ToastService } from '../../../services/toast';
+import { SessionService } from '../../../services/session';
 
 @Component({
   standalone: true,
@@ -18,6 +19,7 @@ export class Login {
   router = inject(Router);
   authService = inject(Auth);
   toastService = inject(ToastService);
+  sessionService = inject(SessionService);
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -55,7 +57,14 @@ export class Login {
     this.authService.login(loginRequest).subscribe({
       next: (response) => {
         this.authService.setToken(response.token);
-        this.router.navigate(['/dashboard']);
+
+        const user = this.sessionService.getUserSession();
+
+        if (user && user.rolId === 1) {
+          this.router.navigate(['/dashboard/usuarios']); 
+        } else {
+          this.router.navigate(['/dashboard/nueva-cotizacion']); 
+        }
       },
       error: (err: HttpErrorResponse) => {
         const mensajeError = err.error?.message || 'Ingreso fallido';

@@ -5,6 +5,6 @@ export interface user {
     email: string;
     personId: number;
     names: string;
-    rol: Rol;
+    rolId: number;
     modules: module[];
 }

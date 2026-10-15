@@ -15,7 +15,7 @@ export class SessionService {
         email: decoded.email,
         personId: decoded.personId,
         names: decoded.names,
-        rol: decoded.rol,
+        rolId: decoded.rolId,
         modules: decoded.modules
     };
     }
