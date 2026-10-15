@@ -61,7 +61,7 @@ export class Login {
         const user = this.sessionService.getUserSession();
 
         if (user && user.rolId === 1) {
-          this.router.navigate(['/dashboard/usuarios']); 
+          this.router.navigate(['/dashboard/historial-paquetes']); 
         } else {
           this.router.navigate(['/dashboard/nueva-cotizacion']); 
         }

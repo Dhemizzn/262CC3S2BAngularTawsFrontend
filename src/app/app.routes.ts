@@ -18,6 +18,9 @@ export const routes: Routes = [
     children: [
       { path: 'nueva-cotizacion', component: NewQuote },
       { path: 'mis-cotizaciones', component: MyQuotes },
+      { path: 'mis-pagos', redirectTo: 'mis-cotizaciones', pathMatch: 'full' },
+      { path: 'historial-paquetes', redirectTo: 'mis-cotizaciones', pathMatch: 'full' },
+      { path: 'roles', redirectTo: 'mis-cotizaciones', pathMatch: 'full' },
       { path: '', redirectTo: 'nueva-cotizacion', pathMatch: 'full' }
     ]
   },

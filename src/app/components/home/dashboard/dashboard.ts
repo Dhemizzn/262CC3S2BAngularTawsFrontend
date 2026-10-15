@@ -24,7 +24,8 @@ export class Dashboard implements OnInit {
   menuItems: MenuItem[] = [];
 
   private iconMap: { [key: string]: string } = {
-    '/dashboard': 'bi-speedometer2',
+    '/historial-paquetes': 'bi-archive',
+    'historial-paquetes': 'bi-archive',
     '/nueva-cotizacion': 'bi-file-earmark-plus',
     'nueva-cotizacion': 'bi-file-earmark-plus',
     '/mis-cotizaciones': 'bi-card-list',
@@ -60,21 +61,8 @@ export class Dashboard implements OnInit {
         urlPath: mod.urlPath || mod.url_path,
         icon: this.iconMap[mod.urlPath || mod.url_path] || 'bi-folder'
       }));
-    } 
-    else {
-      if (idRol === 1) {
-        this.menuItems = [
-          { moduleName: 'Dashboard', urlPath: 'dashboard', icon: 'bi-speedometer2' },
-          { moduleName: 'Usuarios', urlPath: 'usuarios', icon: 'bi-people' },
-          { moduleName: 'Roles', urlPath: 'roles', icon: 'bi-shield-lock' }
-        ];
-      } else {
-        this.menuItems = [
-          { moduleName: 'Nueva Cotización', urlPath: 'nueva-cotizacion', icon: 'bi-file-earmark-plus' },
-          { moduleName: 'Mis Cotizaciones', urlPath: 'mis-cotizaciones', icon: 'bi-card-list' },
-          { moduleName: 'Mis Pagos', urlPath: 'mis-pagos', icon: 'bi-credit-card' }
-        ];
-      }
+    } else {
+      this.menuItems = [];
     }
   }
 
