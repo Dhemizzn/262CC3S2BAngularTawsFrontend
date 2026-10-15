@@ -1,23 +1,38 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
-export interface ToastInfo {
-  header?: string;
-  body: string;
+export type ToastType = 'success' | 'danger' | 'warning' | 'info';
+
+export interface Toast {
+  message: string;
+  type: ToastType;
   delay?: number;
-  classname?: string;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToastService {
-  toasts: ToastInfo[] = [];
+  toasts = signal<Toast[]>([]);
 
-  show(toast: ToastInfo) {
-    this.toasts.push(toast);
+  show(message: string, type: ToastType = 'info') {
+    const toast: Toast = {
+      message,
+      type,
+      delay: 3000
+    };
+
+    this.toasts.update(actuales => [...actuales, toast]);
+
+    setTimeout(() => {
+      this.remove(toast);
+    }, toast.delay);
   }
 
-  remove(toast: ToastInfo) {
-    this.toasts = this.toasts.filter(t => t !== toast);
+  remove(toast: Toast) {
+    this.toasts.update(actuales => actuales.filter((t) => t !== toast));
+  }
+
+  clear() {
+    this.toasts.set([]);
   }
 }

@@ -1,21 +1,23 @@
-import { Component,inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../../../services/auth';
+import { ToastService } from '../../../services/toast';
 
 @Component({
+  standalone: true,
   imports: [RouterLink, RouterModule, ReactiveFormsModule],
   selector: 'app-login',
   styleUrl: './login.scss',
   templateUrl: './login.html',
 })
-
 export class Login {
-  location  = inject(Location);
+  location = inject(Location);
   router = inject(Router);
   authService = inject(Auth);
+  toastService = inject(ToastService);
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -23,7 +25,9 @@ export class Login {
   });
 
   onSubmit() {
-    if(this.form.invalid){
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.toastService.show('El correo debe ser válido y la contraseña tener al menos 6 caracteres.', 'warning');
       return;
     }
 
@@ -34,16 +38,18 @@ export class Login {
       username: email,
       password: password
     };
-    
+
     this.authService.login(loginRequest).subscribe({
-      next: (response) => { //next es un callback que se ejecuta cuando la solicitud es exitosa
+      next: (response) => {
         this.authService.setToken(response.token);
-        alert('Login successful');
+        
+        this.toastService.show('Inicio de sesión exitoso.', 'success');
+        
         this.router.navigate(['/client-dashboard']);
       },
-      error: (error: HttpErrorResponse) => {
-        const mensaje = error.error?.message || 'Error al iniciar sesion';
-        alert(mensaje);
+      error: (err: HttpErrorResponse) => {
+        const mensajeError = err.error?.message || 'Ingreso fallido';
+        this.toastService.show(mensajeError, 'danger');
       }
     });
   }
