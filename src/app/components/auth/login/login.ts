@@ -27,7 +27,20 @@ export class Login {
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.toastService.show('El correo debe ser válido y la contraseña tener al menos 6 caracteres.', 'warning');
+      const correoInvalido = this.form.controls.email.invalid;
+      const contraInvalida = this.form.controls.password.invalid;
+
+      let mensajeAdvertencia = 'Revisa los campos del formulario.';
+
+      if (correoInvalido && contraInvalida) {
+        mensajeAdvertencia = 'El correo no es válido y la contraseña es muy corta.';
+      } else if (correoInvalido) {
+        mensajeAdvertencia = 'Por favor, ingresa un correo electrónico válido.';
+      } else if (contraInvalida) {
+        mensajeAdvertencia = 'La contraseña debe tener al menos 6 caracteres.';
+      }
+
+      this.toastService.show(mensajeAdvertencia, 'warning');
       return;
     }
 
@@ -42,9 +55,6 @@ export class Login {
     this.authService.login(loginRequest).subscribe({
       next: (response) => {
         this.authService.setToken(response.token);
-        
-        this.toastService.show('Inicio de sesión exitoso.', 'success');
-        
         this.router.navigate(['/client-dashboard']);
       },
       error: (err: HttpErrorResponse) => {
