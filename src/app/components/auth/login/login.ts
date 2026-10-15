@@ -55,7 +55,7 @@ export class Login {
     this.authService.login(loginRequest).subscribe({
       next: (response) => {
         this.authService.setToken(response.token);
-        this.router.navigate(['/client-dashboard']);
+        this.router.navigate(['/dashboard']);
       },
       error: (err: HttpErrorResponse) => {
         const mensajeError = err.error?.message || 'Ingreso fallido';

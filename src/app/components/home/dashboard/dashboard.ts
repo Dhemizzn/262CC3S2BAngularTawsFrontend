@@ -4,13 +4,13 @@ import { SessionService } from '../../../services/session';
 import { StorageService } from '../../../services/storage'; 
 
 @Component({
-  selector: 'app-client-dashboard',
+  selector: 'app-dashboard',
   standalone: true,
   imports: [RouterModule],
-  styleUrl: './client-dashboard.scss',
-  templateUrl: './client-dashboard.html',
+  styleUrl: './dashboard.scss',
+  templateUrl: './dashboard.html',
 })
-export class ClientDashboard implements OnInit {
+export class Dashboard implements OnInit {
   private router = inject(Router);
   private sessionService = inject(SessionService);
   private storageService = inject(StorageService);
