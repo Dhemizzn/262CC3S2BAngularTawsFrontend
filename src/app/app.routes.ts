@@ -6,6 +6,8 @@ import { Recovery } from './components/auth/recovery/recovery';
 import { Register } from './components/auth/register/register';
 import { NewQuote } from './components/home/dashboard/new-quote/new-quote';
 import { MyQuotes } from './components/home/dashboard/my-quotes/my-quotes';
+import { PackageHistory } from './components/home/dashboard/package-history/package-history';
+import { Roles } from './components/home/dashboard/roles/roles';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -19,8 +21,8 @@ export const routes: Routes = [
       { path: 'nueva-cotizacion', component: NewQuote },
       { path: 'mis-cotizaciones', component: MyQuotes },
       { path: 'mis-pagos', redirectTo: 'mis-cotizaciones', pathMatch: 'full' },
-      { path: 'historial-paquetes', redirectTo: 'mis-cotizaciones', pathMatch: 'full' },
-      { path: 'roles', redirectTo: 'mis-cotizaciones', pathMatch: 'full' },
+      { path: 'historial-paquetes', component: PackageHistory },
+      { path: 'roles', component: Roles },
       { path: '', redirectTo: 'nueva-cotizacion', pathMatch: 'full' }
     ]
   },
