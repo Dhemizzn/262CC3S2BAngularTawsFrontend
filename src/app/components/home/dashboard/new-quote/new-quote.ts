@@ -1,4 +1,3 @@
-
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -53,7 +52,6 @@ export class NewQuote implements OnInit {
         this.router.navigate(['/dashboard/mis-cotizaciones']);
       },
       error: (err) => {
-        console.error(err);
         this.errorMessage = err.error?.message || 'Error al generar cotizaciones';
       }
     });
