@@ -3,6 +3,7 @@
   <div class="col-12 col-xxl-10">
 
     <div class="card shadow border-0">
+
       <div class="card-header bg-secondary text-white p-4">
         <h3 class="mb-0 fs-5">Mis Cotizaciones</h3>
         <p class="mb-0 text-light small mt-1">
@@ -12,15 +13,11 @@
 
       <div class="card-body p-0">
 
-        @if (mensajeConfirmacion) {
-          <div class="alert alert-success m-3">
-            {{ mensajeConfirmacion }}
-          </div>
-        }
-
-        @if (errorConfirmacion) {
-          <div class="alert alert-danger m-3">
-            {{ errorConfirmacion }}
+        @if (resultadoIncierto) {
+          <div class="alert alert-warning m-3">
+            No se recibió confirmación del servidor.
+            Verifica si la cotización ya está guardada en Neon
+            antes de intentar otra operación.
           </div>
         }
 
@@ -39,13 +36,18 @@
             </thead>
 
             <tbody>
+
               @for (cot of cotizaciones(); track cot.proposalId) {
+
                 <tr>
+
                   <td class="ps-4 fw-bold text-secondary">
                     {{ cot.proposalId.slice(0, 8) }}
                   </td>
 
-                  <td>{{ cot.destination }}</td>
+                  <td>
+                    {{ cot.destination }}
+                  </td>
 
                   <td>
                     {{ cot.departureDate | date:'dd/MM/yyyy' }}
@@ -57,13 +59,17 @@
 
                   <td>
                     @if (cotizacionConfirmada === cot.proposalId) {
+
                       <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
                         Pendiente
                       </span>
+
                     } @else {
+
                       <span class="badge bg-info text-dark rounded-pill px-3 py-2">
                         Propuesta
                       </span>
+
                     }
                   </td>
 
@@ -73,88 +79,135 @@
                       <button
                         class="btn btn-sm btn-outline-primary"
                         (click)="verDetalle(cot)">
+
                         <i class="bi bi-eye"></i>
                         Ver Detalle
+
                       </button>
 
                       <button
                         class="btn btn-sm btn-success"
-                        (click)="confirmarCotizacion(cot)"
-                        [disabled]="confirmando || cotizacionConfirmada !== null">
+                        (click)="solicitarConfirmacion(cot)"
+                        [disabled]="confirmandoId !== null || cotizacionConfirmada !== null || resultadoIncierto">
 
                         @if (cotizacionConfirmada === cot.proposalId) {
+
                           <i class="bi bi-check-circle"></i>
                           Confirmada
-                        } @else if (confirmando) {
+
+                        } @else if (confirmandoId === cot.proposalId) {
+
                           <span class="spinner-border spinner-border-sm me-1"></span>
                           Guardando...
+
                         } @else {
+
                           <i class="bi bi-check-lg"></i>
                           Confirmar
+
                         }
 
                       </button>
 
                     </div>
                   </td>
+
                 </tr>
 
               } @empty {
+
                 <tr>
                   <td colspan="6" class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox fs-2 d-block mb-2"></i>
                     No tienes cotizaciones generadas.
                   </td>
                 </tr>
+
               }
+
             </tbody>
 
           </table>
         </div>
 
         @if (detalleSeleccionado; as detalle) {
+
           <div class="p-4 border-top">
 
-            <h5>Detalle de cotización</h5>
+            <h5 class="mb-4">Detalle de cotización</h5>
 
-            <p>
-              <strong>Origen:</strong>
-              {{ detalle.departureCity }}
-            </p>
+            <div class="row">
 
-            <p>
-              <strong>Destino:</strong>
-              {{ detalle.destination }}
-            </p>
+              <div class="col-md-6">
 
-            <p>
-              <strong>Pasajeros:</strong>
-              {{ detalle.passengerCount }}
-            </p>
+                <p>
+                  <strong>Origen:</strong>
+                  {{ detalle.departureCity }}
+                </p>
 
-            <p>
-              <strong>Hotel:</strong>
-              {{ detalle.hotel.name }}
-            </p>
+                <p>
+                  <strong>Destino:</strong>
+                  {{ detalle.destination }}
+                </p>
 
-            <p>
-              <strong>Noches:</strong>
-              {{ detalle.hotel.nights }}
-            </p>
+                <p>
+                  <strong>Pasajeros:</strong>
+                  {{ detalle.passengerCount }}
+                </p>
 
-            <p>
-              <strong>Aerolínea:</strong>
-              {{ detalle.airplane.airline }}
-            </p>
+                <p>
+                  <strong>Fecha de partida:</strong>
+                  {{ detalle.departureDate | date:'dd/MM/yyyy' }}
+                </p>
 
-            <h6 class="mt-4">Actividades</h6>
+                <p>
+                  <strong>Fecha de retorno:</strong>
+                  {{ detalle.returnDate | date:'dd/MM/yyyy' }}
+                </p>
+
+              </div>
+
+              <div class="col-md-6">
+
+                <p>
+                  <strong>Hotel:</strong>
+                  {{ detalle.hotel.name }}
+                </p>
+
+                <p>
+                  <strong>Noches:</strong>
+                  {{ detalle.hotel.nights }}
+                </p>
+
+                <p>
+                  <strong>Habitaciones:</strong>
+                  {{ detalle.hotel.rooms }}
+                </p>
+
+                <p>
+                  <strong>Aerolínea:</strong>
+                  {{ detalle.airplane.airline }}
+                </p>
+
+                <p>
+                  <strong>Vuelo ida y vuelta por persona:</strong>
+                  S/ {{ detalle.airplane.roundTripPricePerPerson | number:'1.2-2' }}
+                </p>
+
+              </div>
+
+            </div>
+
+            <h6 class="mt-4 mb-3">Actividades</h6>
 
             @for (actividad of detalle.activities; track $index) {
+
               <div class="card mb-2">
                 <div class="card-body">
 
                   <strong>{{ actividad.name }}</strong>
 
-                  <p class="mb-1">
+                  <p class="mb-1 mt-2">
                     Fecha:
                     {{ actividad.date | date:'dd/MM/yyyy' }}
                   </p>
@@ -165,6 +218,11 @@
                     {{ actividad.endTime }}
                   </p>
 
+                  <p class="mb-1">
+                    Duración:
+                    {{ actividad.durationMinutes }} minutos
+                  </p>
+
                   <p class="mb-0">
                     Precio por persona:
                     S/ {{ actividad.pricePerPerson | number:'1.2-2' }}
@@ -172,9 +230,10 @@
 
                 </div>
               </div>
+
             }
 
-            <h5 class="text-success mt-3">
+            <h5 class="text-success mt-4">
               Total: S/ {{ detalle.totalPrice | number:'1.2-2' }}
             </h5>
 
@@ -188,28 +247,149 @@
 
               <button
                 class="btn btn-success"
-                (click)="confirmarCotizacion(detalle)"
-                [disabled]="confirmando || cotizacionConfirmada !== null">
+                (click)="solicitarConfirmacion(detalle)"
+                [disabled]="confirmandoId !== null || cotizacionConfirmada !== null || resultadoIncierto">
 
-                <i class="bi bi-check-circle"></i>
+                @if (cotizacionConfirmada === detalle.proposalId) {
 
-                {{
-                  cotizacionConfirmada === detalle.proposalId
-                    ? 'Confirmada'
-                    : confirmando
-                      ? 'Guardando...'
-                      : 'Confirmar Cotización'
-                }}
+                  <i class="bi bi-check-circle"></i>
+                  Confirmada
+
+                } @else if (confirmandoId === detalle.proposalId) {
+
+                  <span class="spinner-border spinner-border-sm me-1"></span>
+                  Guardando...
+
+                } @else {
+
+                  <i class="bi bi-check-circle"></i>
+                  Confirmar Cotización
+
+                }
 
               </button>
 
             </div>
 
           </div>
+
         }
 
       </div>
+
     </div>
 
   </div>
 </div>
+
+@if (cotizacionPorConfirmar; as cotizacion) {
+
+  <div
+    class="modal fade show d-block"
+    tabindex="-1"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="tituloConfirmacion">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+      <div class="modal-content border-0 shadow">
+
+        <div class="modal-header bg-secondary text-white">
+
+          <h5 class="modal-title" id="tituloConfirmacion">
+            <i class="bi bi-check-circle me-2"></i>
+            Confirmar cotización
+          </h5>
+
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            aria-label="Cerrar"
+            [disabled]="confirmandoId !== null"
+            (click)="cancelarConfirmacion()">
+          </button>
+
+        </div>
+
+        <div class="modal-body p-4">
+
+          <p class="mb-3">
+            ¿Estás seguro de que deseas confirmar esta cotización?
+          </p>
+
+          <div class="bg-light rounded p-3">
+
+            <p class="mb-2">
+              <strong>Destino:</strong>
+              {{ cotizacion.destination }}
+            </p>
+
+            <p class="mb-2">
+              <strong>Pasajeros:</strong>
+              {{ cotizacion.passengerCount }}
+            </p>
+
+            <p class="mb-2">
+              <strong>Hotel:</strong>
+              {{ cotizacion.hotel.name }}
+            </p>
+
+            <p class="mb-0">
+              <strong>Precio total:</strong>
+
+              <span class="text-success fw-bold">
+                S/ {{ cotizacion.totalPrice | number:'1.2-2' }}
+              </span>
+            </p>
+
+          </div>
+
+          <p class="text-muted small mt-3 mb-0">
+            Al confirmar, la cotización se registrará
+            con estado pendiente.
+          </p>
+
+        </div>
+
+        <div class="modal-footer">
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            [disabled]="confirmandoId !== null"
+            (click)="cancelarConfirmacion()">
+            Cancelar
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-success"
+            [disabled]="confirmandoId !== null"
+            (click)="confirmarCotizacion()">
+
+            @if (confirmandoId === cotizacion.proposalId) {
+
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Guardando...
+
+            } @else {
+
+              <i class="bi bi-check-circle me-2"></i>
+              Sí, confirmar
+
+            }
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="modal-backdrop fade show"></div>
+
+}

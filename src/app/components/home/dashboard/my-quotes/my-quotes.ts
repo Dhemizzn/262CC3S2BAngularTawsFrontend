@@ -1,7 +1,10 @@
-import { Component, inject } from '@angular/core';
+
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { finalize, timeout, TimeoutError } from 'rxjs';
 import { QuoteService } from '../../../../services/quote';
 import { QuoteResponse } from '../../../../model/response/quoteResponse';
+import { ToastService } from '../../../../services/toast';
 
 @Component({
   selector: 'app-my-quotes',
@@ -12,15 +15,18 @@ import { QuoteResponse } from '../../../../model/response/quoteResponse';
 export class MyQuotes {
 
   private quoteService = inject(QuoteService);
+  private toastService = inject(ToastService);
+  private cdr = inject(ChangeDetectorRef);
 
   cotizaciones = this.quoteService.cotizaciones;
 
   detalleSeleccionado: QuoteResponse | null = null;
+  cotizacionPorConfirmar: QuoteResponse | null = null;
 
-  confirmando = false;
+  confirmandoId: string | null = null;
   cotizacionConfirmada: string | null = null;
-  mensajeConfirmacion = '';
-  errorConfirmacion = '';
+
+  resultadoIncierto = false;
 
   verDetalle(cotizacion: QuoteResponse): void {
     this.detalleSeleccionado =
@@ -29,37 +35,88 @@ export class MyQuotes {
         : cotizacion;
   }
 
-  confirmarCotizacion(cotizacion: QuoteResponse): void {
+  solicitarConfirmacion(cotizacion: QuoteResponse): void {
+    if (
+      this.confirmandoId !== null ||
+      this.cotizacionConfirmada !== null ||
+      this.resultadoIncierto
+    ) {
+      return;
+    }
 
-    if (this.confirmando || this.cotizacionConfirmada) return;
+    this.cotizacionPorConfirmar = cotizacion;
+  }
 
-    const aceptar = window.confirm(
-      '¿Deseas confirmar esta cotización?'
-    );
+  cancelarConfirmacion(): void {
+    if (this.confirmandoId !== null) return;
 
-    if (!aceptar) return;
+    this.cotizacionPorConfirmar = null;
+  }
 
-    this.confirmando = true;
-    this.errorConfirmacion = '';
+  confirmarCotizacion(): void {
+    const cotizacion = this.cotizacionPorConfirmar;
 
-    this.quoteService.confirmQuote(cotizacion).subscribe({
+    if (
+      !cotizacion ||
+      this.confirmandoId !== null ||
+      this.cotizacionConfirmada !== null ||
+      this.resultadoIncierto
+    ) {
+      return;
+    }
 
-      next: (response) => {
-        this.confirmando = false;
-        this.cotizacionConfirmada = cotizacion.proposalId;
+    this.confirmandoId = cotizacion.proposalId;
 
-        this.mensajeConfirmacion =
-          `Cotización ${response.quotationId} guardada correctamente. Estado: ${response.status}`;
-      },
+    this.quoteService.confirmQuote(cotizacion)
+      .pipe(
+        timeout(30000),
+        finalize(() => {
+          this.confirmandoId = null;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
 
-      error: (err) => {
-        this.confirmando = false;
-        console.error(err);
+        next: (response) => {
+          console.log('Respuesta de confirmación:', response);
 
-        this.errorConfirmacion =
-          err.error?.message || 'No se pudo confirmar la cotización.';
-      }
+          this.cotizacionConfirmada = cotizacion.proposalId;
+          this.cotizacionPorConfirmar = null;
 
-    });
+          this.cdr.markForCheck();
+
+          this.toastService.show(
+            `Cotización ${response.quotationId} guardada correctamente.`,
+            'success'
+          );
+        },
+
+        error: (err) => {
+          console.error('Error al confirmar:', err);
+
+          this.cotizacionPorConfirmar = null;
+
+          if (
+            err instanceof TimeoutError ||
+            err.status === 0 ||
+            err.status === 200
+          ) {
+            this.resultadoIncierto = true;
+
+            this.toastService.show(
+              'No se pudo verificar la respuesta. Comprueba si la cotización ya se guardó en Neon.',
+              'warning'
+            );
+          } else {
+            this.toastService.show(
+              err.error?.message || 'No se pudo confirmar la cotización.',
+              'danger'
+            );
+          }
+
+          this.cdr.markForCheck();
+        }
+
+      });
   }
 }
