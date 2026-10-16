@@ -49,14 +49,14 @@
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label fw-semibold">Fecha y Hora de Partida</label>
-              <input type="datetime-local" class="form-control" formControlName="fechaPartida"
+              <label class="form-label fw-semibold">Fecha de Partida</label>
+              <input type="date" class="form-control" formControlName="fechaPartida"
                      [ngClass]="{'is-invalid': quoteForm.get('fechaPartida')?.invalid && quoteForm.get('fechaPartida')?.touched}">
             </div>
 
             <div class="col-md-6 mb-4">
-              <label class="form-label fw-semibold">Fecha y Hora de Retorno</label>
-              <input type="datetime-local" class="form-control" formControlName="fechaRetorno"
+              <label class="form-label fw-semibold">Fecha de Retorno</label>
+              <input type="date" class="form-control" formControlName="fechaRetorno"
                      [ngClass]="{'is-invalid': quoteForm.get('fechaRetorno')?.invalid && quoteForm.get('fechaRetorno')?.touched}">
             </div>
           </div>
