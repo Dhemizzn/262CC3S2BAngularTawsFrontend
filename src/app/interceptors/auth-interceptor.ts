@@ -24,7 +24,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {//req es un ob
   }
 
   // Obtener JWT guardado durante el login
-  const token = localStorage.getItem('user_token');
+  const token = localStorage.getItem('userToken');
 
   if (!token) {//si no hay token, se envia la peticion sin el JWT
     return next(req);//esta función es la que se encarga de enviar la petición HTTP al siguiente interceptor o al backend, dependiendo de si hay más interceptores configurados o no.

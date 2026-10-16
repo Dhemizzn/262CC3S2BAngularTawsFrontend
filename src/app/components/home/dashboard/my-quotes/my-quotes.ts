@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { QuoteService } from '../../../../services/quote';
+import { QuoteResponse } from '../../../../model/response/quoteResponse';
 
 @Component({
   selector: 'app-my-quotes',
@@ -8,20 +10,56 @@ import { CommonModule } from '@angular/common';
   templateUrl: './my-quotes.html',
 })
 export class MyQuotes {
-  // Datos simulados
-  cotizaciones = [
-    { id: 'COT-001', destino: 'Cusco, Perú', fechaPartida: '2026-11-15T08:00', estado: 'Pendiente' },
-    { id: 'COT-002', destino: 'Puerta 5 ', fechaPartida: '2026-12-10T10:30', estado: 'Cotizada' },
-    { id: 'COT-003', destino: 'SJL', fechaPartida: '2027-01-05T18:45', estado: 'Aceptada' }
-  ];
 
-  getEstadoClase(estado: string): string {
-    switch(estado) {
-      case 'Pendiente': return 'bg-warning text-dark';
-      case 'Cotizada': return 'bg-info text-dark';
-      case 'Aceptada': return 'bg-success';
-      case 'Cancelada': return 'bg-danger';
-      default: return 'bg-secondary';
-    }
+  private quoteService = inject(QuoteService);
+
+  cotizaciones = this.quoteService.cotizaciones;
+
+  detalleSeleccionado: QuoteResponse | null = null;
+
+  confirmando = false;
+  cotizacionConfirmada: string | null = null;
+  mensajeConfirmacion = '';
+  errorConfirmacion = '';
+
+  verDetalle(cotizacion: QuoteResponse): void {
+    this.detalleSeleccionado =
+      this.detalleSeleccionado?.proposalId === cotizacion.proposalId
+        ? null
+        : cotizacion;
+  }
+
+  confirmarCotizacion(cotizacion: QuoteResponse): void {
+
+    if (this.confirmando || this.cotizacionConfirmada) return;
+
+    const aceptar = window.confirm(
+      '¿Deseas confirmar esta cotización?'
+    );
+
+    if (!aceptar) return;
+
+    this.confirmando = true;
+    this.errorConfirmacion = '';
+
+    this.quoteService.confirmQuote(cotizacion).subscribe({
+
+      next: (response) => {
+        this.confirmando = false;
+        this.cotizacionConfirmada = cotizacion.proposalId;
+
+        this.mensajeConfirmacion =
+          `Cotización ${response.quotationId} guardada correctamente. Estado: ${response.status}`;
+      },
+
+      error: (err) => {
+        this.confirmando = false;
+        console.error(err);
+
+        this.errorConfirmacion =
+          err.error?.message || 'No se pudo confirmar la cotización.';
+      }
+
+    });
   }
 }

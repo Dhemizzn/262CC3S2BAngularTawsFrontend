@@ -1,54 +1,213 @@
+
 <div class="row justify-content-center mt-3">
   <div class="col-12 col-xxl-10">
-    
+
     <div class="card shadow border-0">
-      <div class="card-header bg-secondary text-white p-4 d-flex justify-content-between align-items-center">
-        <div>
-          <h3 class="mb-0 fs-5">Mis Cotizaciones</h3>
-          <p class="mb-0 text-light small mt-1">Historial de solicitudes y paquetes propuestos por el agente.</p>
-        </div>
+      <div class="card-header bg-secondary text-white p-4">
+        <h3 class="mb-0 fs-5">Mis Cotizaciones</h3>
+        <p class="mb-0 text-light small mt-1">
+          Cotizaciones generadas para tu viaje
+        </p>
       </div>
-      
+
       <div class="card-body p-0">
+
+        @if (mensajeConfirmacion) {
+          <div class="alert alert-success m-3">
+            {{ mensajeConfirmacion }}
+          </div>
+        }
+
+        @if (errorConfirmacion) {
+          <div class="alert alert-danger m-3">
+            {{ errorConfirmacion }}
+          </div>
+        }
+
         <div class="table-responsive">
           <table class="table table-hover align-middle mb-0">
+
             <thead class="table-light">
               <tr>
-                <th scope="col" class="ps-4">Código</th>
-                <th scope="col">Destino</th>
-                <th scope="col">Fecha de Partida</th>
-                <th scope="col">Estado</th>
-                <th scope="col" class="text-center pe-4">Acciones</th>
+                <th class="ps-4">Código</th>
+                <th>Destino</th>
+                <th>Fecha de Partida</th>
+                <th>Precio Total</th>
+                <th>Estado</th>
+                <th class="text-center pe-4">Acciones</th>
               </tr>
             </thead>
+
             <tbody>
-              
-              <tr *ngFor="let cot of cotizaciones">
-                <td class="ps-4 fw-bold text-secondary">{{ cot.id }}</td>
-                <td>{{ cot.destino }}</td>
-                <td>{{ cot.fechaPartida | date:'dd/MM/yyyy HH:mm' }}</td>
-                <td>
-                  <span class="badge rounded-pill px-3 py-2" [ngClass]="getEstadoClase(cot.estado)">
-                    {{ cot.estado }}
-                  </span>
-                </td>
-                <td class="text-center pe-4">
-                  <button class="btn btn-sm btn-outline-primary" title="Ver Detalle">
-                    <i class="bi bi-eye"></i> Ver Detalle
-                  </button>
-                </td>
-              </tr>
+              @for (cot of cotizaciones(); track cot.proposalId) {
+                <tr>
+                  <td class="ps-4 fw-bold text-secondary">
+                    {{ cot.proposalId.slice(0, 8) }}
+                  </td>
 
-              <tr *ngIf="cotizaciones.length === 0">
-                <td colspan="5" class="text-center py-5 text-muted">
-                  <i class="bi bi-inbox fs-2 d-block mb-2"></i>
-                  No tienes cotizaciones registradas en este momento.
-                </td>
-              </tr>
+                  <td>{{ cot.destination }}</td>
 
+                  <td>
+                    {{ cot.departureDate | date:'dd/MM/yyyy' }}
+                  </td>
+
+                  <td class="fw-bold">
+                    S/ {{ cot.totalPrice | number:'1.2-2' }}
+                  </td>
+
+                  <td>
+                    @if (cotizacionConfirmada === cot.proposalId) {
+                      <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                        Pendiente
+                      </span>
+                    } @else {
+                      <span class="badge bg-info text-dark rounded-pill px-3 py-2">
+                        Propuesta
+                      </span>
+                    }
+                  </td>
+
+                  <td class="text-center pe-4">
+                    <div class="d-flex justify-content-center gap-2">
+
+                      <button
+                        class="btn btn-sm btn-outline-primary"
+                        (click)="verDetalle(cot)">
+                        <i class="bi bi-eye"></i>
+                        Ver Detalle
+                      </button>
+
+                      <button
+                        class="btn btn-sm btn-success"
+                        (click)="confirmarCotizacion(cot)"
+                        [disabled]="confirmando || cotizacionConfirmada !== null">
+
+                        @if (cotizacionConfirmada === cot.proposalId) {
+                          <i class="bi bi-check-circle"></i>
+                          Confirmada
+                        } @else if (confirmando) {
+                          <span class="spinner-border spinner-border-sm me-1"></span>
+                          Guardando...
+                        } @else {
+                          <i class="bi bi-check-lg"></i>
+                          Confirmar
+                        }
+
+                      </button>
+
+                    </div>
+                  </td>
+                </tr>
+
+              } @empty {
+                <tr>
+                  <td colspan="6" class="text-center py-5 text-muted">
+                    No tienes cotizaciones generadas.
+                  </td>
+                </tr>
+              }
             </tbody>
+
           </table>
         </div>
+
+        @if (detalleSeleccionado; as detalle) {
+          <div class="p-4 border-top">
+
+            <h5>Detalle de cotización</h5>
+
+            <p>
+              <strong>Origen:</strong>
+              {{ detalle.departureCity }}
+            </p>
+
+            <p>
+              <strong>Destino:</strong>
+              {{ detalle.destination }}
+            </p>
+
+            <p>
+              <strong>Pasajeros:</strong>
+              {{ detalle.passengerCount }}
+            </p>
+
+            <p>
+              <strong>Hotel:</strong>
+              {{ detalle.hotel.name }}
+            </p>
+
+            <p>
+              <strong>Noches:</strong>
+              {{ detalle.hotel.nights }}
+            </p>
+
+            <p>
+              <strong>Aerolínea:</strong>
+              {{ detalle.airplane.airline }}
+            </p>
+
+            <h6 class="mt-4">Actividades</h6>
+
+            @for (actividad of detalle.activities; track $index) {
+              <div class="card mb-2">
+                <div class="card-body">
+
+                  <strong>{{ actividad.name }}</strong>
+
+                  <p class="mb-1">
+                    Fecha:
+                    {{ actividad.date | date:'dd/MM/yyyy' }}
+                  </p>
+
+                  <p class="mb-1">
+                    Horario:
+                    {{ actividad.startTime }} -
+                    {{ actividad.endTime }}
+                  </p>
+
+                  <p class="mb-0">
+                    Precio por persona:
+                    S/ {{ actividad.pricePerPerson | number:'1.2-2' }}
+                  </p>
+
+                </div>
+              </div>
+            }
+
+            <h5 class="text-success mt-3">
+              Total: S/ {{ detalle.totalPrice | number:'1.2-2' }}
+            </h5>
+
+            <div class="d-flex gap-2 mt-3">
+
+              <button
+                class="btn btn-secondary"
+                (click)="detalleSeleccionado = null">
+                Cerrar
+              </button>
+
+              <button
+                class="btn btn-success"
+                (click)="confirmarCotizacion(detalle)"
+                [disabled]="confirmando || cotizacionConfirmada !== null">
+
+                <i class="bi bi-check-circle"></i>
+
+                {{
+                  cotizacionConfirmada === detalle.proposalId
+                    ? 'Confirmada'
+                    : confirmando
+                      ? 'Guardando...'
+                      : 'Confirmar Cotización'
+                }}
+
+              </button>
+
+            </div>
+
+          </div>
+        }
+
       </div>
     </div>
 
