@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ClientDashboard } from './client-dashboard';
+import { PackageHistory } from './package-history';
 
-describe('ClientDashboard', () => {
-  let component: ClientDashboard;
-  let fixture: ComponentFixture<ClientDashboard>;
+describe('PackageHistory', () => {
+  let component: PackageHistory;
+  let fixture: ComponentFixture<PackageHistory>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ClientDashboard],
+      imports: [PackageHistory],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ClientDashboard);
+    fixture = TestBed.createComponent(PackageHistory);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
