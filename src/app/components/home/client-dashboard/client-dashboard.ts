@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { SessionService } from '../../../services/session';
 import { StorageService } from '../../../services/storage'; 
-
+imports: [RouterOutlet]
 @Component({
   selector: 'app-client-dashboard',
   standalone: true,
