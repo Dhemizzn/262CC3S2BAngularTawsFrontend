@@ -5,8 +5,7 @@ import { user } from '../model/user';
 @Service()
 export class SessionService {
   private storageService = inject(StorageService);
-
-    getUserSession(): user | null {
+  getUserSession(): user | null {
     const decoded = this.getDecodedToken();
 
     if (!decoded) return null;
@@ -20,6 +19,17 @@ export class SessionService {
     };
     }
 
+
+  isSessionValid(): boolean {
+    const decoded = this.getDecodedToken();
+
+    if (!decoded) return false;
+
+    return (
+      typeof decoded.exp === 'number' &&
+      decoded.exp * 1000 > Date.now()
+    );
+  }
   private getDecodedToken(): any | null {
     const token = this.storageService.getItem('userToken');
 
