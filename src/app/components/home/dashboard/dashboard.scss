@@ -1,32 +1,34 @@
-@use '../../../../variables' as *; 
 
-.sidebar, .main-content {
-  min-height: calc(100vh - 95px); 
+@use '../../../../variables' as *;
+
+.sidebar,
+.main-content {
+  min-height: calc(100vh - #{rem(95)});
 }
 
 .sidebar {
-  border-right: 1px solid #eaeaea;
+  border-right: rem(1) solid $border-color;
 
   .nav-link {
     font-weight: 500;
     transition: all 0.3s ease;
-    padding: 0.75rem 1rem;
+    padding: rem(12) rem(16);
 
     &:hover {
-      background-color: #f8f9fa;
-      color: $color-primary !important; 
-      transform: translateX(3px); 
+      background-color: $bg-light;
+      color: $color-primary !important;
+      transform: translateX(rem(3));
     }
 
-    
     &.active {
-      background-color: #e9ecef;
-      color: #000;
+      background-color: $bg-light;
+      color: $text-dark;
       font-weight: 600;
-      border-left: 4px solid $color-secondary;
+      border-left: rem(4) solid $color-secondary;
     }
   }
 }
+
 .main-content {
-  background-color: #f4f6f9; 
+  background-color: $bg-light;
 }
