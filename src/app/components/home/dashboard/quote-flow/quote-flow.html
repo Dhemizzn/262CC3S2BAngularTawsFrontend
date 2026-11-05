@@ -1,0 +1,35 @@
+<section class="mb-4">
+  <h4 class="fw-bold mb-3">
+    Nueva Cotización
+  </h4>
+  <div class="row g-3">
+    @for (step of steps; track step.path; let i = $index) {
+      <div class="col-md-4">
+        @if (canOpen(i)) {
+          <a
+            [routerLink]="step.path"
+            routerLinkActive="active"
+            class="step d-flex align-items-center gap-3 p-3 rounded text-decoration-none"
+          >
+            <span class="step-number">
+              {{ i + 1 }}
+            </span>
+            <span>{{ step.label }}</span>
+            @if (i < currentUnlocked()) {
+              <i class="bi bi-check-circle-fill text-success ms-auto"></i>
+            }
+          </a>
+        } @else {
+          <div class="step locked d-flex align-items-center gap-3 p-3 rounded">
+            <span class="step-number">
+              {{ i + 1 }}
+            </span>
+            <span>{{ step.label }}</span>
+            <i class="bi bi-lock-fill ms-auto"></i>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>
+<router-outlet></router-outlet>

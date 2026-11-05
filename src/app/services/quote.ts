@@ -1,7 +1,7 @@
 
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { QuoteRequest } from '../model/request/quoteRequest';
 import { QuoteResponse } from '../model/response/quoteResponse';
 import { environment } from '../components/environments/environment';
@@ -13,6 +13,12 @@ export class QuoteService {
 
   private _cotizaciones = signal<QuoteResponse[]>([]);
   cotizaciones = this._cotizaciones.asReadonly();
+  private _confirmedQuote = signal<{
+  quotationId: string;
+  proposal: QuoteResponse;
+  } | null>(null);
+
+  confirmedQuote = this._confirmedQuote.asReadonly();
 
   createQuote(request: QuoteRequest): Observable<QuoteResponse[]> {
     return this.http.post<QuoteResponse[]>(`${this.apiUrl}/generate`, request);
@@ -20,22 +26,29 @@ export class QuoteService {
 
   guardarCotizaciones(cotizaciones: QuoteResponse[]): void {
     this._cotizaciones.set(cotizaciones);
+    this._confirmedQuote.set(null);
   }
 
+
   confirmQuote(cotizacion: QuoteResponse): Observable<{
+    quotationId: string;
+    status: string;
+    message: string;
+  }> {
+    return this.http.post<{
       quotationId: string;
       status: string;
       message: string;
-    }> {
-      return this.http.post<{
-        quotationId: string;
-        status: string;
-        message: string;
-      }>(
-        `${this.apiUrl}/confirm`,
-        cotizacion
-      );
-}
-
-
+    }>(
+      `${this.apiUrl}/confirm`,
+      cotizacion
+    ).pipe(
+      tap(response => {
+        this._confirmedQuote.set({
+          quotationId: response.quotationId,
+          proposal: cotizacion
+        });
+      })
+    );
+  }
 }
