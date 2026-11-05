@@ -3,15 +3,22 @@ import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+
 import { Auth } from '../../../services/auth';
 import { ToastService } from '../../../services/toast';
 
+import { RegexConstants } from '../../../utils/regex-constants';
+
 @Component({
-  imports: [RouterLink, ReactiveFormsModule],
   selector: 'app-register',
-  styleUrl: './register.scss',
   templateUrl: './register.html',
+  styleUrl: './register.scss',
+  imports: [
+    RouterLink, 
+    ReactiveFormsModule
+  ]
 })
+
 export class Register {
   authService = inject(Auth);
   location = inject(Location);
@@ -22,14 +29,37 @@ export class Register {
     firstName: new FormControl('', [Validators.required]),
     lastNameM: new FormControl('', [Validators.required]),
     lastNameP: new FormControl('', [Validators.required]),
-    dni: new FormControl('', [Validators.required, Validators.pattern(/^\d{8}$/)]),
-    phone: new FormControl('', [Validators.required, Validators.pattern(/^\d{9}$/)]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    dni: new FormControl('', [
+      Validators.required, 
+      Validators.pattern(/^\d{8}$/)
+    ]),
+    phone: new FormControl('', [
+      Validators.required, 
+      Validators.pattern(/^\d{9}$/)
+    ]),
+    email: new FormControl('', [
+      Validators.required, 
+      Validators.email
+    ]),
     direction: new FormControl('', [Validators.required]),
     roleId: new FormControl(2, [Validators.required])
   });
 
-  onSubmit() {
+  filterInput(
+    event: Event,
+    field: 'firstName' | 'lastNameM' | 'lastNameP' | 'dni' | 'phone' | 'email' | 'direction',
+    type: 'name' | 'number' | 'email' | 'address'
+  ): void {
+    RegexConstants[type](event);
+
+    const input = event.target as HTMLInputElement;
+
+    this.form.controls[field].setValue(input.value, {
+      emitEvent: false
+    });
+  }
+
+  onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
 
@@ -47,8 +77,13 @@ export class Register {
       return;
     }
 
-    const { firstName, lastNameM, lastNameP, dni, phone, email, direction, roleId } = this.form.value;
-    if (!firstName || !lastNameM || !lastNameP || !dni || !phone || !email || !direction || !roleId) return;
+    const { 
+      firstName, lastNameM, lastNameP, dni, phone, email, direction, roleId 
+    } = this.form.value;
+
+    if (!firstName || !lastNameM || !lastNameP || !dni || !phone || !email || !direction || !roleId) {
+      return;
+    }
 
     const registerRequest = {
       firstName: firstName,
@@ -62,7 +97,7 @@ export class Register {
     };
 
     this.authService.register(registerRequest).subscribe({
-      next: (response) => {
+      next: () => {
         this.toastService.show('¡Registro exitoso! Ya puedes iniciar sesión.', 'success');
         this.router.navigate(['/login']);
       },
@@ -71,6 +106,5 @@ export class Register {
         this.toastService.show(mensaje, 'danger');
       }
     });
-
   }
 }

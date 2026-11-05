@@ -30,6 +30,7 @@ export class SessionService {
       decoded.exp * 1000 > Date.now()
     );
   }
+  
   private getDecodedToken(): any | null {
     const token = this.storageService.getItem('userToken');
 
