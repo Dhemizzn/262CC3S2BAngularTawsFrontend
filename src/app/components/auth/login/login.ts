@@ -88,8 +88,8 @@ export class Login {
 
         const user = this.sessionService.getUserSession();
 
-        if (user && user.rolId === 1) {
-          this.router.navigate(['/dashboard/historial-paquetes']);
+        if (user?.rolId === 1) {
+          this.router.navigate(['/dashboard']);
         } else {
           this.router.navigate(['/dashboard/nueva-cotizacion']);
         }

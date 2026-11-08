@@ -28,47 +28,82 @@
       </div>
     </nav>
 
-    <main class="col-12 col-lg-9 col-xl-10 main-content p-3 p-md-4">
-      <div class="content-wrap">
-        @if (isDashboardHome()) {
-          <header class="mb-4">
-            <h1 class="h3 fw-bold text-secondary mb-2">Bienvenido a Peru TOURS</h1>
-            <p class="text-muted mb-0">Organiza tu próximo viaje y consulta tus solicitudes desde un solo lugar.</p>
-          </header>
 
+  <main class="col-12 col-lg-9 col-xl-10 main-content p-3 p-md-4">
+    <div class="content-wrap">
+      @if (isDashboardHome()) {
+        @if (isAdmin) {
+          <app-admin-dashboard></app-admin-dashboard>
+        } @else {
+          <header class="mb-4">
+            <h1 class="h3 fw-bold text-secondary mb-2">
+              Bienvenido a Peru TOURS
+            </h1>
+            <p class="text-muted mb-0">
+              Organiza tu próximo viaje y consulta tus solicitudes
+              desde un solo lugar.
+            </p>
+          </header>
           <div class="row g-4">
             <div class="col-md-6">
               <div class="card h-100 border rounded-3">
                 <div class="card-body p-4 d-flex flex-column">
                   <i class="bi bi-file-earmark-plus fs-2 text-primary mb-3"></i>
-                  <h2 class="h5 fw-semibold text-secondary">Nueva cotización</h2>
-                  <p class="text-muted mb-4">Elige tu destino, las fechas de viaje y recibe propuestas para tu próximo recorrido.</p>
+                  <h2 class="h5 fw-semibold text-secondary">
+                    Nueva cotización
+                  </h2>
+                  <p class="text-muted mb-4">
+                    Elige tu destino, las fechas de viaje y recibe
+                    propuestas para tu próximo recorrido.
+                  </p>
                   <div class="mt-auto">
-                    <a routerLink="/dashboard/nueva-cotizacion" class="btn btn-primary">
-                      Crear cotización <i class="bi bi-arrow-right ms-2"></i>
+                    <a
+                      routerLink="/dashboard/nueva-cotizacion"
+                      class="btn btn-primary"
+                    >
+                      Crear cotización
+                      <i class="bi bi-arrow-right ms-2"></i>
                     </a>
                   </div>
                 </div>
               </div>
             </div>
-
             <div class="col-md-6">
               <div class="card h-100 border rounded-3">
                 <div class="card-body p-4 d-flex flex-column">
                   <i class="bi bi-suitcase fs-2 text-secondary mb-3"></i>
-                  <h2 class="h5 fw-semibold text-secondary">Mis paquetes</h2>
-                  <p class="text-muted mb-4">Aquí podrás consultar los paquetes turísticos que hayas adquirido.</p>
+                  <h2 class="h5 fw-semibold text-secondary">
+                    Mis paquetes
+                  </h2>
+                  <p class="text-muted mb-4">
+                    Aquí podrás consultar los paquetes turísticos
+                    que hayas adquirido.
+                  </p>
                   <div class="mt-auto">
-                    <button type="button" class="btn btn-outline-secondary">Ver tus paquetes</button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary"
+                      disabled
+                    >
+                      Próximamente
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
-        } @else {
-          <router-outlet></router-outlet>
+
         }
-      </div>
-    </main>
+
+      } @else {
+
+        <router-outlet></router-outlet>
+
+      }
+
+    </div>
+  </main>
+
   </div>
 </div>

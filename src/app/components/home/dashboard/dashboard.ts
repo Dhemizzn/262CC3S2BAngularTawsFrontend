@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { SessionService } from '../../../services/session';
 import { Auth } from '../../../services/auth';
+import { AdminDashboard } from './admin-dashboard/admin-dashboard';
+
 
 export interface MenuItem {
   moduleName: string;
@@ -12,7 +14,7 @@ export interface MenuItem {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, AdminDashboard],
   styleUrl: './dashboard.scss',
   templateUrl: './dashboard.html',
 })
@@ -20,6 +22,7 @@ export class Dashboard implements OnInit {
   private authService = inject(Auth);
   private router = inject(Router);
   private sessionService = inject(SessionService);
+  isAdmin = false;
 
   firstName: string = 'Usuario';
   roleLabel: string = 'Portal del Socio';
@@ -29,6 +32,8 @@ export class Dashboard implements OnInit {
     const currentUser = this.sessionService.getUserSession();
 
     if (currentUser) {
+      this.isAdmin = Number(currentUser.rolId) === 1;
+
       if (currentUser.names) {
         this.firstName = currentUser.names.split(' ')[0];
       }
@@ -36,6 +41,7 @@ export class Dashboard implements OnInit {
       this.loadDynamicMenu(currentUser);
     }
   }
+
 
   private loadDynamicMenu(user: any): void {
     const idRol = Number(user.rolId);
@@ -71,9 +77,9 @@ export class Dashboard implements OnInit {
 
     if (paths.includes('historial-paquetes')) {
       this.menuItems.push({
-        moduleName: 'Mis Paquetes',
+        moduleName: idRol === 1 ? 'Historial de Paquetes' : 'Mis Paquetes',
         urlPath: '/dashboard/historial-paquetes',
-        icon: 'bi-suitcase'
+        icon: 'bi-clock-history'
       });
     }
   }
