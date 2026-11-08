@@ -1,77 +1,74 @@
-<div class="container-fluid">
-  <div class="row">
-    <nav class="col-md-3 col-lg-2 d-none d-md-flex bg-white sidebar shadow-sm flex-column">
-      <div class="position-sticky pt-5 mt-3 px-2 w-100 d-flex flex-column flex-grow-1">
-        <div class="px-3 py-2 mb-3 border-bottom">
-          <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-person-circle fs-3 text-secondary"></i>
-            <div class="text-truncate">
-              <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">
-                {{ roleLabel }}
-              </small>
-              <span class="fw-bold text-dark fs-6">¡Hola, {{ firstName }}!</span>
-            </div>
+<div class="container-fluid dashboard-layout px-0">
+  <div class="row g-0">
+    <nav class="col-12 col-lg-3 col-xl-2 sidebar bg-white">
+      <div class="sidebar-inner d-flex flex-column p-3">
+        <div class="d-flex align-items-center gap-3 p-2 pb-4 mb-3 border-bottom">
+          <i class="bi bi-person-circle fs-2 text-secondary"></i>
+          <div class="text-truncate">
+            <small class="d-block text-muted text-uppercase">{{ roleLabel }}</small>
+            <span class="fw-semibold text-secondary">¡Hola, {{ firstName }}!</span>
           </div>
         </div>
 
-        <ul class="nav flex-column gap-2">
+        <ul class="nav flex-row flex-lg-column gap-2">
           @for (item of menuItems; track item.urlPath) {
             <li class="nav-item">
-              <a class="nav-link text-dark rounded d-flex align-items-center" [routerLink]="item.urlPath" routerLinkActive="active bg-light fw-bold text-primary" [routerLinkActiveOptions]="{ exact: item.urlPath === '/dashboard' }">
-                <i class="bi {{ item.icon || 'bi-folder' }} fs-5 me-2"></i>
-                {{ item.moduleName }}
+              <a [routerLink]="item.urlPath" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.urlPath === '/dashboard' }" class="nav-link d-flex align-items-center gap-3 rounded-3">
+                <i class="bi {{ item.icon || 'bi-folder' }}"></i> <span>{{ item.moduleName }}</span>
               </a>
             </li>
           }
         </ul>
 
-        <hr class="my-4 mt-auto">
-        
-        <div class="px-2 pb-3">
-          <button type="button" class="btn btn-outline-danger w-100" (click)="logout()">
-            <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
+        <div class="mt-auto pt-4">
+          <button type="button" class="btn btn-outline-secondary w-100" (click)="logout()">
+            <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
           </button>
         </div>
       </div>
     </nav>
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-5 mt-4 pb-4 bg-light main-content d-flex flex-column">
-      @if (isDashboardHome()) {
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4 p-md-5">
-            <h3 class="fw-bold text-secondary mb-3">Bienvenido a Peru TOURS</h3>
-            <p class="text-muted mb-4">
-              Desde aquí puedes solicitar cotizaciones para tus viajes y consultar tus paquetes turísticos.
-            </p>
-            <div class="row g-3">
-              <!-- NUEVA COTIZACIÓN -->
-              <div class="col-md-6">
-                <div class="card h-100 border shadow-sm">
-                  <div class="card-body p-4">
-                    <i class="bi bi-file-earmark-plus fs-1 text-primary"></i>
-                    <h5 class="fw-bold mt-3">Nueva Cotización</h5>
-                    <p class="text-muted">Solicita una cotización para tu próximo viaje.</p>
-                    <a routerLink="/dashboard/nueva-cotizacion" class="btn btn-primary">Nueva Cotización</a>
+    <main class="col-12 col-lg-9 col-xl-10 main-content p-3 p-md-4">
+      <div class="content-wrap">
+        @if (isDashboardHome()) {
+          <header class="mb-4">
+            <h1 class="h3 fw-bold text-secondary mb-2">Bienvenido a Peru TOURS</h1>
+            <p class="text-muted mb-0">Organiza tu próximo viaje y consulta tus solicitudes desde un solo lugar.</p>
+          </header>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card h-100 border rounded-3">
+                <div class="card-body p-4 d-flex flex-column">
+                  <i class="bi bi-file-earmark-plus fs-2 text-primary mb-3"></i>
+                  <h2 class="h5 fw-semibold text-secondary">Nueva cotización</h2>
+                  <p class="text-muted mb-4">Elige tu destino, las fechas de viaje y recibe propuestas para tu próximo recorrido.</p>
+                  <div class="mt-auto">
+                    <a routerLink="/dashboard/nueva-cotizacion" class="btn btn-primary">
+                      Crear cotización <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div class="col-md-6">
-                <div class="card h-100 border shadow-sm">
-                  <div class="card-body p-4">
-                    <i class="bi bi-suitcase fs-1 text-secondary"></i>
-                    <h5 class="fw-bold mt-3">Mis Paquetes</h5>
-                    <p class="text-muted">Consulta tus paquetes turísticos adquiridos.</p>
-                    <button type="button" class="btn btn-outline-secondary" disabled></button>
+            <div class="col-md-6">
+              <div class="card h-100 border rounded-3">
+                <div class="card-body p-4 d-flex flex-column">
+                  <i class="bi bi-suitcase fs-2 text-secondary mb-3"></i>
+                  <h2 class="h5 fw-semibold text-secondary">Mis paquetes</h2>
+                  <p class="text-muted mb-4">Aquí podrás consultar los paquetes turísticos que hayas adquirido.</p>
+                  <div class="mt-auto">
+                    <button type="button" class="btn btn-outline-secondary">Ver tus paquetes</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      } @else {
-        <router-outlet></router-outlet>
-      }
+        } @else {
+          <router-outlet></router-outlet>
+        }
+      </div>
     </main>
   </div>
 </div>

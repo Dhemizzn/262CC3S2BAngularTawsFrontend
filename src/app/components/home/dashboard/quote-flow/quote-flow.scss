@@ -1,44 +1,11 @@
 @use '../../../../../variables' as *;
-.step {
-  min-height: rem(70);
-  background-color: $white;
-  border: rem(1) solid $border-color;
-  color: $text-dark;
-  font-weight: 600;
-  transition: 0.2s;
 
-  &:hover:not(.locked) {
-    border-color: $color-secondary;
-  }
-
-  &.active {
-    background-color: rgba($color-primary, 0.08);
-    border-color: $color-primary;
-    color: $color-secondary;
-  }
-
-  &.locked {
-    background-color: $bg-light;
-    color: rgba($text-dark, 0.55);
-    cursor: not-allowed;
-  }
+.quote-step {
+  min-height: rem(68);
 }
 
 .step-number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: rem(30);
-  height: rem(30);
-  flex-shrink: 0;
-
-  border-radius: 50%;
-  background-color: $color-secondary;
-  color: $white;
-}
-
-.locked .step-number {
-  background-color: $border-color;
-  color: $text-dark;
+  width: rem(32);
+  height: rem(32);
+  font-size: rem(13);
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { SessionService } from '../../../services/session';
+import { Auth } from '../../../services/auth';
 
 export interface MenuItem {
   moduleName: string;
@@ -16,6 +17,7 @@ export interface MenuItem {
   templateUrl: './dashboard.html',
 })
 export class Dashboard implements OnInit {
+  private authService = inject(Auth);
   private router = inject(Router);
   private sessionService = inject(SessionService);
 
@@ -82,7 +84,7 @@ export class Dashboard implements OnInit {
   }
 
   logout(): void {
-    localStorage.removeItem('userToken');
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }

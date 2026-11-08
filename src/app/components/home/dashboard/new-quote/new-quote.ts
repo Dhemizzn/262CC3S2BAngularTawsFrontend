@@ -49,7 +49,7 @@ export class NewQuote implements OnInit {
     this.quoteService.createQuote(payload).subscribe({
       next: (response) => {
         this.quoteService.guardarCotizaciones(response);
-        this.router.navigate(['/dashboard/mis-cotizaciones']);
+        this.router.navigate(['/dashboard/nueva-cotizacion/cotizaciones']);
       },
       error: (err) => {
         this.errorMessage = err.error?.message || 'Error al generar cotizaciones';

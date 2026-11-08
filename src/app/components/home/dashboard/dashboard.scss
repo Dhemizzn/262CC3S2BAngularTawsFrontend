@@ -1,34 +1,50 @@
-
 @use '../../../../variables' as *;
 
-.sidebar,
-.main-content {
-  min-height: calc(100vh - #{rem(95)});
+.dashboard-layout {
+  padding-top: rem(52);
 }
 
 .sidebar {
   border-right: rem(1) solid $border-color;
+}
 
-  .nav-link {
-    font-weight: 500;
-    transition: all 0.3s ease;
-    padding: rem(12) rem(16);
+.sidebar-inner,
+.main-content {
+  min-height: calc(100vh - #{rem(96)});
+}
 
-    &:hover {
-      background-color: $bg-light;
-      color: $color-primary !important;
-      transform: translateX(rem(3));
-    }
+.sidebar .nav-link {
+  color: $text-dark;
+  font-weight: 500;
 
-    &.active {
-      background-color: $bg-light;
-      color: $text-dark;
-      font-weight: 600;
-      border-left: rem(4) solid $color-secondary;
-    }
+  &:hover {
+    background-color: $bg-light;
+    color: $color-primary;
+  }
+
+  &.active {
+    background-color: rgba($color-primary, 0.08);
+    color: $color-primary;
+    font-weight: 600;
   }
 }
 
 .main-content {
   background-color: $bg-light;
+}
+
+.content-wrap {
+  max-width: rem(1250);
+  margin: 0 auto;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    border-right: none;
+    border-bottom: rem(1) solid $border-color;
+  }
+
+  .sidebar-inner {
+    min-height: auto;
+  }
 }
