@@ -22,12 +22,17 @@ import { RegexConstants } from '../../../utils/regex-constants';
   ]
 })
 export class Login {
-  // Inyección de dependencias
   location = inject(Location);
   router = inject(Router);
   authService = inject(Auth);
   toastService = inject(ToastService);
   sessionService = inject(SessionService);
+
+  mostrarPassword: boolean = false;
+
+  togglePasswordVisibility(): void {
+    this.mostrarPassword = !this.mostrarPassword;
+  }
 
   form = new FormGroup({
     email: new FormControl('', [
@@ -100,4 +105,22 @@ export class Login {
       }
     });
   }
+
+  focusNextField(event: Event): void {
+    event.preventDefault();
+
+    const input = event.target as HTMLInputElement;
+    const inputs = Array.from(
+      input.form?.querySelectorAll<HTMLInputElement>(
+        'input:not([disabled]), button[type="submit"]'
+      ) ?? []
+    );
+
+    const currentIndex = inputs.indexOf(input);
+
+    if (currentIndex !== -1 && currentIndex < inputs.length - 1) {
+      inputs[currentIndex + 1].focus();
+    }
+  }
+
 }

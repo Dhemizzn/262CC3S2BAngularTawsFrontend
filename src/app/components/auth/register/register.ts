@@ -107,4 +107,24 @@ export class Register {
       }
     });
   }
+
+  focusNextField(event: Event): void {
+    event.preventDefault();
+
+    const input = event.target as HTMLInputElement;
+    const inputs = Array.from(
+      input.form?.querySelectorAll<HTMLInputElement>(
+        'input:not([disabled]), button[type="submit"]'
+      ) ?? []
+    );
+
+    const currentIndex = inputs.indexOf(input);
+
+    if (currentIndex !== -1 && currentIndex < inputs.length - 1) {
+      inputs[currentIndex + 1].focus();
+    }
+  }
+
+
+
 }
