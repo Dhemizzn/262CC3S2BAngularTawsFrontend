@@ -1,4 +1,3 @@
-
 import { Component, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { finalize } from 'rxjs';

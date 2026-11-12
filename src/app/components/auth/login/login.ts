@@ -122,5 +122,4 @@ export class Login {
       inputs[currentIndex + 1].focus();
     }
   }
-
 }
