@@ -14,6 +14,11 @@
           <div>{{ successMessage }}</div>
         </div>
 
+        <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4">
+          <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+          <div>{{ errorMessage }}</div>
+        </div>
+
         <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()">
           
           <h5 class="text-secondary mb-3 border-bottom pb-2 fs-6">Información de la Ruta</h5>
@@ -21,16 +26,34 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label fw-semibold">Ciudad de Partida</label>
-              <input type="text" class="form-control" formControlName="ciudadPartida" 
-                     [ngClass]="{'is-invalid': quoteForm.get('ciudadPartida')?.invalid && quoteForm.get('ciudadPartida')?.touched}" 
-                     placeholder="Ej. Lima, Arequipa">
+              <select class="form-select" formControlName="ciudadPartida" 
+                      [ngClass]="{'is-invalid': quoteForm.get('ciudadPartida')?.invalid && quoteForm.get('ciudadPartida')?.touched}">
+                <option value="" disabled selected>Seleccione ciudad de partida</option>
+                @for (ciudad of ciudadesPartida; track ciudad) {
+                  <option [value]="ciudad">{{ ciudad }}</option>
+                }
+              </select>
+              <div class="invalid-feedback">Debe seleccionar una ciudad de partida.</div>
             </div>
 
             <div class="col-md-6 mb-3">
               <label class="form-label fw-semibold">Destino</label>
-              <input type="text" class="form-control" formControlName="destino" 
-                     [ngClass]="{'is-invalid': quoteForm.get('destino')?.invalid && quoteForm.get('destino')?.touched}" 
-                     placeholder="Ej. Cusco, Arequipa">
+              <select class="form-select" formControlName="destino" 
+                      [ngClass]="{'is-invalid': quoteForm.get('destino')?.invalid && quoteForm.get('destino')?.touched}">
+                <option value="" disabled selected>
+                  @if (cargandoDestinos()) {
+                    Cargando destinos...
+                  } @else {
+                    Seleccione un destino
+                  }
+                </option>
+                @for (destino of destinos(); track destino.destinationId) {
+                  <option [value]="destino.name" [disabled]="destino.name === quoteForm.get('ciudadPartida')?.value">
+                    {{ destino.name }}
+                  </option>
+                }
+              </select>
+              <div class="invalid-feedback">Debe seleccionar un destino válido.</div>
             </div>
           </div>
 

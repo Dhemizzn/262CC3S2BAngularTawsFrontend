@@ -1,0 +1,119 @@
+<section class="min-vh-100 position-relative d-flex flex-column justify-content-center align-items-center text-center flex-grow-1 overflow-hidden">
+  
+  @for (slide of slidesHero; track slide.id; let i = $index) {
+    <div class="slide position-absolute top-0 start-0 w-100 h-100" [class.active]="i === currentIndex">
+      <img [src]="slide.url" alt="Fondo Peru Tours" class="w-100 h-100 object-fit-cover" />
+      <div class="position-absolute top-0 start-0 w-100 h-100 hero-overlay"></div>
+    </div>
+  }
+  <div class="position-relative z-3 text-white px-3">
+    <p class="text-uppercase kicker-spacing mb-2 small">Agencia de viajes</p>
+    <h1 class="fw-bold display-5 max-w-720 mx-auto">Descubre el Perú con Peru TOURS</h1>
+    <p class="fs-5 max-w-560 mx-auto">
+      Planes, destinos y tarifas pensados para que viajes sin complicaciones.
+    </p>
+    <div class="d-flex gap-3 justify-content-center mt-4">
+      <a href="#planes" class="bttn bttn-primary text-decoration-none">Ver planes</a>
+      <a routerLink="/login" class="bttn btn-hero-outline text-decoration-none">Iniciar sesión</a>
+    </div>
+  </div>
+</section>
+
+<section id="destinos" class="bg-light py-5">
+  <div class="container py-4">
+    <h2 class="text-center text-secondary fw-bold mb-2">Lugares que puedes visitar</h2>
+    <p class="text-center text-dark max-w-560 mx-auto mb-5">
+      Rutas clásicas del Perú para armar tu próximo viaje.
+    </p>
+
+    <div class="row g-4">
+      @for (destino of destinos; track destino.nombre) {
+        <div class="col-12 col-md-6 col-lg-3">
+          <article 
+            class="card border-0 rounded-4 overflow-hidden tarjeta-viaje text-white shadow-sm"
+            (click)="alternarDestino(destino.nombre)">
+            <img [src]="destino.imagen" [alt]="destino.nombre" class="card-img rounded-0 w-100" />
+            
+            <div class="card-img-overlay overlay-oscuro d-flex flex-column justify-content-end p-3">
+              <p class="opacity-75 mb-1 small">{{ destino.region }}</p>
+              <h3 class="fs-5 mb-0 fw-semibold">{{ destino.nombre }}</h3>
+              
+              @if (destinoExpandido === destino.nombre) {
+                <div class="descripcion-revelada">
+                  <p class="mb-0 mt-2 small text-light">{{ destino.descripcion }}</p>
+                </div>
+              }
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section id="planes" class="bg-white py-5">
+  <div class="container py-4">
+    <h2 class="text-center text-secondary fw-bold mb-2">
+      Planes de <span class="text-primary">viaje</span>
+    </h2>
+    <p class="text-center text-dark max-w-560 mx-auto mb-5">
+      Paquetes listos para reservar, con duración y precio por persona.
+    </p>
+
+    <div class="row g-4 justify-content-center">
+      @for (plan of planes; track plan.nombre) {
+        <div class="col-12 col-md-6 col-lg-4">
+          <article 
+            class="card border-0 rounded-4 overflow-hidden tarjeta-viaje text-white shadow-sm"
+            (click)="alternarPlan(plan.nombre)">
+            <img [src]="plan.imagen" [alt]="plan.nombre" class="card-img rounded-0 w-100" />
+            
+            <div class="card-img-overlay overlay-oscuro d-flex flex-column justify-content-end align-items-start p-4">
+              <p class="small opacity-75 mb-1">{{ plan.duracion }}</p>
+              <h3 class="fs-4 fw-semibold">{{ plan.nombre }}</h3>
+              
+              @if (planExpandido === plan.nombre) {
+                <div class="descripcion-revelada w-100">
+                  <p class="mb-3 text-light">{{ plan.incluye }}</p>
+                </div>
+              }
+              
+              <span class="bg-primary text-white fs-5 fw-bold px-3 py-2 rounded-2 mt-3">{{ plan.precio }}</span>
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section id="nosotros" class="bg-light py-5">
+  <div class="container py-4">
+    <h2 class="text-center text-secondary fw-bold mb-2">Por qué elegirnos</h2>
+    <p class="text-center text-dark max-w-560 mx-auto mb-5">
+      Peru TOURS arma el viaje para que tú solo te preocupes por llegar.
+    </p>
+
+    <div class="row g-4">
+      @for (motivo of motivos; track motivo.titulo) {
+        <div class="col-12 col-md-6 col-lg-3">
+          <article class="bg-white rounded-4 p-4 h-100 text-center shadow-sm">
+            <i class="bi {{ motivo.icono }} fs-1 text-primary d-block mb-3"></i>
+            <h3 class="fs-5 fw-semibold">{{ motivo.titulo }}</h3>
+            <p class="text-muted mb-0 small">{{ motivo.texto }}</p>
+          </article>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section id="reserva" class="bg-white py-5">
+  <div class="container text-center py-4">
+    <h2 class="text-secondary fw-bold mb-3">¿Listo para armar tu viaje?</h2>
+    <p class="text-dark mb-4">
+      Inicia sesión para ver disponibilidad y continuar con tu reserva.
+    </p>
+    <a routerLink="/login" class="bttn bttn-primary text-decoration-none">Iniciar sesión</a>
+  </div>
+</section>

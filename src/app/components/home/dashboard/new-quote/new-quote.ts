@@ -1,8 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { QuoteService } from '../../../../services/quote';
+import { QuoteService, Destination } from '../../../../services/quote';
 import { QuoteRequest } from '../../../../model/request/quoteRequest';
 
 @Component({
@@ -20,6 +20,10 @@ export class NewQuote implements OnInit {
   successMessage = '';
   errorMessage = '';
 
+  destinos = signal<Destination[]>([]);
+  cargandoDestinos = signal(true);
+  ciudadesPartida: string[] = ['Lima', 'Arequipa', 'Cusco', 'Trujillo', 'Chiclayo', 'Piura'];
+
   ngOnInit(): void {
     this.quoteForm = this.fb.group({
       destino: ['', Validators.required],
@@ -27,6 +31,21 @@ export class NewQuote implements OnInit {
       pasajeros: [1, [Validators.required, Validators.min(1)]],
       fechaPartida: ['', Validators.required],
       fechaRetorno: ['', Validators.required]
+    });
+
+    this.cargarDestinos();
+  }
+
+  cargarDestinos(): void {
+    this.quoteService.getDestinations().subscribe({
+      next: (data) => {
+        this.destinos.set(data);
+        this.cargandoDestinos.set(false);
+      },
+      error: () => {
+        this.errorMessage = 'No se pudieron cargar los destinos.';
+        this.cargandoDestinos.set(false);
+      }
     });
   }
 

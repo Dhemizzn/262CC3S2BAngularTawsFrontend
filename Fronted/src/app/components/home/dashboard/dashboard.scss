@@ -1,0 +1,50 @@
+@use '../../../../variables' as *;
+
+.dashboard-layout {
+  padding-top: rem(52);
+}
+
+.sidebar {
+  border-right: rem(1) solid $border-color;
+}
+
+.sidebar-inner,
+.main-content {
+  min-height: calc(100vh - #{rem(96)});
+}
+
+.sidebar .nav-link {
+  color: $text-dark;
+  font-weight: 500;
+
+  &:hover {
+    background-color: $bg-light;
+    color: $color-primary;
+  }
+
+  &.active {
+    background-color: rgba($color-primary, 0.08);
+    color: $color-primary;
+    font-weight: 600;
+  }
+}
+
+.main-content {
+  background-color: $bg-light;
+}
+
+.content-wrap {
+  max-width: rem(1250);
+  margin: 0 auto;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    border-right: none;
+    border-bottom: rem(1) solid $border-color;
+  }
+
+  .sidebar-inner {
+    min-height: auto;
+  }
+}

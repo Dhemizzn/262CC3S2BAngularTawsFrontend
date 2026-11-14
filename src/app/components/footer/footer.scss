@@ -1,4 +1,10 @@
 @use '../../../variables' as *;
+
+:host {
+  display: block;
+  flex-shrink: 0;
+}
+
 .bg-f{
     background: $bg-light;
     color: $text-dark;

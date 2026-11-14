@@ -22,7 +22,7 @@ export class MyQuotes {
   detalleSeleccionado: QuoteResponse | null = null;
   cotizacionPorConfirmar: QuoteResponse | null = null;
   confirmandoId: string | null = null;
-  cotizacionConfirmada: string | null = null;
+  cotizacionConfirmada: string | null = this.quoteService.confirmedQuote()?.proposal.proposalId ?? null;
   resultadoIncierto = false;
 
   verDetalle(cotizacion: QuoteResponse): void {

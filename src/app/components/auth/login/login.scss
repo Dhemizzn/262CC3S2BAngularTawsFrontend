@@ -17,3 +17,20 @@
 .auth-card {
     max-width: rem(500);
 }
+
+.password-toggle {
+    border: 1px solid $border-color;
+    border-left: 0;
+    background-color: $white;
+    color: $text-dark;
+
+    &:hover {
+        background-color: $bg-light;
+        color: $color-secondary;
+    }
+
+    &:focus,
+    &:active {
+        box-shadow: none;
+    }
+}

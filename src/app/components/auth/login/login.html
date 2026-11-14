@@ -8,7 +8,7 @@
     <label for="password" class="form-label fw-medium">Contraseña</label>
     <div class="input-group">
       <input [type]="mostrarPassword ? 'text' : 'password'" id="password" class="form-control" formControlName="password" placeholder="Ingrese su contraseña" />
-      <button type="button" class="btn btn-outline-secondary" (click)="togglePasswordVisibility()" [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+      <button type="button" class="btn password-toggle" (click)="togglePasswordVisibility()" [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
         <i [class]="mostrarPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
       </button>
     </div>

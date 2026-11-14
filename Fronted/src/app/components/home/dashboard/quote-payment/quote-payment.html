@@ -1,0 +1,64 @@
+<section class="container-fluid px-0">
+  <div class="mb-4">
+    <h4 class="fw-bold text-secondary mb-2">Pago de cotización</h4>
+    <p class="text-muted mb-0">Revisa los datos de tu cotización antes de continuar con el pago.</p>
+  </div>
+
+  @if (quoteService.confirmedQuote(); as quote) {
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="bg-white border rounded-3 p-4 h-100">
+          <h5 class="fw-semibold mb-4">Resumen del viaje</h5>
+          <div class="d-flex justify-content-between gap-3 mb-3"><span class="text-muted">Cotización</span> <span class="fw-semibold">{{ quote.quotationId }}</span></div>
+          <div class="d-flex justify-content-between gap-3 mb-3"><span class="text-muted">Destino</span> <span class="fw-semibold">{{ quote.proposal.destination }}</span></div>
+          <div class="d-flex justify-content-between gap-3 mb-3"><span class="text-muted">Pasajeros</span> <span class="fw-semibold">{{ quote.proposal.passengerCount }}</span></div>
+          <hr class="my-4">
+          <div class="d-flex justify-content-between align-items-center gap-3"><span class="fw-semibold">Total a pagar</span> <h4 class="fw-bold text-secondary mb-0">S/ {{ quote.proposal.totalPrice | number:'1.2-2' }}</h4></div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="bg-white border rounded-3 p-4 h-100">
+          <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+            <h5 class="fw-semibold mb-0">Mercado Pago</h5>
+          </div>
+          <p class="text-muted mb-4">Realiza el pago usando tu cuenta de Mercado Pago.</p>
+
+          @if (errorMessage()) {
+            <div class="alert alert-danger" role="alert">{{ errorMessage() }}</div>
+          }
+
+          @if (paymentStatus() === 'paid') {
+            <div class="alert alert-success mb-0" role="status">
+              <i class="bi bi-check-circle-fill me-2"></i> <strong>Pago acreditado correctamente.</strong>
+              <p class="mb-0 mt-2">Tu cotización ya figura como pagada.</p>
+            </div>
+          } @else if (checkoutUrl(); as url) {
+            <div class="d-grid gap-2">
+              <a [href]="url" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                Ir a Mercado Pago <i class="bi bi-box-arrow-up-right ms-2"></i>
+              </a>
+              <button type="button" class="btn btn-outline-secondary" (click)="copyCheckoutUrl()">
+                <i class="bi bi-copy me-2"></i> {{ copied() ? 'Enlace copiado' : 'Copiar enlace' }}
+              </button>
+              <button type="button" class="btn btn-outline-secondary" [disabled]="verifying()" (click)="verifyPayment()">
+                <i class="bi bi-arrow-clockwise me-2"></i> {{ verifying() ? 'Verificando...' : 'Verificar pago' }}
+              </button>
+            </div>
+
+            @if (paymentStatus() && paymentStatus() !== 'paid') {
+              <div class="alert alert-warning mt-3 mb-0" role="status">El pago todavía no figura como acreditado.</div>
+            }
+            <p class="small text-muted mt-3 mb-0">Al finalizar el pago, regresa aquí y selecciona «Verificar pago».</p>
+          } @else {
+            <button type="button" class="btn btn-primary w-100" [disabled]="loading()" (click)="createCheckout()">
+              {{ loading() ? 'Generando enlace...' : 'Continuar con Mercado Pago' }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="alert alert-warning" role="alert">No tienes una cotización confirmada para pagar.</div>
+  }
+</section>

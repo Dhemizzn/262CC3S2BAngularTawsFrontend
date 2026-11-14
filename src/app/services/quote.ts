@@ -5,10 +5,27 @@ import { QuoteRequest } from '../model/request/quoteRequest';
 import { QuoteResponse } from '../model/response/quoteResponse';
 import { environment } from '../components/environments/environment';
 
+export interface Destination {
+  destinationId: number;
+  name: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class QuoteService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.url}/quotations`;
+
+  getDestinations(): Observable<Destination[]> {
+    return this.http.get<Destination[]>(`${this.apiUrl}/destinations`);
+  }
+
+  getMyPackages(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/my-packages`);
+  }
+
+  cancelPackage(quotationId: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${quotationId}`);
+  }
 
   private _cotizaciones = signal<QuoteResponse[]>([]);
   cotizaciones = this._cotizaciones.asReadonly();

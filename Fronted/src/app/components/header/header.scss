@@ -1,0 +1,28 @@
+@use "../../../variables" as *;
+
+.bg-h{
+    background: $color-secondary;
+    color: $white;
+    border-bottom: rem(3) solid $color-primary; 
+};
+
+
+.border-h{
+    border-bottom: rem(3) solid $color-primary; 
+}
+
+.header-link {
+    color: $white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+  
+.header-link:hover {
+    color: $color-primary;
+}
+
+.flex-1{
+    flex: 1 1 0%;
+}
+

@@ -47,7 +47,8 @@ export const routes: Routes = [
         children: [
           {
             path: 'nueva',
-            component: NewQuote
+            component: NewQuote,
+            canActivate: [quoteStepGuard]
           },
           {
             path: 'cotizaciones',

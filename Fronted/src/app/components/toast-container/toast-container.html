@@ -1,0 +1,12 @@
+@for (toast of toastService.toasts(); track $index) {
+  <div 
+    class="toast show border-0 mb-2 rounded-1" 
+    [class]="getToastClass(toast.type)" 
+    role="alert" 
+    style="display: block; opacity: 1; min-width: 350px; pointer-events: auto;"
+  >
+    <div class="toast-body fs-6 fw-bold" style="padding: 0.75rem;">
+      {{ toast.message }}
+    </div>
+  </div>
+}

@@ -1,16 +1,28 @@
 @use '../../../../variables' as *;
 
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
 .dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
   padding-top: rem(52);
+}
+
+.dashboard-layout > .row {
+  flex: 1 1 auto;
 }
 
 .sidebar {
   border-right: rem(1) solid $border-color;
 }
 
-.sidebar-inner,
-.main-content {
-  min-height: calc(100vh - #{rem(96)});
+.sidebar-inner {
+  height: 100%;
 }
 
 .sidebar .nav-link {
@@ -45,6 +57,6 @@
   }
 
   .sidebar-inner {
-    min-height: auto;
+    height: auto;
   }
 }

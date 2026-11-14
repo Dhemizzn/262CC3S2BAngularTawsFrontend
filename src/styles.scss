@@ -68,3 +68,8 @@ a {
 a:hover {
     color: $color-secondary;
 }
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}

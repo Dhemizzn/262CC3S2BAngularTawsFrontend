@@ -1,0 +1,11 @@
+@use '../../../../../variables' as *;
+
+.quote-step {
+  min-height: rem(68);
+}
+
+.step-number {
+  width: rem(32);
+  height: rem(32);
+  font-size: rem(13);
+}

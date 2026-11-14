@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { finalize } from 'rxjs';
 import { QuoteService } from '../../../../services/quote';
 
 @Component({
   selector: 'app-quote-payment',
   standalone: true,
-  imports: [DecimalPipe],
+  imports: [CommonModule, DecimalPipe],
   templateUrl: './quote-payment.html',
   styleUrl: './quote-payment.scss'
 })
@@ -21,10 +21,43 @@ export class QuotePayment {
   errorMessage = signal('');
   copied = signal(false);
 
+  tipoComprobante = signal<'boleta' | 'factura'>('boleta');
+  ruc = signal('');
+  razonSocial = signal('');
+  direccionFiscal = signal('');
+  rucTouched = signal(false);
+
+  esRucValido(): boolean {
+    return /^[0-9]{11}$/.test(this.ruc().trim());
+  }
+
+  formularioValido(): boolean {
+    if (this.tipoComprobante() === 'boleta') {
+      return true;
+    }
+    return this.esRucValido() && this.razonSocial().trim().length > 0;
+  }
+
+  onRucInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const soloNumeros = input.value.replace(/\D/g, '').slice(0, 11);
+    this.ruc.set(soloNumeros);
+  }
+
+  onRazonSocialInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.razonSocial.set(input.value);
+  }
+
+  onDireccionFiscalInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.direccionFiscal.set(input.value);
+  }
+
   createCheckout(): void {
     const quote = this.quoteService.confirmedQuote();
 
-    if (!quote || this.loading()) return;
+    if (!quote || this.loading() || !this.formularioValido()) return;
 
     this.loading.set(true);
     this.errorMessage.set('');

@@ -4,7 +4,6 @@
   flex-direction: column;
 }
 
-// Fondo del loading
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -17,7 +16,6 @@
   align-items: center;
 }
 
-// Oculta el SVG utilizado como plantilla
 .svg-sprite {
   position: absolute;
   width: 0;
@@ -25,7 +23,6 @@
   overflow: hidden;
 }
 
-// Contenedor de las huellitas y el texto
 .loading-content {
   display: flex;
   flex-direction: column;
@@ -33,7 +30,6 @@
   gap: 20px;
 }
 
-// Animación de las huellitas
 .ajax-loader {
   position: relative;
   font-size: 45px;
@@ -76,7 +72,6 @@
   }
 }
 
-// Texto del loading
 .loading-text {
   color: white;
   font-size: 1.2rem;
@@ -85,7 +80,6 @@
   text-align: center;
 }
 
-// Animación
 @keyframes pawAnimation {
   0% {
     opacity: 1;

@@ -1,0 +1,36 @@
+@use "../../../../variables" as *;
+
+:host {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+            url('https://images.pexels.com/photos/37885473/pexels-photo-37885473.jpeg');
+    background-size: cover;
+    background-position: center;
+
+}
+
+.auth-card {
+    max-width: rem(500);
+}
+
+.password-toggle {
+    border: 1px solid $border-color;
+    border-left: 0;
+    background-color: $white;
+    color: $text-dark;
+
+    &:hover {
+        background-color: $bg-light;
+        color: $color-secondary;
+    }
+
+    &:focus,
+    &:active {
+        box-shadow: none;
+    }
+}

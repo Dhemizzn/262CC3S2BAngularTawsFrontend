@@ -1,0 +1,30 @@
+<section class="mb-4">
+  <header class="mb-4">
+    <h2 class="h3 fw-bold text-secondary mb-2">Nueva cotización</h2>
+    <p class="text-muted mb-0">Completa cada etapa para continuar con tu viaje.</p>
+  </header>
+
+  <nav class="row g-3" aria-label="Etapas de cotización">
+    @for (step of steps; track step.path; let i = $index) {
+      <div class="col-12 col-md-4">
+        @if (canOpen(i)) {
+          <a [routerLink]="step.path" routerLinkActive="border-primary" [routerLinkActiveOptions]="{ exact: true }" class="quote-step d-flex align-items-center gap-3 p-3 bg-white border rounded-3 text-decoration-none text-dark">
+            <span class="step-number d-flex align-items-center justify-content-center rounded-circle bg-secondary text-white fw-semibold flex-shrink-0">{{ i + 1 }}</span>
+            <span class="fw-semibold small">{{ step.label }}</span>
+            @if (i < currentUnlocked()) {
+              <i class="bi bi-check-circle-fill text-primary ms-auto"></i>
+            }
+          </a>
+        } @else {
+          <div class="quote-step d-flex align-items-center gap-3 p-3 bg-light border rounded-3 text-muted" aria-disabled="true">
+            <span class="step-number d-flex align-items-center justify-content-center rounded-circle border text-muted flex-shrink-0">{{ i + 1 }}</span>
+            <span class="fw-semibold small">{{ step.label }}</span>
+            <i class="bi bi-lock ms-auto"></i>
+          </div>
+        }
+      </div>
+    }
+  </nav>
+</section>
+
+<router-outlet></router-outlet>

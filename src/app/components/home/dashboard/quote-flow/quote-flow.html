@@ -19,7 +19,11 @@
           <div class="quote-step d-flex align-items-center gap-3 p-3 bg-light border rounded-3 text-muted" aria-disabled="true">
             <span class="step-number d-flex align-items-center justify-content-center rounded-circle border text-muted flex-shrink-0">{{ i + 1 }}</span>
             <span class="fw-semibold small">{{ step.label }}</span>
-            <i class="bi bi-lock ms-auto"></i>
+            @if (i < currentUnlocked()) {
+              <i class="bi bi-check-circle-fill text-primary ms-auto"></i>
+            } @else {
+              <i class="bi bi-lock ms-auto"></i>
+            }
           </div>
         }
       </div>

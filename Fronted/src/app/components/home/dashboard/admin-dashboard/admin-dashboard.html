@@ -1,0 +1,59 @@
+<section>
+  <div class="mb-4">
+    <h3 class="fw-bold text-secondary mb-2">Panel administrativo</h3>
+    <p class="text-muted mb-0">Estadísticas generales de Peru TOURS.</p>
+  </div>
+
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>
+      <p class="text-muted mt-3">Cargando estadísticas...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="alert alert-danger">{{ errorMessage() }}</div>
+  } @else if (stats(); as data) {
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="card h-100 border">
+          <div class="card-body p-4">
+            <h5 class="fw-semibold mb-2">Destinos más cotizados</h5>
+            <p class="small text-muted mb-4">Cantidad de cotizaciones por destino.</p>
+            @if (data.destinations.length > 0) {
+              <apx-chart [series]="destinationsSeries()" [chart]="barChart" [xaxis]="destinationsXAxis()" [colors]="['#FF3B30']"></apx-chart>
+            } @else {
+              <p class="text-muted text-center py-5">No hay datos disponibles.</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100 border">
+          <div class="card-body p-4">
+            <h5 class="fw-semibold mb-2">Estado de cotizaciones</h5>
+            <p class="small text-muted mb-4">Distribución de cotizaciones según su estado.</p>
+            @if (data.statuses.length > 0) {
+              <apx-chart [series]="statusesSeries()" [chart]="donutChart" [labels]="statusesLabels()" [colors]="['#FF3B30', '#0F172A']"></apx-chart>
+            } @else {
+              <p class="text-muted text-center py-5">No hay datos disponibles.</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="card border">
+          <div class="card-body p-4">
+            <h5 class="fw-semibold mb-2">Registro de usuarios</h5>
+            <p class="small text-muted mb-4">Cantidad de nuevos usuarios registrados por mes.</p>
+            @if (data.registrations.length > 0) {
+              <apx-chart [series]="registrationsSeries()" [chart]="lineChart" [xaxis]="registrationsXAxis()" [colors]="['#FF3B30']"></apx-chart>
+            } @else {
+              <p class="text-muted text-center py-5">No hay registros con fechas disponibles.</p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</section>

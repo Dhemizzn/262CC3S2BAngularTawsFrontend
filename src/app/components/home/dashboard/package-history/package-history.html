@@ -1,1 +1,236 @@
-<p>package-history works!</p>
+<section>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="fw-bold mb-1">Mis Paquetes y Solicitudes</h4>
+      <p class="text-muted mb-0">Revisa tus solicitudes activas, visualiza el cronograma de actividades o descarga tus itinerarios.</p>
+    </div>
+    <span class="text-muted small">{{ paquetes().length }} paquetes registrados</span>
+  </div>
+
+  @if (cargando()) {
+    <div class="text-center py-5">
+      <div class="spinner-border" style="color: #e63946;" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="text-muted mt-3">Cargando tus paquetes...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="alert alert-danger" role="alert">
+      {{ errorMessage() }}
+    </div>
+  } @else {
+    <div class="bg-white border rounded-3 overflow-hidden shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead style="background-color: #f8f9fa;">
+            <tr>
+              <th class="ps-4 py-3 text-muted fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.03em; text-transform: uppercase;">Destino</th>
+              <th class="py-3 text-muted fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.03em; text-transform: uppercase;">Origen</th>
+              <th class="py-3 text-muted fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.03em; text-transform: uppercase;">Fechas</th>
+              <th class="py-3 text-muted fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.03em; text-transform: uppercase;">Pasajeros</th>
+              <th class="py-3 text-end text-muted fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.03em; text-transform: uppercase;">Total</th>
+              <th class="py-3 text-center text-muted fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.03em; text-transform: uppercase;">Estado</th>
+              <th class="py-3 text-end pe-4 text-muted fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.03em; text-transform: uppercase;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (paquete of paquetes(); track paquete.quotationId) {
+              <tr style="border-bottom: 1px solid #f0f0f0;">
+                <td class="ps-4 py-3 fw-semibold text-dark">{{ paquete.destinationRegion }}</td>
+                <td class="py-3 text-muted">{{ paquete.departureRegion }}</td>
+                <td class="py-3 text-muted text-nowrap">
+                  {{ paquete.departureDate | date:'dd/MM/yyyy' }} - {{ paquete.returnDate | date:'dd/MM/yyyy' }}
+                </td>
+                <td class="py-3 text-muted">{{ paquete.peopleQuantity }} pers.</td>
+                <td class="py-3 text-end fw-semibold text-dark text-nowrap">
+                  S/ {{ paquete.total | number:'1.2-2' }}
+                </td>
+                <td class="py-3 text-center">
+                  <span class="rounded-pill px-3 py-1 small fw-medium text-white"
+                    [style.background-color]="obtenerEstadoColor(paquete.status)"
+                    style="font-size: 0.78rem;">
+                    {{ obtenerEstadoLabel(paquete.status) }}
+                  </span>
+                </td>
+                <td class="py-3 text-end pe-4">
+                  <div class="d-flex justify-content-end gap-2">
+                    <button type="button"
+                      class="btn btn-sm"
+                      style="border: 1px solid #e63946; color: #e63946; background: transparent; border-radius: 6px;"
+                      (click)="verCronograma(paquete)">
+                      Ver cronograma
+                    </button>
+                    <button type="button"
+                      class="btn btn-sm"
+                      style="border: 1px solid #dee2e6; color: #6c757d; background: transparent; border-radius: 6px;"
+                      (click)="descargarItinerario(paquete)">
+                      Descargar PDF
+                    </button>
+                    @if (paquete.status === 'pending') {
+                      <button type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        style="border-radius: 6px;"
+                        (click)="solicitarEliminacion(paquete)">
+                        <i class="bi bi-trash3 me-1"></i> Eliminar
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" class="text-center text-muted py-5">
+                  No tienes paquetes turísticos ni solicitudes registradas aún.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (paqueteSeleccionado(); as p) {
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header text-white" style="background-color: #1a1f2e;">
+            <div>
+              <h5 class="modal-title fw-bold mb-0">Cronograma de Actividades</h5>
+              <small style="opacity: 0.75;">{{ p.quotationId }} &middot; {{ p.destinationRegion }}</small>
+            </div>
+            <button type="button" class="btn-close btn-close-white" aria-label="Cerrar" (click)="cerrarCronograma()"></button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="rounded-3 p-3 mb-4" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+              <div class="row g-2 small">
+                <div class="col-md-6">
+                  <span class="text-muted">Ruta:</span>
+                  <span class="fw-semibold ms-1">{{ p.departureRegion }} &rarr; {{ p.destinationRegion }}</span>
+                </div>
+                <div class="col-md-6">
+                  <span class="text-muted">Fechas:</span>
+                  <span class="fw-semibold ms-1">{{ p.departureDate | date:'dd/MM/yyyy' }} al {{ p.returnDate | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="col-md-6">
+                  <span class="text-muted">Pasajeros:</span>
+                  <span class="fw-semibold ms-1">{{ p.peopleQuantity }}</span>
+                </div>
+                <div class="col-md-6">
+                  <span class="text-muted">Estado:</span>
+                  <span class="rounded-pill px-2 py-1 ms-1 small fw-medium text-white"
+                    [style.background-color]="obtenerEstadoColor(p.status)" style="font-size: 0.75rem;">
+                    {{ obtenerEstadoLabel(p.status) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            @if (p.parsedItinerary; as it) {
+              @if (it.hotel || it.airplane) {
+                <div class="row g-3 mb-4">
+                  @if (it.hotel) {
+                    <div class="col-md-6">
+                      <div class="border rounded-3 p-3 h-100 bg-white">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                          <i class="bi bi-building" style="color: #e63946;"></i>
+                          <h6 class="fw-bold mb-0">Hospedaje</h6>
+                        </div>
+                        <p class="mb-1 small"><span class="text-muted">Hotel:</span> <span class="fw-medium">{{ it.hotel.name }}</span></p>
+                        <p class="mb-1 small"><span class="text-muted">Noches:</span> <span class="fw-medium">{{ it.hotel.nights }}</span></p>
+                        <p class="mb-0 small"><span class="text-muted">Habitaciones:</span> <span class="fw-medium">{{ it.hotel.rooms }}</span></p>
+                      </div>
+                    </div>
+                  }
+                  @if (it.airplane) {
+                    <div class="col-md-6">
+                      <div class="border rounded-3 p-3 h-100 bg-white">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                          <i class="bi bi-airplane" style="color: #e63946;"></i>
+                          <h6 class="fw-bold mb-0">Transporte Aéreo</h6>
+                        </div>
+                        <p class="mb-1 small"><span class="text-muted">Aerolínea:</span> <span class="fw-medium">{{ it.airplane.airline }}</span></p>
+                        <p class="mb-1 small"><span class="text-muted">Salida:</span> <span class="fw-medium">{{ it.airplane.outboundTime }}</span></p>
+                        <p class="mb-0 small"><span class="text-muted">Retorno:</span> <span class="fw-medium">{{ it.airplane.returnTime }}</span></p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+
+              <h6 class="fw-bold mb-3">Actividades Programadas</h6>
+              @if (it.activities && it.activities.length > 0) {
+                <div class="mb-3">
+                  @for (act of it.activities; track $index) {
+                    <div class="p-3 mb-2 bg-white border rounded-3">
+                      <div class="d-flex justify-content-between align-items-start gap-3">
+                        <div>
+                          <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="rounded-pill px-2 py-1 small fw-medium text-white"
+                              style="background-color: #1a1f2e; font-size: 0.72rem;">
+                              Día {{ $index + 1 }}
+                            </span>
+                            <strong class="text-dark">{{ act.name }}</strong>
+                          </div>
+                          <p class="text-muted small mb-0">
+                            {{ act.date | date:'dd/MM/yyyy' }} &middot; {{ act.startTime }} - {{ act.endTime }} ({{ act.durationMinutes }} min)
+                          </p>
+                        </div>
+                        <span class="text-nowrap small fw-semibold text-dark">
+                          S/ {{ act.pricePerPerson | number:'1.2-2' }}<span class="text-muted fw-normal"> / pers.</span>
+                        </span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="text-muted small">No hay detalle de actividades disponible para esta cotización.</p>
+              }
+            } @else {
+              <p class="text-muted small">El itinerario completo aún no está disponible.</p>
+            }
+          </div>
+          <div class="modal-footer border-top" style="background-color: #f8f9fa;">
+            <button type="button" class="btn btn-outline-secondary btn-sm px-4" (click)="cerrarCronograma()">Cerrar</button>
+            <button type="button" class="btn btn-sm px-4 text-white" style="background-color: #e63946; border: none;"
+              (click)="descargarItinerario(p)">
+              <i class="bi bi-file-earmark-pdf me-1"></i> Descargar PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+  }
+
+  @if (paquetePorEliminar(); as pEliminar) {
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="tituloEliminar">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold" id="tituloEliminar">Eliminar solicitud</h5>
+            <button type="button" class="btn-close" aria-label="Cerrar" [disabled]="eliminando() !== null" (click)="cancelarEliminacion()"></button>
+          </div>
+          <div class="modal-body p-4">
+            <p>¿Deseas eliminar esta solicitud de propuesta?</p>
+            <div class="bg-light rounded-3 p-3">
+              <p class="mb-2"><strong>Destino:</strong> {{ pEliminar.destinationRegion }}</p>
+              <p class="mb-2"><strong>Pasajeros:</strong> {{ pEliminar.peopleQuantity }}</p>
+              <p class="mb-2"><strong>Fechas:</strong> {{ pEliminar.departureDate | date:'dd/MM/yyyy' }} - {{ pEliminar.returnDate | date:'dd/MM/yyyy' }}</p>
+              <p class="mb-0"><strong>Total:</strong> S/ {{ pEliminar.total | number:'1.2-2' }}</p>
+            </div>
+            <p class="text-danger small mt-3 mb-0">Esta acción no se puede deshacer.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" [disabled]="eliminando() !== null" (click)="cancelarEliminacion()">Cancelar</button>
+            <button type="button" class="btn btn-primary" [disabled]="eliminando() !== null" (click)="confirmarEliminacion()">
+              {{ eliminando() !== null ? 'Eliminando...' : 'Eliminar solicitud' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+  }
+
+</section>

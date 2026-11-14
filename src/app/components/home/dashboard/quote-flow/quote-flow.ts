@@ -32,6 +32,9 @@ export class QuoteFlow {
   }
 
   canOpen(index: number): boolean {
+    if (this.quoteService.confirmedQuote()) {
+      return index === 2;
+    }
     return index <= this.currentUnlocked();
   }
 }
