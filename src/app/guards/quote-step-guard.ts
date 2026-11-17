@@ -19,10 +19,7 @@ export const quoteStepGuard: CanActivateFn = (route) => {
   }
 
   if (step === 'pagar' && !quoteService.confirmedQuote()) {
-    return router.createUrlTree([
-      base,
-      quoteService.cotizaciones().length ? 'cotizaciones' : 'nueva'
-    ]);
+    return router.createUrlTree([base, quoteService.cotizaciones().length ? 'cotizaciones' : 'nueva']);
   }
 
   return true;

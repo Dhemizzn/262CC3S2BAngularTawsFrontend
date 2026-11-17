@@ -13,13 +13,20 @@
     <div class="alert alert-danger">{{ errorMessage() }}</div>
   } @else if (stats(); as data) {
     <div class="row g-4">
+      <!-- 1. Destinos más cotizados (Radar Chart) -->
       <div class="col-lg-6">
         <div class="card h-100 border">
           <div class="card-body p-4">
             <h5 class="fw-semibold mb-2">Destinos más cotizados</h5>
-            <p class="small text-muted mb-4">Cantidad de cotizaciones por destino.</p>
+            <p class="small text-muted mb-3">Distribución y rendimiento de cotizaciones por destino.</p>
             @if (data.destinations.length > 0) {
-              <apx-chart [series]="destinationsSeries()" [chart]="barChart" [xaxis]="destinationsXAxis()" [colors]="['#FF3B30']"></apx-chart>
+              <apx-chart
+                [series]="destinationsRadarOptions.series!"
+                [chart]="destinationsRadarOptions.chart!"
+                [yaxis]="destinationsRadarOptions.yaxis!"
+                [xaxis]="destinationsRadarOptions.xaxis!"
+                [colors]="destinationsRadarOptions.colors!"
+              ></apx-chart>
             } @else {
               <p class="text-muted text-center py-5">No hay datos disponibles.</p>
             }
@@ -27,13 +34,20 @@
         </div>
       </div>
 
+      <!-- 2. Estado de cotizaciones (RadialBar Chart) -->
       <div class="col-lg-6">
         <div class="card h-100 border">
           <div class="card-body p-4">
-            <h5 class="fw-semibold mb-2">Estado de cotizaciones</h5>
-            <p class="small text-muted mb-4">Distribución de cotizaciones según su estado.</p>
+            <h5 class="fw-semibold mb-2">Cotizaciones pagadas y pendientes</h5>
+            <p class="small text-muted mb-3">Proporción de estados con respecto al total.</p>
             @if (data.statuses.length > 0) {
-              <apx-chart [series]="statusesSeries()" [chart]="donutChart" [labels]="statusesLabels()" [colors]="['#FF3B30', '#0F172A']"></apx-chart>
+              <apx-chart
+                [series]="quotesRadialOptions.series!"
+                [chart]="quotesRadialOptions.chart!"
+                [plotOptions]="quotesRadialOptions.plotOptions!"
+                [labels]="quotesRadialOptions.labels!"
+                [colors]="quotesRadialOptions.colors!"
+              ></apx-chart>
             } @else {
               <p class="text-muted text-center py-5">No hay datos disponibles.</p>
             }
@@ -41,13 +55,22 @@
         </div>
       </div>
 
+      <!-- 3. Registro de usuarios (Line Chart con Forecast y Gradiente) -->
       <div class="col-12">
         <div class="card border">
           <div class="card-body p-4">
             <h5 class="fw-semibold mb-2">Registro de usuarios</h5>
-            <p class="small text-muted mb-4">Cantidad de nuevos usuarios registrados por mes.</p>
+            <p class="small text-muted mb-3">Historial mensual con proyección estimada.</p>
             @if (data.registrations.length > 0) {
-              <apx-chart [series]="registrationsSeries()" [chart]="lineChart" [xaxis]="registrationsXAxis()" [colors]="['#FF3B30']"></apx-chart>
+              <apx-chart
+                [series]="usersChartOptions.series!"
+                [chart]="usersChartOptions.chart!"
+                [forecastDataPoints]="usersChartOptions.forecastDataPoints!"
+                [stroke]="usersChartOptions.stroke!"
+                [xaxis]="usersChartOptions.xaxis!"
+                [yaxis]="usersChartOptions.yaxis!"
+                [fill]="usersChartOptions.fill!"
+              ></apx-chart>
             } @else {
               <p class="text-muted text-center py-5">No hay registros con fechas disponibles.</p>
             }

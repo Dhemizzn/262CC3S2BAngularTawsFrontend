@@ -7,12 +7,6 @@
     <span class="text-muted small">{{ cotizaciones().length }} opciones disponibles</span>
   </div>
 
-  @if (resultadoIncierto) {
-    <div class="alert alert-warning">
-      No se recibió confirmación del servidor. Comprueba si la cotización se guardó antes de intentarlo nuevamente.
-    </div>
-  }
-
   <div class="bg-white border rounded-3 overflow-hidden">
     <div class="table-responsive">
       <table class="table table-hover align-middle mb-0">
@@ -32,7 +26,7 @@
               <td>{{ cot.departureDate | date:'dd/MM/yyyy' }}</td>
               <td class="text-end fw-semibold text-nowrap">S/ {{ cot.totalPrice | number:'1.2-2' }}</td>
               <td>
-                @if (cotizacionConfirmada === cot.proposalId) {
+                @if (confirmedQuoteId === cot.proposalId) {
                   <span class="badge bg-light text-dark border">Pendiente de pago</span>
                 } @else {
                   <span class="text-muted small">Sin confirmar</span>
@@ -40,9 +34,9 @@
               </td>
               <td class="text-end pe-4">
                 <div class="d-flex justify-content-end gap-2">
-                  <button type="button" class="btn btn-sm btn-outline-secondary" (click)="verDetalle(cot)">Ver detalle</button>
-                  <button type="button" class="btn btn-sm btn-primary" (click)="solicitarConfirmacion(cot)" [disabled]="confirmandoId !== null || cotizacionConfirmada !== null || resultadoIncierto">
-                    @if (cotizacionConfirmada === cot.proposalId) { Confirmada } @else if (confirmandoId === cot.proposalId) { Guardando... } @else { Seleccionar }
+                  <button type="button" class="btn btn-sm btn-outline-secondary" (click)="viewDetail(cot)">Ver detalle</button>
+                  <button type="button" class="btn btn-sm btn-primary" (click)="requestConfirmation(cot)" [disabled]="confirmingId !== null || confirmedQuoteId !== null || uncertainResult">
+                    @if (confirmedQuoteId === cot.proposalId) { Confirmada } @else if (confirmingId === cot.proposalId) { Guardando... } @else { Seleccionar }
                   </button>
                 </div>
               </td>
@@ -56,11 +50,11 @@
       </table>
     </div>
 
-    @if (detalleSeleccionado; as detalle) {
+    @if (selectedDetail; as detalle) {
       <div class="border-top p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h5 class="fw-bold mb-0">Detalle de la propuesta</h5>
-          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="detalleSeleccionado = null">Cerrar</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="selectedDetail = null">Cerrar</button>
         </div>
 
         <div class="row g-4">
@@ -102,8 +96,8 @@
             <span class="text-muted small d-block">Total del viaje</span>
             <h4 class="fw-bold mb-0">S/ {{ detalle.totalPrice | number:'1.2-2' }}</h4>
           </div>
-          <button type="button" class="btn btn-primary" (click)="solicitarConfirmacion(detalle)" [disabled]="confirmandoId !== null || cotizacionConfirmada !== null || resultadoIncierto">
-            @if (cotizacionConfirmada === detalle.proposalId) { Confirmada } @else if (confirmandoId === detalle.proposalId) { Guardando... } @else { Seleccionar propuesta }
+          <button type="button" class="btn btn-primary" (click)="requestConfirmation(detalle)" [disabled]="confirmingId !== null || confirmedQuoteId !== null || uncertainResult">
+            @if (confirmedQuoteId === detalle.proposalId) { Confirmada } @else if (confirmingId === detalle.proposalId) { Guardando... } @else { Seleccionar propuesta }
           </button>
         </div>
       </div>
@@ -111,13 +105,13 @@
   </div>
 </section>
 
-@if (cotizacionPorConfirmar; as cotizacion) {
+@if (quoteToConfirm; as cotizacion) {
   <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmacion">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title fw-bold" id="tituloConfirmacion">Confirmar cotización</h5>
-          <button type="button" class="btn-close" aria-label="Cerrar" [disabled]="confirmandoId !== null" (click)="cancelarConfirmacion()"></button>
+          <button type="button" class="btn-close" aria-label="Cerrar" [disabled]="confirmingId !== null" (click)="cancelConfirmation()"></button>
         </div>
         <div class="modal-body p-4">
           <p>¿Deseas continuar con esta propuesta?</p>
@@ -130,9 +124,9 @@
           <p class="text-muted small mt-3 mb-0">Al confirmar, podrás continuar con el pago.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" [disabled]="confirmandoId !== null" (click)="cancelarConfirmacion()">Cancelar</button>
-          <button type="button" class="btn btn-primary" [disabled]="confirmandoId !== null" (click)="confirmarCotizacion()">
-            {{ confirmandoId !== null ? 'Confirmando...' : 'Confirmar y continuar' }}
+          <button type="button" class="btn btn-outline-secondary" [disabled]="confirmingId !== null" (click)="cancelConfirmation()">Cancelar</button>
+          <button type="button" class="btn btn-primary" [disabled]="confirmingId !== null" (click)="confirmQuote()">
+            {{ confirmingId !== null ? 'Confirmando...' : 'Confirmar y continuar' }}
           </button>
         </div>
       </div>

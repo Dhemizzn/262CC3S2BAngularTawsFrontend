@@ -1,0 +1,109 @@
+@use '../../../../../variables' as *;
+
+.package-history {
+  .spinner-primary {
+    color: $color-primary;
+  }
+
+  .table-head {
+    background-color: lighten($bg-light, 3%);
+
+    th {
+      font-size: rem(13);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: lighten($text-dark, 20%);
+    }
+  }
+
+  .table-row {
+    border-bottom: rem(1) solid $border-color;
+  }
+
+  .text-dark-custom {
+    color: $text-dark;
+  }
+
+  .status-badge {
+    font-size: rem(12.5);
+    font-weight: 500;
+    color: $white;
+
+    &.status-paid {
+      background-color: #198754; // Verde éxito
+    }
+
+    &.status-pending {
+      background-color: $color-primary; // Rojo corporativo TAWS
+    }
+
+    &.status-default {
+      background-color: lighten($text-dark, 30%);
+    }
+  }
+
+  .btn-outline-action {
+    border: rem(1) solid $color-primary;
+    color: $color-primary;
+    background: transparent;
+    border-radius: rem(6);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $color-primary;
+      color: $white;
+    }
+  }
+
+  .btn-outline-neutral {
+    border: rem(1) solid $border-color;
+    color: lighten($text-dark, 15%);
+    background: transparent;
+    border-radius: rem(6);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $bg-light;
+      border-color: darken($border-color, 10%);
+      color: $text-dark;
+    }
+  }
+
+  .btn-outline-remove {
+    border-radius: rem(6);
+  }
+}
+
+// Estilos del modal de cronograma y eliminación
+.modal-header-custom {
+  background-color: $color-secondary;
+  color: $white;
+}
+
+.modal-summary-box {
+  background-color: lighten($bg-light, 3%);
+  border: rem(1) solid $border-color;
+}
+
+.modal-icon-accent {
+  color: $color-primary;
+}
+
+.modal-day-badge {
+  background-color: $color-secondary;
+  font-size: rem(11.5);
+  color: $white;
+}
+
+.btn-download-pdf {
+  background-color: $color-primary;
+  border: none;
+  color: $white;
+  border-radius: rem(6);
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+    color: $white;
+  }
+}

@@ -19,47 +19,47 @@ export class MyQuotes {
   private router = inject(Router);
 
   cotizaciones = this.quoteService.cotizaciones;
-  detalleSeleccionado: QuoteResponse | null = null;
-  cotizacionPorConfirmar: QuoteResponse | null = null;
-  confirmandoId: string | null = null;
-  cotizacionConfirmada: string | null = this.quoteService.confirmedQuote()?.proposal.proposalId ?? null;
-  resultadoIncierto = false;
+  selectedDetail: QuoteResponse | null = null;
+  quoteToConfirm: QuoteResponse | null = null;
+  confirmingId: string | null = null;
+  confirmedQuoteId: string | null = this.quoteService.confirmedQuote()?.proposal.proposalId ?? null;
+  uncertainResult = false;
 
-  verDetalle(cotizacion: QuoteResponse): void {
-    this.detalleSeleccionado = this.detalleSeleccionado?.proposalId === cotizacion.proposalId ? null : cotizacion;
+  viewDetail(quote: QuoteResponse): void {
+    this.selectedDetail = this.selectedDetail?.proposalId === quote.proposalId ? null : quote;
   }
 
-  solicitarConfirmacion(cotizacion: QuoteResponse): void {
-    if (this.confirmandoId !== null || this.cotizacionConfirmada !== null || this.resultadoIncierto) return;
-    this.cotizacionPorConfirmar = cotizacion;
+  requestConfirmation(quote: QuoteResponse): void {
+    if (this.confirmingId !== null || this.confirmedQuoteId !== null || this.uncertainResult) return;
+    this.quoteToConfirm = quote;
   }
 
-  cancelarConfirmacion(): void {
-    if (this.confirmandoId !== null) return;
-    this.cotizacionPorConfirmar = null;
+  cancelConfirmation(): void {
+    if (this.confirmingId !== null) return;
+    this.quoteToConfirm = null;
   }
 
-  confirmarCotizacion(): void {
-    const cotizacion = this.cotizacionPorConfirmar;
-    if (!cotizacion || this.confirmandoId !== null || this.cotizacionConfirmada !== null || this.resultadoIncierto) return;
+  confirmQuote(): void {
+    const quote = this.quoteToConfirm;
+    if (!quote || this.confirmingId !== null || this.confirmedQuoteId !== null || this.uncertainResult) return;
 
-    this.confirmandoId = cotizacion.proposalId;
+    this.confirmingId = quote.proposalId;
 
-    this.quoteService.confirmQuote(cotizacion).pipe(
+    this.quoteService.confirmQuote(quote).pipe(
       timeout(30000),
-      finalize(() => { this.confirmandoId = null; this.cdr.markForCheck(); })
+      finalize(() => { this.confirmingId = null; this.cdr.markForCheck(); })
     ).subscribe({
       next: (response) => {
-        this.cotizacionConfirmada = cotizacion.proposalId;
-        this.cotizacionPorConfirmar = null;
+        this.confirmedQuoteId = quote.proposalId;
+        this.quoteToConfirm = null;
         this.cdr.markForCheck();
         this.toastService.show(`Cotización ${response.quotationId} guardada correctamente.`, 'success');
         this.router.navigate(['/dashboard/nueva-cotizacion/pagar']);
       },
       error: (err) => {
-        this.cotizacionPorConfirmar = null;
+        this.quoteToConfirm = null;
         if (err instanceof TimeoutError || err.status === 0 || err.status === 200) {
-          this.resultadoIncierto = true;
+          this.uncertainResult = true;
           this.toastService.show('No se pudo verificar la respuesta. Comprueba si la cotización ya se guardó en Neon.', 'warning');
         } else {
           this.toastService.show(err.error?.message || 'No se pudo confirmar la cotización.', 'danger');

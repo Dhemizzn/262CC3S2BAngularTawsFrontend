@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { finalize } from 'rxjs';
 import { QuoteService } from '../../../../services/quote';
+import { ToastService } from '../../../../services/toast';
 
 @Component({
   selector: 'app-quote-payment',
@@ -11,67 +12,65 @@ import { QuoteService } from '../../../../services/quote';
   styleUrl: './quote-payment.scss'
 })
 export class QuotePayment {
-
   quoteService = inject(QuoteService);
+  private toastService = inject(ToastService);
 
   loading = signal(false);
   verifying = signal(false);
   checkoutUrl = signal<string | null>(null);
   paymentStatus = signal<string | null>(null);
-  errorMessage = signal('');
   copied = signal(false);
 
-  tipoComprobante = signal<'boleta' | 'factura'>('boleta');
-  ruc = signal('');
-  razonSocial = signal('');
-  direccionFiscal = signal('');
-  rucTouched = signal(false);
+  receiptType = signal<'boleta' | 'factura'>('boleta');
+  taxId = signal('');
+  companyName = signal('');
+  fiscalAddress = signal('');
+  taxIdTouched = signal(false);
 
-  esRucValido(): boolean {
-    return /^[0-9]{11}$/.test(this.ruc().trim());
+  isTaxIdValid(): boolean {
+    return /^[0-9]{11}$/.test(this.taxId().trim());
   }
 
-  formularioValido(): boolean {
-    if (this.tipoComprobante() === 'boleta') {
+  isFormValid(): boolean {
+    if (this.receiptType() === 'boleta') {
       return true;
     }
-    return this.esRucValido() && this.razonSocial().trim().length > 0;
+    return this.isTaxIdValid() && this.companyName().trim().length > 0;
   }
 
-  onRucInput(event: Event): void {
+  onTaxIdInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const soloNumeros = input.value.replace(/\D/g, '').slice(0, 11);
-    this.ruc.set(soloNumeros);
+    const numericOnly = input.value.replace(/\D/g, '').slice(0, 11);
+    this.taxId.set(numericOnly);
   }
 
-  onRazonSocialInput(event: Event): void {
+  onCompanyNameInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.razonSocial.set(input.value);
+    this.companyName.set(input.value);
   }
 
-  onDireccionFiscalInput(event: Event): void {
+  onFiscalAddressInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.direccionFiscal.set(input.value);
+    this.fiscalAddress.set(input.value);
   }
 
   createCheckout(): void {
     const quote = this.quoteService.confirmedQuote();
 
-    if (!quote || this.loading() || !this.formularioValido()) return;
+    if (!quote || this.loading() || !this.isFormValid()) return;
 
     this.loading.set(true);
-    this.errorMessage.set('');
 
     this.quoteService.createCheckout(quote.quotationId)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (response) => {
           this.checkoutUrl.set(response.checkoutUrl);
+          this.toastService.show('Enlace de pago generado con éxito.', 'info');
         },
         error: (err) => {
-          this.errorMessage.set(
-            err.error?.message || 'No se pudo generar el enlace de pago.'
-          );
+          const message = err.error?.message || 'No se pudo generar el enlace de pago.';
+          this.toastService.show(message, 'danger');
         }
       });
   }
@@ -82,18 +81,21 @@ export class QuotePayment {
     if (!quote || this.verifying() || this.paymentStatus() === 'paid') return;
 
     this.verifying.set(true);
-    this.errorMessage.set('');
 
     this.quoteService.verifyPayment(quote.quotationId)
       .pipe(finalize(() => this.verifying.set(false)))
       .subscribe({
         next: (response) => {
           this.paymentStatus.set(response.status);
+          if (response.status === 'paid') {
+            this.toastService.show('¡Pago acreditado correctamente!', 'success');
+          } else {
+            this.toastService.show('El pago aún no figura como acreditado.', 'warning');
+          }
         },
         error: (err) => {
-          this.errorMessage.set(
-            err.error?.message || 'No se pudo verificar el pago.'
-          );
+          const message = err.error?.message || 'No se pudo verificar el pago.';
+          this.toastService.show(message, 'danger');
         }
       });
   }
@@ -105,8 +107,9 @@ export class QuotePayment {
     try {
       await navigator.clipboard.writeText(url);
       this.copied.set(true);
+      this.toastService.show('Enlace de pago copiado al portapapeles.', 'success');
     } catch {
-      this.errorMessage.set('No se pudo copiar el enlace.');
+      this.toastService.show('No se pudo copiar el enlace.', 'danger');
     }
   }
 }

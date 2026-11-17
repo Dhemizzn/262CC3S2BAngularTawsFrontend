@@ -80,12 +80,12 @@ export const routes: Routes = [
       {
         path: 'historial-paquetes',
         component: PackageHistory,
-        canActivate: [authGuard, moduleGuard]
+        canActivate: [moduleGuard]
       },
       {
         path: 'roles',
         component: Roles,
-        canActivate: [authGuard, moduleGuard]
+        canActivate: [moduleGuard]
       }
     ]
   }

@@ -22,9 +22,7 @@ export class SessionService {
 
   isSessionValid(): boolean {
     const decoded = this.getDecodedToken();
-
     if (!decoded) return false;
-
     return (
       typeof decoded.exp === 'number' &&
       decoded.exp * 1000 > Date.now()

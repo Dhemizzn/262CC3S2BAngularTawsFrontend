@@ -25,35 +25,32 @@
 
           <div class="d-flex gap-4 mb-3">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="tipoComprobante" id="boleta"
-                     [checked]="tipoComprobante() === 'boleta'" (change)="tipoComprobante.set('boleta')">
+              <input class="form-check-input" type="radio" name="receiptType" id="boleta"
+                     [checked]="receiptType() === 'boleta'" (change)="receiptType.set('boleta')">
               <label class="form-check-label fw-medium" for="boleta">Boleta de Venta</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="tipoComprobante" id="factura"
-                     [checked]="tipoComprobante() === 'factura'" (change)="tipoComprobante.set('factura')">
+              <input class="form-check-input" type="radio" name="receiptType" id="factura"
+                     [checked]="receiptType() === 'factura'" (change)="receiptType.set('factura')">
               <label class="form-check-label fw-medium" for="factura">Factura</label>
             </div>
           </div>
 
-          @if (tipoComprobante() === 'factura') {
+          @if (receiptType() === 'factura') {
             <div class="bg-light p-3 rounded-3 mb-4 border">
               <div class="mb-3">
-                <label for="rucInput" class="form-label fw-semibold small">Número de RUC</label>
-                <input type="text" id="rucInput" class="form-control" [value]="ruc()" (input)="onRucInput($event)" (blur)="rucTouched.set(true)"
-                       [class.is-invalid]="rucTouched() && !esRucValido()" placeholder="Ingrese RUC de 11 dígitos" maxlength="11">
-                @if (rucTouched() && !esRucValido()) {
-                  <div class="invalid-feedback">El RUC debe tener exactamente 11 dígitos numéricos.</div>
-                }
+                <label for="taxIdInput" class="form-label fw-semibold small">Número de RUC</label>
+                <input type="text" id="taxIdInput" class="form-control" [value]="taxId()" (input)="onTaxIdInput($event)" (blur)="taxIdTouched.set(true)"
+                       placeholder="Ingrese RUC de 11 dígitos" maxlength="11">
               </div>
               <div class="mb-3">
-                <label for="razonSocialInput" class="form-label fw-semibold small">Razón Social</label>
-                <input type="text" id="razonSocialInput" class="form-control" [value]="razonSocial()" (input)="onRazonSocialInput($event)"
+                <label for="companyNameInput" class="form-label fw-semibold small">Razón Social</label>
+                <input type="text" id="companyNameInput" class="form-control" [value]="companyName()" (input)="onCompanyNameInput($event)"
                        placeholder="Nombre o razón social de la empresa">
               </div>
               <div>
-                <label for="direccionFiscalInput" class="form-label fw-semibold small">Dirección Fiscal</label>
-                <input type="text" id="direccionFiscalInput" class="form-control" [value]="direccionFiscal()" (input)="onDireccionFiscalInput($event)"
+                <label for="fiscalAddressInput" class="form-label fw-semibold small">Dirección Fiscal</label>
+                <input type="text" id="fiscalAddressInput" class="form-control" [value]="fiscalAddress()" (input)="onFiscalAddressInput($event)"
                        placeholder="Dirección fiscal (opcional)">
               </div>
             </div>
@@ -63,10 +60,6 @@
             <h5 class="fw-semibold mb-0">Mercado Pago</h5>
           </div>
           <p class="text-muted mb-4 small">Realiza el pago de forma segura usando tu cuenta de Mercado Pago.</p>
-
-          @if (errorMessage()) {
-            <div class="alert alert-danger" role="alert">{{ errorMessage() }}</div>
-          }
 
           @if (paymentStatus() === 'paid') {
             <div class="alert alert-success mb-0" role="status">
@@ -91,7 +84,7 @@
             }
             <p class="small text-muted mt-3 mb-0">Al finalizar el pago, regresa aquí y selecciona «Verificar pago».</p>
           } @else {
-            <button type="button" class="btn btn-primary w-100" [disabled]="loading() || !formularioValido()" (click)="createCheckout()">
+            <button type="button" class="btn btn-primary w-100" [disabled]="loading() || !isFormValid()" (click)="createCheckout()">
               {{ loading() ? 'Generando enlace...' : 'Continuar con Mercado Pago' }}
             </button>
           }
