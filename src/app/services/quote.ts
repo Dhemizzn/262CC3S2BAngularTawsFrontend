@@ -10,6 +10,27 @@ export interface Destination {
   name: string;
 }
 
+export interface RucInfo {
+  rucNumber: string;
+  businessName: string;
+  fiscalAddress: string;
+}
+
+export interface CheckoutBillingData {
+  receiptType?: 'boleta' | 'factura';
+  dni?: string;
+  ruc?: string;
+  businessName?: string;
+  fiscalAddress?: string;
+}
+
+export interface PaymentStatusResult {
+  status: string;
+  receiptType?: 'boleta' | 'factura' | string;
+  documentNumber?: string;
+  transactionId?: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class QuoteService {
   private http = inject(HttpClient);
@@ -52,15 +73,27 @@ export class QuoteService {
     );
   }
 
-  createCheckout(quotationId: string): Observable<{ orderId: string; checkoutUrl: string; }> {
+  getRucInfo(rucNumber: string): Observable<RucInfo> {
+    return this.http.get<RucInfo>(`${environment.url}/payments/ruc/${rucNumber}`);
+  }
+
+  createCheckout(quotationId: string, billingData?: CheckoutBillingData): Observable<{ orderId: string; checkoutUrl: string; }> {
+    const payload = {
+      quotationId,
+      ...(billingData || {})
+    };
     return this.http.post<{ orderId: string; checkoutUrl: string; }>(
-      `${environment.url}/payments/checkout`, { quotationId }
+      `${environment.url}/payments/checkout`, payload
     );
   }
 
-  verifyPayment(quotationId: string): Observable<{ status: string }> {
-    return this.http.post<{ status: string }>(
-      `${environment.url}/payments/verify`, { quotationId }
+  verifyPayment(quotationId: string, billingData?: CheckoutBillingData): Observable<PaymentStatusResult> {
+    const payload = {
+      quotationId,
+      ...(billingData || {})
+    };
+    return this.http.post<PaymentStatusResult>(
+      `${environment.url}/payments/verify`, payload
     );
   }
 }

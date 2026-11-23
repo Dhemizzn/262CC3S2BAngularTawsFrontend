@@ -1,0 +1,239 @@
+<section class="client-history">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+      <h4 class="fw-bold mb-1">Historial de Clientes y Paquetes</h4>
+      <p class="text-muted mb-0">Supervisa las cotizaciones y compras realizadas por todos los clientes.</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <span class="badge bg-secondary px-3 py-2 fs-6">{{ packages().length }} registros</span>
+      <button type="button" class="btn btn-outline-success d-flex align-items-center gap-2" (click)="exportToCsv()">
+        <i class="bi bi-file-earmark-spreadsheet"></i>
+        <span>Exportar CSV</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Panel de Filtros -->
+  <div class="card border-0 shadow-sm rounded-3 mb-4 p-3 bg-white">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-sm-6 col-md-3">
+        <label class="form-label small fw-semibold text-muted mb-1">Fecha Salida Desde</label>
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="filterStartDate">
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <label class="form-label small fw-semibold text-muted mb-1">Fecha Retorno Hasta</label>
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="filterEndDate">
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <label class="form-label small fw-semibold text-muted mb-1">Monto Mínimo (S/)</label>
+        <input type="number" class="form-control form-control-sm" placeholder="Ej. 500" [(ngModel)]="filterMinAmount">
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <label class="form-label small fw-semibold text-muted mb-1">Monto Máximo (S/)</label>
+        <input type="number" class="form-control form-control-sm" placeholder="Ej. 5000" [(ngModel)]="filterMaxAmount">
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <label class="form-label small fw-semibold text-muted mb-1">ID Cliente (User ID)</label>
+        <input type="number" class="form-control form-control-sm" placeholder="Ej. 1" [(ngModel)]="filterUserId">
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <label class="form-label small fw-semibold text-muted mb-1">ID Paquete / Cotización</label>
+        <input type="text" class="form-control form-control-sm" placeholder="Ej. COT-2026-..." [(ngModel)]="filterQuotationId">
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <label class="form-label small fw-semibold text-muted mb-1">Estado</label>
+        <select class="form-select form-select-sm" [(ngModel)]="filterStatus">
+          <option value="">Todos los estados</option>
+          <option value="paid">Pagado</option>
+          <option value="pending">Pendiente</option>
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3 d-flex gap-2">
+        <button type="button" class="btn btn-primary btn-sm flex-grow-1" (click)="search()">
+          <i class="bi bi-search me-1"></i> Filtrar
+        </button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="resetFilters()" title="Limpiar filtros">
+          <i class="bi bi-arrow-counterclockwise"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de Resultados -->
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="text-muted mt-3">Consultando historial de paquetes...</p>
+    </div>
+  } @else {
+    <div class="bg-white border rounded-3 overflow-hidden shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-head">
+            <tr>
+              <th class="ps-4 py-3 fw-semibold">ID Paquete</th>
+              <th class="py-3 fw-semibold">Cliente</th>
+              <th class="py-3 fw-semibold">Destino</th>
+              <th class="py-3 fw-semibold">Fechas</th>
+              <th class="py-3 text-end fw-semibold">Monto Total</th>
+              <th class="py-3 text-center fw-semibold">Estado</th>
+              <th class="py-3 text-end pe-4 fw-semibold">Detalle</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (paquete of packages(); track paquete.quotationId) {
+              <tr class="table-row">
+                <td class="ps-4 py-3 fw-semibold text-primary">
+                  {{ paquete.quotationId }}
+                </td>
+                <td class="py-3">
+                  <div class="fw-semibold text-dark">{{ paquete.clientName }}</div>
+                  <small class="text-muted">ID: {{ paquete.userId }} &middot; DNI: {{ paquete.clientDni }}</small>
+                </td>
+                <td class="py-3">
+                  <div class="fw-semibold">{{ paquete.destinationRegion }}</div>
+                  <small class="text-muted">Desde: {{ paquete.departureRegion }}</small>
+                </td>
+                <td class="py-3 text-muted text-nowrap">
+                  {{ paquete.departureDate | date:'dd/MM/yyyy' }} - {{ paquete.returnDate | date:'dd/MM/yyyy' }}
+                </td>
+                <td class="py-3 text-end fw-semibold text-dark text-nowrap">
+                  S/ {{ paquete.total | number:'1.2-2' }}
+                </td>
+                <td class="py-3 text-center">
+                  <span class="rounded-pill px-3 py-1 status-badge"
+                    [ngClass]="getStatusClass(paquete.status)">
+                    {{ getStatusLabel(paquete.status) }}
+                  </span>
+                </td>
+                <td class="py-3 text-end pe-4">
+                  <button type="button"
+                    class="btn btn-sm btn-outline-action"
+                    (click)="viewDetail(paquete)">
+                    <i class="bi bi-eye me-1"></i> Ver detalle
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" class="text-center text-muted py-5">
+                  No se encontraron paquetes con los filtros seleccionados.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  <!-- Modal Detalle del Paquete Comprado -->
+  @if (selectedPackage(); as p) {
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header modal-header-custom">
+            <div>
+              <h5 class="modal-title fw-bold mb-0">Detalle del Paquete Comprado</h5>
+              <small class="opacity-75">{{ p.quotationId }} &middot; {{ p.clientName }}</small>
+            </div>
+            <button type="button" class="btn-close btn-close-white" aria-label="Cerrar" (click)="closeDetail()"></button>
+          </div>
+          <div class="modal-body p-4">
+            <!-- Info Cliente -->
+            <div class="bg-light rounded-3 p-3 mb-3 border">
+              <h6 class="fw-bold mb-2 text-dark"><i class="bi bi-person-badge me-2 text-primary"></i>Información del Cliente</h6>
+              <div class="row g-2 small">
+                <div class="col-md-4"><span class="text-muted">Nombre:</span> <strong>{{ p.clientName }}</strong></div>
+                <div class="col-md-4"><span class="text-muted">DNI:</span> <strong>{{ p.clientDni }}</strong></div>
+                <div class="col-md-4"><span class="text-muted">Email:</span> <strong>{{ p.clientEmail }}</strong></div>
+                <div class="col-md-4"><span class="text-muted">User ID:</span> <strong>{{ p.userId }}</strong></div>
+                <div class="col-md-4"><span class="text-muted">Estado de Pago:</span>
+                  <span class="rounded-pill px-2 py-1 ms-1 status-badge" [ngClass]="getStatusClass(p.status)">
+                    {{ getStatusLabel(p.status) }}
+                  </span>
+                </div>
+                <div class="col-md-4"><span class="text-muted">Monto Total:</span> <strong class="text-primary">S/ {{ p.total | number:'1.2-2' }}</strong></div>
+              </div>
+            </div>
+
+            <!-- Resumen Viaje -->
+            <div class="bg-light rounded-3 p-3 mb-3 border">
+              <h6 class="fw-bold mb-2 text-dark"><i class="bi bi-geo-alt me-2 text-primary"></i>Itinerario del Viaje</h6>
+              <div class="row g-2 small">
+                <div class="col-md-6"><span class="text-muted">Ruta:</span> <strong>{{ p.departureRegion }} &rarr; {{ p.destinationRegion }}</strong></div>
+                <div class="col-md-6"><span class="text-muted">Fechas:</span> <strong>{{ p.departureDate | date:'dd/MM/yyyy' }} al {{ p.returnDate | date:'dd/MM/yyyy' }}</strong></div>
+                <div class="col-md-6"><span class="text-muted">Pasajeros:</span> <strong>{{ p.peopleQuantity }} persona(s)</strong></div>
+                <div class="col-md-6"><span class="text-muted">Ref. Pago (MP):</span> <strong>{{ p.mpOrderId || 'Sin orden MP' }}</strong></div>
+              </div>
+            </div>
+
+            <!-- Desglose Hotel y Transporte -->
+            @if (p.parsedItinerary; as it) {
+              @if (it.hotel || it.airplane) {
+                <div class="row g-3 mb-3">
+                  @if (it.hotel) {
+                    <div class="col-md-6">
+                      <div class="border rounded-3 p-3 h-100 bg-white">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                          <i class="bi bi-building text-primary"></i>
+                          <h6 class="fw-bold mb-0">Hospedaje</h6>
+                        </div>
+                        <p class="mb-1 small"><span class="text-muted">Hotel:</span> <strong>{{ it.hotel.name }}</strong></p>
+                        <p class="mb-1 small"><span class="text-muted">Noches:</span> {{ it.hotel.nights }}</p>
+                        <p class="mb-0 small"><span class="text-muted">Habitaciones:</span> {{ it.hotel.rooms }}</p>
+                      </div>
+                    </div>
+                  }
+                  @if (it.airplane) {
+                    <div class="col-md-6">
+                      <div class="border rounded-3 p-3 h-100 bg-white">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                          <i class="bi bi-airplane text-primary"></i>
+                          <h6 class="fw-bold mb-0">Transporte Aéreo</h6>
+                        </div>
+                        <p class="mb-1 small"><span class="text-muted">Aerolínea:</span> <strong>{{ it.airplane.airline }}</strong></p>
+                        <p class="mb-1 small"><span class="text-muted">Salida:</span> {{ it.airplane.outboundTime }}</p>
+                        <p class="mb-0 small"><span class="text-muted">Retorno:</span> {{ it.airplane.returnTime }}</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Actividades -->
+              <h6 class="fw-bold mb-2">Actividades Programadas</h6>
+              @if (it.activities && it.activities.length > 0) {
+                <div class="mb-2">
+                  @for (act of it.activities; track $index) {
+                    <div class="p-2 mb-2 bg-white border rounded-3 small">
+                      <div class="d-flex justify-content-between align-items-start gap-2">
+                        <div>
+                          <span class="badge bg-secondary me-2">Día {{ $index + 1 }}</span>
+                          <strong>{{ act.name }}</strong>
+                          <div class="text-muted mt-1">
+                            {{ act.date | date:'dd/MM/yyyy' }} &middot; {{ act.startTime }} - {{ act.endTime }} ({{ act.durationMinutes }} min)
+                          </div>
+                        </div>
+                        <span class="fw-semibold text-nowrap">S/ {{ act.pricePerPerson | number:'1.2-2' }} / pers.</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="text-muted small">No hay actividades detalladas.</p>
+              }
+            }
+          </div>
+          <div class="modal-footer border-top bg-light">
+            <button type="button" class="btn btn-secondary btn-sm px-4" (click)="closeDetail()">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+  }
+</section>

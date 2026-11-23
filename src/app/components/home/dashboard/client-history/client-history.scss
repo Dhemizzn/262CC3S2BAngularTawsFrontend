@@ -1,0 +1,54 @@
+@use '../../../../../variables' as *;
+
+.client-history {
+  .table-head {
+    background-color: lighten($bg-light, 3%);
+
+    th {
+      font-size: rem(13);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: lighten($text-dark, 20%);
+    }
+  }
+
+  .table-row {
+    border-bottom: rem(1) solid $border-color;
+  }
+
+  .status-badge {
+    font-size: rem(12);
+    font-weight: 500;
+    color: $white;
+
+    &.status-paid {
+      background-color: #198754;
+    }
+
+    &.status-pending {
+      background-color: $color-primary;
+    }
+
+    &.status-default {
+      background-color: lighten($text-dark, 30%);
+    }
+  }
+
+  .btn-outline-action {
+    border: rem(1) solid $color-primary;
+    color: $color-primary;
+    background: transparent;
+    border-radius: rem(6);
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $color-primary;
+      color: $white;
+    }
+  }
+}
+
+.modal-header-custom {
+  background-color: $color-secondary;
+  color: $white;
+}

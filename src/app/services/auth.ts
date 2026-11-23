@@ -12,9 +12,6 @@ export class Auth {
     private apiUrl = `${environment.url}/auth`
     private storageService = inject(StorageService);
 
-    private isAuthenticated = signal<boolean>(this.hasToken());
-    isAuthenticated$ = this.isAuthenticated.asReadonly();
-
     http = inject(HttpClient);
     login(user: loginRequest) : Observable<authResponse> {
             return this.http.post<authResponse>(`${this.apiUrl}/login`,user);
@@ -30,11 +27,9 @@ export class Auth {
 
     public setToken(token: string): void {
         this.storageService.setItem('userToken', token);
-        this.isAuthenticated.set(true);
     }
 
     logout(): void {
         this.storageService.removeItem('userToken');
-        this.isAuthenticated.set(false);
     }
 }

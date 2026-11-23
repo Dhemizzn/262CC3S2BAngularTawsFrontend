@@ -54,7 +54,6 @@ export class AdminDashboard implements OnInit, AfterViewInit {
   loading = signal(true);
   errorMessage = signal('');
 
-  // 1. Gráfico de Usuarios (Line chart con smooth curve, gradient fill & forecast)
   usersChartOptions: Partial<LineChartOptions> = {
     series: [
       {
@@ -96,7 +95,6 @@ export class AdminDashboard implements OnInit, AfterViewInit {
     }
   };
 
-  // 2. Gráfico de Cotizaciones Pagadas / Pendientes (RadialBar)
   quotesRadialOptions: Partial<RadialBarChartOptions> = {
     series: [],
     chart: {
@@ -128,7 +126,6 @@ export class AdminDashboard implements OnInit, AfterViewInit {
     colors: ['#28a745', '#FF3B30', '#0F172A']
   };
 
-  // 3. Gráfico de Destinos más cotizados (Radar chart)
   destinationsRadarOptions: Partial<RadarChartOptions> = {
     series: [
       {
@@ -170,7 +167,6 @@ export class AdminDashboard implements OnInit, AfterViewInit {
   }
 
   private buildCharts(data: DashboardStatsResponse): void {
-    // 1. Usuarios: Line con gradient y categories
     if (data.registrations && data.registrations.length > 0) {
       const categories = data.registrations.map(r => r.label);
       const values = data.registrations.map(r => r.value);
@@ -181,7 +177,6 @@ export class AdminDashboard implements OnInit, AfterViewInit {
       };
     }
 
-    // 2. Cotizaciones pagadas/pendientes: RadialBar
     if (data.statuses && data.statuses.length > 0) {
       const totalCount = data.statuses.reduce((acc, curr) => acc + curr.value, 0);
       const labels = data.statuses.map(s => {
@@ -217,7 +212,6 @@ export class AdminDashboard implements OnInit, AfterViewInit {
       };
     }
 
-    // 3. Destinos: Radar chart
     if (data.destinations && data.destinations.length > 0) {
       const categories = data.destinations.map(d => d.label);
       const values = data.destinations.map(d => d.value);

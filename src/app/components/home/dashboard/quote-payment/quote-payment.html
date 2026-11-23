@@ -36,12 +36,33 @@
             </div>
           </div>
 
+          @if (receiptType() === 'boleta') {
+            <div class="bg-light p-3 rounded-3 mb-4 border">
+              <div class="mb-0">
+                <label for="dniInput" class="form-label fw-semibold small">Número de DNI</label>
+                <input type="text" id="dniInput" class="form-control" [value]="dni()" (input)="onDniInput($event)" (blur)="dniTouched.set(true)"
+                       placeholder="Ingrese DNI de 8 dígitos" maxlength="8">
+                @if (dniTouched() && !isDniValid()) {
+                  <small class="text-danger mt-1 d-block">El DNI debe contener exactamente 8 dígitos numéricos.</small>
+                }
+              </div>
+            </div>
+          }
+
           @if (receiptType() === 'factura') {
             <div class="bg-light p-3 rounded-3 mb-4 border">
               <div class="mb-3">
-                <label for="taxIdInput" class="form-label fw-semibold small">Número de RUC</label>
+                <label for="taxIdInput" class="form-label fw-semibold small d-flex justify-content-between align-items-center">
+                  <span>Número de RUC</span>
+                  @if (searchingRuc()) {
+                    <span class="text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Buscando...</span>
+                  }
+                </label>
                 <input type="text" id="taxIdInput" class="form-control" [value]="taxId()" (input)="onTaxIdInput($event)" (blur)="taxIdTouched.set(true)"
                        placeholder="Ingrese RUC de 11 dígitos" maxlength="11">
+                @if (taxIdTouched() && !isTaxIdValid()) {
+                  <small class="text-danger mt-1 d-block">El RUC debe contener exactamente 11 dígitos numéricos.</small>
+                }
               </div>
               <div class="mb-3">
                 <label for="companyNameInput" class="form-label fw-semibold small">Razón Social</label>
@@ -51,7 +72,7 @@
               <div>
                 <label for="fiscalAddressInput" class="form-label fw-semibold small">Dirección Fiscal</label>
                 <input type="text" id="fiscalAddressInput" class="form-control" [value]="fiscalAddress()" (input)="onFiscalAddressInput($event)"
-                       placeholder="Dirección fiscal (opcional)">
+                       placeholder="Dirección fiscal de la empresa">
               </div>
             </div>
           }
@@ -64,7 +85,13 @@
           @if (paymentStatus() === 'paid') {
             <div class="alert alert-success mb-0" role="status">
               <i class="bi bi-check-circle-fill me-2"></i> <strong>Pago acreditado correctamente.</strong>
-              <p class="mb-0 mt-2">Tu cotización ya figura como pagada.</p>
+              <p class="mb-1 mt-2">Tu cotización ya figura como pagada.</p>
+              @if (issuedDocumentNumber()) {
+                <div class="mt-2 p-2 bg-white rounded border d-inline-block">
+                  <span class="text-muted small">Comprobante emitido:</span>
+                  <strong class="text-dark ms-1">{{ issuedReceiptType() === 'factura' ? 'Factura' : 'Boleta' }} N° {{ issuedDocumentNumber() }}</strong>
+                </div>
+              }
             </div>
           } @else if (checkoutUrl(); as url) {
             <div class="d-grid gap-2">

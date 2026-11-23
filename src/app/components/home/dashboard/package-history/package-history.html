@@ -46,6 +46,13 @@
                     [ngClass]="getStatusClass(paquete.status)">
                     {{ getStatusLabel(paquete.status) }}
                   </span>
+                  @if (paquete.documentNumber) {
+                    <div class="mt-1">
+                      <small class="text-muted fw-semibold" style="font-size: 11px;">
+                        {{ paquete.receiptType === 'factura' ? 'Factura' : 'Boleta' }}: {{ paquete.documentNumber }}
+                      </small>
+                    </div>
+                  }
                 </td>
                 <td class="py-3 text-end pe-4">
                   <div class="d-flex justify-content-end gap-2">
@@ -59,6 +66,13 @@
                       (click)="downloadItinerary(paquete)">
                       Descargar PDF
                     </button>
+                    @if (paquete.status === 'paid') {
+                      <button type="button"
+                        class="btn btn-sm btn-outline-success"
+                        (click)="downloadReceipt(paquete)">
+                        <i class="bi bi-receipt me-1"></i> Comprobante
+                      </button>
+                    }
                     @if (paquete.status === 'pending') {
                       <button type="button"
                         class="btn btn-sm btn-outline-danger btn-outline-remove"

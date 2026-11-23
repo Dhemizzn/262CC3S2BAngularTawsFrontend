@@ -82,6 +82,14 @@ export class Dashboard implements OnInit {
         icon: 'bi-clock-history'
       });
     }
+
+    if (idRol === 1) {
+      this.menuItems.push({
+        moduleName: 'Historial de Clientes',
+        urlPath: '/dashboard/historial-clientes',
+        icon: 'bi-people'
+      });
+    }
   }
 
 
