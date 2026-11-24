@@ -1,5 +1,6 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, HostListener, inject, signal } from '@angular/core';
 import { CommonModule, DecimalPipe, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { QuoteService } from '../../../../services/quote';
 import { ToastService } from '../../../../services/toast';
 import { SessionService } from '../../../../services/session';
@@ -15,12 +16,34 @@ export class PackageHistory implements OnInit {
   private quoteService = inject(QuoteService);
   private toastService = inject(ToastService);
   private sessionService = inject(SessionService);
+  private router = inject(Router);
 
   packages = signal<any[]>([]);
   loading = signal(true);
   selectedPackage = signal<any | null>(null);
   packageToDelete = signal<any | null>(null);
   deletingId = signal<string | null>(null);
+  openDropdownId = signal<string | null>(null);
+
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    if (this.openDropdownId() !== null) {
+      this.openDropdownId.set(null);
+    }
+  }
+
+  toggleDropdown(quotationId: string, event: MouseEvent): void {
+    event.stopPropagation();
+    if (this.openDropdownId() === quotationId) {
+      this.openDropdownId.set(null);
+    } else {
+      this.openDropdownId.set(quotationId);
+    }
+  }
+
+  closeDropdown(): void {
+    this.openDropdownId.set(null);
+  }
 
   ngOnInit(): void {
     this.loadPackages();
@@ -99,6 +122,38 @@ export class PackageHistory implements OnInit {
         this.packageToDelete.set(null);
       }
     });
+  }
+
+  copyCheckoutUrl(pkg: any): void {
+    if (!pkg.mpCheckoutUrl) {
+      this.toastService.show('No hay enlace de Mercado Pago generado aún para esta cotización.', 'warning');
+      return;
+    }
+    navigator.clipboard.writeText(pkg.mpCheckoutUrl).then(() => {
+      this.toastService.show('Enlace de pago copiado al portapapeles.', 'success');
+    }).catch(() => {
+      this.toastService.show('No se pudo copiar el enlace al portapapeles.', 'danger');
+    });
+  }
+
+  continuePayment(pkg: any): void {
+    const itinerary = pkg.parsedItinerary || {};
+    const proposal: any = {
+      proposalId: pkg.quotationId,
+      departureCity: pkg.departureRegion,
+      destination: pkg.destinationRegion,
+      passengerCount: pkg.peopleQuantity,
+      departureDate: pkg.departureDate,
+      returnDate: pkg.returnDate,
+      days: 0,
+      hotel: itinerary.hotel || null,
+      airplane: itinerary.airplane || null,
+      activities: itinerary.activities || [],
+      totalPrice: Number(pkg.total) || 0
+    };
+
+    this.quoteService.setConfirmedQuote(pkg.quotationId, proposal);
+    this.router.navigate(['/dashboard/nueva-cotizacion/pagar']);
   }
 
   getStatusLabel(status: string): string {
@@ -229,143 +284,6 @@ export class PackageHistory implements OnInit {
       </html>`;
 
     const printWindow = window.open('', '_blank', 'width=900,height=700');
-    if (printWindow) {
-      printWindow.document.write(html);
-      printWindow.document.close();
-      printWindow.focus();
-      setTimeout(() => {
-        printWindow.print();
-      }, 500);
-    }
-  }
-
-  downloadReceipt(pkg: any): void {
-    const user = this.sessionService.getUserSession();
-    const isFactura = pkg.receiptType === 'factura';
-    const docTitle = isFactura ? 'Factura Electrónica' : 'Boleta de Venta Electrónica';
-    const docNumber = pkg.documentNumber || pkg.quotationId;
-    const clientName = isFactura ? (pkg.businessName || user?.names || 'Cliente Registrado') : (user?.names || 'Cliente Registrado');
-    const clientDoc = isFactura ? (pkg.ruc ? `RUC: ${pkg.ruc}` : '') : '';
-    const clientAddress = isFactura ? (pkg.fiscalAddress ? `<p><strong>Dirección Fiscal:</strong> ${pkg.fiscalAddress}</p>` : '') : '';
-    const clientEmail = user?.email || 'N/A';
-    const totalAmount = Number(pkg.total || 0);
-    const subtotal = totalAmount / 1.18;
-    const igv = totalAmount - subtotal;
-    const paymentRef = pkg.transactionId ? `TX-${pkg.transactionId}` : (pkg.mpOrderId || ('REC-' + (pkg.quotationId || '0000')));
-    const receiptDate = (pkg.transactionDate ? new Date(pkg.transactionDate) : new Date()).toLocaleDateString('es-PE', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-
-    const html = `
-      <!DOCTYPE html>
-      <html lang="es">
-      <head>
-        <meta charset="UTF-8">
-        <title>Comprobante de Pago - ${pkg.quotationId}</title>
-        <style>
-          * { box-sizing: border-box; margin: 0; padding: 0; }
-          body { font-family: 'Segoe UI', Arial, sans-serif; color: #1e293b; padding: 40px; font-size: 14px; background: #fff; }
-          @media print {
-            body { padding: 20px; }
-            button { display: none !important; }
-          }
-          .receipt-box { max-width: 800px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 32px; }
-          .header { display: flex; justify-content: space-between; border-bottom: 2px solid #f1f5f9; padding-bottom: 24px; margin-bottom: 24px; }
-          .logo { font-size: 24px; font-weight: 800; color: #0F172A; }
-          .logo span { color: #FF3B30; }
-          .doc-badge { background: #198754; color: #fff; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; text-transform: uppercase; }
-          .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-          .detail-card { background: #f8fafc; border: 1px solid #edf2f7; border-radius: 8px; padding: 16px; }
-          .detail-card h3 { font-size: 12px; text-transform: uppercase; color: #64748b; margin-bottom: 8px; letter-spacing: 0.05em; }
-          .table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-          .table th { background: #0F172A; color: #fff; text-align: left; padding: 12px; font-size: 12px; text-transform: uppercase; }
-          .table td { padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
-          .totals { margin-left: auto; width: 280px; margin-bottom: 24px; }
-          .totals-row { display: flex; justify-content: space-between; padding: 6px 0; color: #64748b; }
-          .totals-row.final { border-top: 2px solid #0F172A; color: #0F172A; font-weight: 700; font-size: 16px; padding-top: 10px; margin-top: 4px; }
-          .footer { text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px dashed #cbd5e1; padding-top: 20px; }
-        </style>
-      </head>
-      <body>
-        <div class="receipt-box">
-          <div class="header">
-            <div>
-              <div class="logo">Peru<span>TOURS</span></div>
-              <p style="color:#64748b; font-size:12px; margin-top:4px;">Agencia de Turismo TAWS S.A.C.</p>
-              <p style="color:#64748b; font-size:12px;">RUC: 20601234567 | Lima, Perú</p>
-            </div>
-            <div style="text-align: right;">
-              <span class="doc-badge">${docTitle}</span>
-              <p style="font-weight:700; margin-top:8px; font-size:15px; color:#0F172A;">N° ${docNumber}</p>
-              <p style="color:#64748b; font-size:12px;">Fecha: ${receiptDate}</p>
-            </div>
-          </div>
-
-          <div class="details-grid">
-            <div class="detail-card">
-              <h3>Datos del Cliente</h3>
-              <p><strong>Titular / Razón Social:</strong> ${clientName}</p>
-              ${clientDoc ? `<p><strong>${clientDoc}</strong></p>` : ''}
-              ${clientAddress}
-              <p><strong>Email:</strong> ${clientEmail}</p>
-              <p><strong>Pasajeros:</strong> ${pkg.peopleQuantity} persona(s)</p>
-            </div>
-            <div class="detail-card">
-              <h3>Datos de la Transacción</h3>
-              <p><strong>Estado:</strong> <span style="color:#198754; font-weight:700;">PAGADO</span></p>
-              <p><strong>Transacción / Ref:</strong> ${paymentRef}</p>
-              <p><strong>Medio de Pago:</strong> Mercado Pago / Tarjeta</p>
-            </div>
-          </div>
-
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Descripción</th>
-                <th>Ruta</th>
-                <th>Fechas</th>
-                <th style="text-align: right;">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <strong>Paquete Turístico Completo</strong><br>
-                  <span style="color:#64748b; font-size:12px;">Incluye vuelos, hospedaje y cronograma de actividades turísticas</span>
-                </td>
-                <td>${pkg.departureRegion} &rarr; ${pkg.destinationRegion}</td>
-                <td>${pkg.departureDate} al ${pkg.returnDate}</td>
-                <td style="text-align: right; font-weight:600;">S/ ${totalAmount.toFixed(2)}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="totals">
-            <div class="totals-row">
-              <span>Op. Gravada:</span>
-              <span>S/ ${subtotal.toFixed(2)}</span>
-            </div>
-            <div class="totals-row">
-              <span>I.G.V. (18%):</span>
-              <span>S/ ${igv.toFixed(2)}</span>
-            </div>
-            <div class="totals-row final">
-              <span>Total Pagado:</span>
-              <span>S/ ${totalAmount.toFixed(2)}</span>
-            </div>
-          </div>
-
-          <div class="footer">
-            <p>Este documento constituye un comprobante formal de pago emitido electrónicamente.</p>
-            <p>¡Gracias por tu preferencia y feliz viaje con Peru TOURS!</p>
-          </div>
-        </div>
-      </body>
-      </html>`;
-
-    const printWindow = window.open('', '_blank', 'width=900,height=750');
     if (printWindow) {
       printWindow.document.write(html);
       printWindow.document.close();

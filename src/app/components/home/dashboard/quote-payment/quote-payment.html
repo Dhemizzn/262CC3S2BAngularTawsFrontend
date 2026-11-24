@@ -42,9 +42,6 @@
                 <label for="dniInput" class="form-label fw-semibold small">Número de DNI</label>
                 <input type="text" id="dniInput" class="form-control" [value]="dni()" (input)="onDniInput($event)" (blur)="dniTouched.set(true)"
                        placeholder="Ingrese DNI de 8 dígitos" maxlength="8">
-                @if (dniTouched() && !isDniValid()) {
-                  <small class="text-danger mt-1 d-block">El DNI debe contener exactamente 8 dígitos numéricos.</small>
-                }
               </div>
             </div>
           }
@@ -54,9 +51,6 @@
               <div class="mb-3">
                 <label for="taxIdInput" class="form-label fw-semibold small d-flex justify-content-between align-items-center">
                   <span>Número de RUC</span>
-                  @if (searchingRuc()) {
-                    <span class="text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>Buscando...</span>
-                  }
                 </label>
                 <input type="text" id="taxIdInput" class="form-control" [value]="taxId()" (input)="onTaxIdInput($event)" (blur)="taxIdTouched.set(true)"
                        placeholder="Ingrese RUC de 11 dígitos" maxlength="11">

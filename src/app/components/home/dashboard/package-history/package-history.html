@@ -15,7 +15,7 @@
       <p class="text-muted mt-3">Cargando tus paquetes...</p>
     </div>
   } @else {
-    <div class="bg-white border rounded-3 overflow-hidden shadow-sm">
+    <div class="bg-white border rounded-3 shadow-sm">
       <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
           <thead class="table-head">
@@ -46,39 +46,51 @@
                     [ngClass]="getStatusClass(paquete.status)">
                     {{ getStatusLabel(paquete.status) }}
                   </span>
-                  @if (paquete.documentNumber) {
-                    <div class="mt-1">
-                      <small class="text-muted fw-semibold" style="font-size: 11px;">
-                        {{ paquete.receiptType === 'factura' ? 'Factura' : 'Boleta' }}: {{ paquete.documentNumber }}
-                      </small>
-                    </div>
-                  }
                 </td>
                 <td class="py-3 text-end pe-4">
-                  <div class="d-flex justify-content-end gap-2">
+                  <div class="dropdown d-inline-block text-start position-relative">
                     <button type="button"
-                      class="btn btn-sm btn-outline-action"
-                      (click)="viewSchedule(paquete)">
-                      Ver cronograma
+                      class="btn btn-sm btn-outline-secondary dropdown-toggle-custom"
+                      [class.active]="openDropdownId() === paquete.quotationId"
+                      (click)="toggleDropdown(paquete.quotationId, $event)">
+                      <span>Acciones</span>
+                      <i class="bi bi-chevron-down ms-1"></i>
                     </button>
-                    <button type="button"
-                      class="btn btn-sm btn-outline-neutral"
-                      (click)="downloadItinerary(paquete)">
-                      Descargar PDF
-                    </button>
-                    @if (paquete.status === 'paid') {
-                      <button type="button"
-                        class="btn btn-sm btn-outline-success"
-                        (click)="downloadReceipt(paquete)">
-                        <i class="bi bi-receipt me-1"></i> Comprobante
-                      </button>
-                    }
-                    @if (paquete.status === 'pending') {
-                      <button type="button"
-                        class="btn btn-sm btn-outline-danger btn-outline-remove"
-                        (click)="requestDeletion(paquete)">
-                        <i class="bi bi-trash3 me-1"></i> Eliminar
-                      </button>
+                    @if (openDropdownId() === paquete.quotationId) {
+                      <div class="dropdown-menu show shadow-sm custom-action-menu py-1"
+                        (click)="$event.stopPropagation()">
+                        <button type="button"
+                          class="dropdown-item py-2 px-3"
+                          (click)="viewSchedule(paquete); closeDropdown()">
+                          <i class="bi bi-calendar3 me-2 text-primary"></i>Ver cronograma
+                        </button>
+                        <button type="button"
+                          class="dropdown-item py-2 px-3"
+                          (click)="downloadItinerary(paquete); closeDropdown()">
+                          <i class="bi bi-file-earmark-pdf me-2 text-danger"></i>Descargar PDF
+                        </button>
+                        @if (paquete.status === 'pending') {
+                          <div class="dropdown-divider my-1"></div>
+                          <button type="button"
+                            class="dropdown-item py-2 px-3 fw-semibold text-primary"
+                            (click)="continuePayment(paquete); closeDropdown()">
+                            <i class="bi bi-credit-card me-2"></i>Pagar
+                          </button>
+                          @if (paquete.mpCheckoutUrl) {
+                            <button type="button"
+                              class="dropdown-item py-2 px-3"
+                              (click)="copyCheckoutUrl(paquete); closeDropdown()">
+                              <i class="bi bi-copy me-2 text-secondary"></i>Copiar enlace
+                            </button>
+                          }
+                          <div class="dropdown-divider my-1"></div>
+                          <button type="button"
+                            class="dropdown-item py-2 px-3 text-danger"
+                            (click)="requestDeletion(paquete); closeDropdown()">
+                            <i class="bi bi-trash3 me-2"></i>Eliminar
+                          </button>
+                        }
+                      </div>
                     }
                   </div>
                 </td>

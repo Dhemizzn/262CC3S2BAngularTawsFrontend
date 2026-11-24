@@ -73,8 +73,21 @@ export class QuoteService {
     );
   }
 
+  setConfirmedQuote(quotationId: string, proposal: QuoteResponse): void {
+    this._confirmedQuote.set({ quotationId, proposal });
+  }
+
+  clearFlow(): void {
+    this._cotizaciones.set([]);
+    this._confirmedQuote.set(null);
+  }
+
   getRucInfo(rucNumber: string): Observable<RucInfo> {
     return this.http.get<RucInfo>(`${environment.url}/payments/ruc/${rucNumber}`);
+  }
+
+  getLastRuc(): Observable<RucInfo | null> {
+    return this.http.get<RucInfo | null>(`${environment.url}/payments/last-ruc`);
   }
 
   createCheckout(quotationId: string, billingData?: CheckoutBillingData): Observable<{ orderId: string; checkoutUrl: string; }> {

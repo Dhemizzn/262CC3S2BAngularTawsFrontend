@@ -75,11 +75,19 @@ export class Dashboard implements OnInit {
       });
     }
 
-    if (paths.includes('historial-paquetes')) {
+    if (idRol !== 1 && paths.includes('historial-paquetes')) {
       this.menuItems.push({
-        moduleName: idRol === 1 ? 'Historial de Paquetes' : 'Mis Paquetes',
+        moduleName: 'Mis Paquetes',
         urlPath: '/dashboard/historial-paquetes',
         icon: 'bi-clock-history'
+      });
+    }
+
+    if (idRol !== 1 && (paths.includes('estado-cuenta') || paths.includes('historial-paquetes'))) {
+      this.menuItems.push({
+        moduleName: 'Estado de Cuenta',
+        urlPath: '/dashboard/estado-cuenta',
+        icon: 'bi-wallet2'
       });
     }
 

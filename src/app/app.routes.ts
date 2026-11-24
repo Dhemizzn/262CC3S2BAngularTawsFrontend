@@ -10,6 +10,7 @@ import { QuoteFlow } from './components/home/dashboard/quote-flow/quote-flow';
 import { QuotePayment } from './components/home/dashboard/quote-payment/quote-payment';
 import { PackageHistory } from './components/home/dashboard/package-history/package-history';
 import { ClientHistory } from './components/home/dashboard/client-history/client-history';
+import { AccountStatement } from './components/home/dashboard/account-statement/account-statement';
 import { Roles } from './components/home/dashboard/roles/roles';
 import { authGuard } from './guards/auth-guard';
 import { moduleGuard } from './guards/module-guard';
@@ -82,6 +83,11 @@ export const routes: Routes = [
         path: 'historial-paquetes',
         component: PackageHistory,
         canActivate: [moduleGuard]
+      },
+      {
+        path: 'estado-cuenta',
+        component: AccountStatement,
+        canActivate: [authGuard, moduleGuard]
       },
       {
         path: 'historial-clientes',

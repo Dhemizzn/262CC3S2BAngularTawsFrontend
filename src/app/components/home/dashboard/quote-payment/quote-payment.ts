@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { QuoteService, CheckoutBillingData } from '../../../../services/quote';
 import { ToastService } from '../../../../services/toast';
@@ -12,9 +13,10 @@ import { RegexConstants } from '../../../../utils/regex-constants';
   templateUrl: './quote-payment.html',
   styleUrl: './quote-payment.scss'
 })
-export class QuotePayment {
+export class QuotePayment implements OnInit {
   quoteService = inject(QuoteService);
   private toastService = inject(ToastService);
+  private router = inject(Router);
 
   loading = signal(false);
   verifying = signal(false);
@@ -32,6 +34,25 @@ export class QuotePayment {
   dniTouched = signal(false);
   taxIdTouched = signal(false);
   searchingRuc = signal(false);
+
+  ngOnInit(): void {
+    this.loadLastRuc();
+  }
+
+  loadLastRuc(): void {
+    this.quoteService.getLastRuc().subscribe({
+      next: (ruc) => {
+        if (ruc && ruc.rucNumber) {
+          this.taxId.set(ruc.rucNumber);
+          if (ruc.businessName) this.companyName.set(ruc.businessName);
+          if (ruc.fiscalAddress) this.fiscalAddress.set(ruc.fiscalAddress);
+        }
+      },
+      error: () => {
+        // Silencioso si no tiene RUC previo o falla
+      }
+    });
+  }
 
   isDniValid(): boolean {
     return /^[0-9]{8}$/.test(this.dni().trim());
@@ -156,6 +177,10 @@ export class QuotePayment {
           if (response.status === 'paid') {
             const docInfo = response.documentNumber ? ` Comprobante: ${response.documentNumber}` : '';
             this.toastService.show(`¡Pago acreditado correctamente!${docInfo}`, 'success');
+            setTimeout(() => {
+              this.quoteService.clearFlow();
+              this.router.navigate(['/dashboard/nueva-cotizacion/nueva']);
+            }, 2000);
           } else {
             this.toastService.show('El pago aún no figura como acreditado.', 'warning');
           }
