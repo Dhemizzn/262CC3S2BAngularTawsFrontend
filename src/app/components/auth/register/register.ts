@@ -1,3 +1,4 @@
+
 import { Component, inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -14,11 +15,10 @@ import { RegexConstants } from '../../../utils/regex-constants';
   templateUrl: './register.html',
   styleUrl: './register.scss',
   imports: [
-    RouterLink, 
+    RouterLink,
     ReactiveFormsModule
   ]
 })
-
 export class Register {
   authService = inject(Auth);
   location = inject(Location);
@@ -26,23 +26,42 @@ export class Register {
   toastService = inject(ToastService);
 
   form = new FormGroup({
-    firstName: new FormControl('', [Validators.required]),
-    lastNameM: new FormControl('', [Validators.required]),
-    lastNameP: new FormControl('', [Validators.required]),
+    firstName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(40)
+    ]),
+    lastNameM: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(40)
+    ]),
+    lastNameP: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(40)
+    ]),
     dni: new FormControl('', [
-      Validators.required, 
+      Validators.required,
       Validators.pattern(/^\d{8}$/)
     ]),
     phone: new FormControl('', [
-      Validators.required, 
+      Validators.required,
       Validators.pattern(/^\d{9}$/)
     ]),
     email: new FormControl('', [
-      Validators.required, 
-      Validators.email
+      Validators.required,
+      Validators.email,
+      Validators.maxLength(40)
     ]),
-    direction: new FormControl('', [Validators.required]),
-    roleId: new FormControl(2, [Validators.required])
+    direction: new FormControl('', [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(150)
+    ]),
+    roleId: new FormControl(2, [
+      Validators.required
+    ])
   });
 
   filterInput(
@@ -63,22 +82,35 @@ export class Register {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
 
-      let mensajeAdvertencia = 'Por favor, complete todos los campos obligatorios.';
+      const c = this.form.controls;
+      let mensajeAdvertencia = 'Revisa los campos del formulario.';
 
-      if (this.form.controls.dni.errors?.['pattern']) {
+      if (Object.values(c).some(control => control.hasError('required'))) {
+        mensajeAdvertencia = 'Por favor, completa todos los campos obligatorios.';
+      } else if (c.firstName.invalid) {
+        mensajeAdvertencia = 'El nombre debe tener entre 2 y 40 caracteres.';
+      } else if (c.lastNameP.invalid) {
+        mensajeAdvertencia = 'El apellido paterno debe tener entre 2 y 40 caracteres.';
+      } else if (c.lastNameM.invalid) {
+        mensajeAdvertencia = 'El apellido materno debe tener entre 2 y 40 caracteres.';
+      } else if (c.dni.hasError('pattern')) {
         mensajeAdvertencia = 'El DNI debe tener exactamente 8 dígitos numéricos.';
-      } else if (this.form.controls.phone.errors?.['pattern']) {
+      } else if (c.email.hasError('maxlength')) {
+        mensajeAdvertencia = 'El correo no debe superar los 40 caracteres.';
+      } else if (c.email.hasError('email')) {
+        mensajeAdvertencia = 'Por favor, ingresa un correo electrónico válido.';
+      } else if (c.phone.hasError('pattern')) {
         mensajeAdvertencia = 'El teléfono debe tener exactamente 9 dígitos numéricos.';
-      } else if (this.form.controls.email.errors?.['email']) {
-        mensajeAdvertencia = 'Por favor, ingrese un correo electrónico válido.';
+      } else if (c.direction.invalid) {
+        mensajeAdvertencia = 'La dirección debe tener entre 5 y 150 caracteres.';
       }
 
       this.toastService.show(mensajeAdvertencia, 'warning');
       return;
     }
 
-    const { 
-      firstName, lastNameM, lastNameP, dni, phone, email, direction, roleId 
+    const {
+      firstName, lastNameM, lastNameP, dni, phone, email, direction, roleId
     } = this.form.value;
 
     if (!firstName || !lastNameM || !lastNameP || !dni || !phone || !email || !direction || !roleId) {
@@ -86,13 +118,13 @@ export class Register {
     }
 
     const registerRequest = {
-      firstName: firstName,
-      paternalSurname: lastNameP,
-      maternalSurname: lastNameM,
+      firstName: firstName.trim(),
+      paternalSurname: lastNameP.trim(),
+      maternalSurname: lastNameM.trim(),
       dni: dni,
       phone: phone,
-      email: email,
-      direction: direction,
+      email: email.trim(),
+      direction: direction.trim(),
       roleId: roleId
     };
 
@@ -124,7 +156,4 @@ export class Register {
       inputs[currentIndex + 1].focus();
     }
   }
-
-
-
 }
