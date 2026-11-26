@@ -22,7 +22,6 @@ import { RegexConstants } from '../../../utils/regex-constants';
   ]
 })
 export class Login {
-  location = inject(Location);
   router = inject(Router);
   authService = inject(Auth);
   toastService = inject(ToastService);

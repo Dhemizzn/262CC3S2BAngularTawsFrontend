@@ -2,7 +2,8 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
-import { QuoteService, CheckoutBillingData } from '../../../../services/quote';
+import { QuoteService } from '../../../../services/quote';
+import { CheckoutBillingData } from '../../../../model/request/checkoutBillingData';
 import { ToastService } from '../../../../services/toast';
 import { RegexConstants } from '../../../../utils/regex-constants';
 

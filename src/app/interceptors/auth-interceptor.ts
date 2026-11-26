@@ -1,10 +1,12 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { environment } from '../components/environments/environment';
+import { StorageService } from '../services/storage';
+import { inject } from '@angular/core';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const apiUrl = environment.url.replace(/\/$/, '');
-
+  const storageService = inject(StorageService);
   const isOurApi = req.url === apiUrl || req.url.startsWith(`${apiUrl}/`);
 
   if (!isOurApi) {
@@ -21,7 +23,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  const token = localStorage.getItem('userToken');
+  const token = storageService.getItem('token'); //obtiene el token JWT del localStorage, si no esta en un entorno de navegador, devuelve null
 
   if (!token) {
     return next(req);//esta función es la que se encarga de enviar la petición HTTP al siguiente interceptor o al backend, dependiendo de si hay más interceptores configurados o no.

@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { QuoteService, Destination } from '../../../../services/quote';
+import { QuoteService } from '../../../../services/quote';
+import { Destination } from '../../../../model/destination';
 import { QuoteRequest } from '../../../../model/request/quoteRequest';
 import { ToastService } from '../../../../services/toast';
 

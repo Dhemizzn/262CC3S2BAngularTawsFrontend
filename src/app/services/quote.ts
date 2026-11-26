@@ -3,33 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { QuoteRequest } from '../model/request/quoteRequest';
 import { QuoteResponse } from '../model/response/quoteResponse';
+import { Destination } from '../model/destination';
+import { RucInfo } from '../model/ruc';
+import { CheckoutBillingData } from '../model/request/checkoutBillingData';
+import { PaymentStatusResult } from '../model/response/paymentStatusResult';
 import { environment } from '../components/environments/environment';
-
-export interface Destination {
-  destinationId: number;
-  name: string;
-}
-
-export interface RucInfo {
-  rucNumber: string;
-  businessName: string;
-  fiscalAddress: string;
-}
-
-export interface CheckoutBillingData {
-  receiptType?: 'boleta' | 'factura';
-  dni?: string;
-  ruc?: string;
-  businessName?: string;
-  fiscalAddress?: string;
-}
-
-export interface PaymentStatusResult {
-  status: string;
-  receiptType?: 'boleta' | 'factura' | string;
-  documentNumber?: string;
-  transactionId?: number;
-}
 
 @Injectable({ providedIn: 'root' })
 export class QuoteService {
