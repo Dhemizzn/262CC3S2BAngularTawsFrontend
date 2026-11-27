@@ -1,4 +1,3 @@
-
 export interface QuoteRequest {
   departureCity: string;
   destination: string;

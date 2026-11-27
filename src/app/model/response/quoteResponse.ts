@@ -1,4 +1,3 @@
-
 export interface HotelView {
   id: number;
   name: string;
